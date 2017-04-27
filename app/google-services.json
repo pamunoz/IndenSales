@@ -1,0 +1,174 @@
+{
+  "project_info": {
+    "project_number": "216102871006",
+    "firebase_url": "https://app-inden-android.firebaseio.com",
+    "project_id": "app-inden-android",
+    "storage_bucket": "app-inden-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216102871006:android:fcfef757a832647b",
+        "android_client_info": {
+          "package_name": "com.google.firebase.quickstart.database"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216102871006-l4ec1m6i5dl596i7do8vv7pd2br9jbub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGvke3FvReEzXqvJHkHqhl1bwxMDYR_Bs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216102871006:android:60da711119944017",
+        "android_client_info": {
+          "package_name": "com.pfariasmunoz.appindenandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216102871006-hqaqn2om7f8h1oclegd5lm4snrdrhid0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pfariasmunoz.appindenandroid",
+            "certificate_hash": "335203a0f92054b3e4c742d852d88e19e18570b3"
+          }
+        },
+        {
+          "client_id": "216102871006-l4ec1m6i5dl596i7do8vv7pd2br9jbub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGvke3FvReEzXqvJHkHqhl1bwxMDYR_Bs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216102871006-l4ec1m6i5dl596i7do8vv7pd2br9jbub.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216102871006:android:b1fe1c9ca72af5bd",
+        "android_client_info": {
+          "package_name": "com.pfariasmunoz.indensalessystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216102871006-venq4h2p8mko8ge082v2s53jcakcdhth.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pfariasmunoz.indensalessystem",
+            "certificate_hash": "335203a0f92054b3e4c742d852d88e19e18570b3"
+          }
+        },
+        {
+          "client_id": "216102871006-l4ec1m6i5dl596i7do8vv7pd2br9jbub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGvke3FvReEzXqvJHkHqhl1bwxMDYR_Bs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216102871006-l4ec1m6i5dl596i7do8vv7pd2br9jbub.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216102871006:android:52ac6353082f45c4",
+        "android_client_info": {
+          "package_name": "com.pfariasmunoz.indensales"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216102871006-ldevoi3dgtqaa6thakdfv4udusin2aqh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pfariasmunoz.indensales",
+            "certificate_hash": "335203a0f92054b3e4c742d852d88e19e18570b3"
+          }
+        },
+        {
+          "client_id": "216102871006-l4ec1m6i5dl596i7do8vv7pd2br9jbub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGvke3FvReEzXqvJHkHqhl1bwxMDYR_Bs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216102871006-l4ec1m6i5dl596i7do8vv7pd2br9jbub.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
