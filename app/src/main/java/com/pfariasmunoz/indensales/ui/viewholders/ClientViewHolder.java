@@ -4,6 +4,7 @@ import android.provider.UserDictionary;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.pfariasmunoz.indensales.R;
@@ -20,6 +21,7 @@ import butterknife.ButterKnife;
 public class ClientViewHolder extends RecyclerView.ViewHolder {
     private TextView mNameTextView;
     private TextView mRutTextView;
+    private Button mAddSaleButton;
     private TextView mAdressTextView;
     private TextView mDiscountTextView;
 
@@ -27,6 +29,7 @@ public class ClientViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         mNameTextView = (TextView) itemView.findViewById(R.id.tv_client_name);
         mRutTextView = (TextView) itemView.findViewById(R.id.tv_client_rut);
+        mAddSaleButton = (Button) itemView.findViewById(R.id.bt_add_sale);
         //mAdressTextView = (TextView) itemView.findViewById(R.id.tv_client_adress);
         //mDiscountTextView = (TextView) itemView.findViewById(R.id.tv_client_discount);
     }
@@ -40,5 +43,9 @@ public class ClientViewHolder extends RecyclerView.ViewHolder {
         mNameTextView.setText(client.getNombre().trim());
         mRutTextView.setText(client.getRut());
         //mDiscountTextView.setText(client.getDescuento());
+    }
+
+    public Button getAddSaleButton() {
+        return mAddSaleButton;
     }
 }

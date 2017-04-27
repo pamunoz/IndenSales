@@ -1,6 +1,7 @@
 package com.pfariasmunoz.indensales.ui.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.data.models.Adress;
 import com.pfariasmunoz.indensales.data.models.Client;
+import com.pfariasmunoz.indensales.ui.activities.AddSaleActivity;
 import com.pfariasmunoz.indensales.ui.viewholders.ClientViewHolder;
 
 import butterknife.BindView;
@@ -92,6 +94,13 @@ public class ClientsFragment extends Fragment {
             protected void populateViewHolder(
                     final ClientViewHolder viewHolder,
                     final Client model, int position) {
+                viewHolder.getAddSaleButton().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), AddSaleActivity.class);
+                        startActivity(intent);
+                    }
+                });
 
 
                 String clientUid = FirebaseDb.getUid(getRef(position));
