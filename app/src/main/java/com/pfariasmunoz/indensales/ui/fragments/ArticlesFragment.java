@@ -102,4 +102,5 @@ public class ArticlesFragment extends BaseFragment {
         if (mArticleAdapter != null) mArticleAdapter.cleanup();
     }
 
+
 }

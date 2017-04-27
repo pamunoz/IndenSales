@@ -110,7 +110,6 @@ public class ClientsFragment extends Fragment {
             }
         };
         mClientAdapter.notifyDataSetChanged();
-
     }
 
 }
