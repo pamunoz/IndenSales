@@ -9,18 +9,17 @@
     tools:context="com.pfariasmunoz.indensales.ui.activities.AddSaleActivity">
 
     <fragment
-        android:id="@+id/fg_articles"
+        android:id="@+id/fl_articles"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="5"
-        class="com.pfariasmunoz.indensales.ui.fragments.ArticlesFragment"/>
+        android:name="com.pfariasmunoz.indensales.ui.fragments.ArticlesFragment"/>
 
-    <FrameLayout
-        android:id="@+id/fl_sales_details"
+    <fragment
+        android:id="@+id/fl_sales_bar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-
-    </FrameLayout>
+        android:layout_weight="1"
+        android:name="com.pfariasmunoz.indensales.ui.fragments.SalesBarFragment"/>
 
 </LinearLayout>
