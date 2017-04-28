@@ -133,7 +133,7 @@ public class ClientsFragment extends Fragment {
     /**
      * This method start the sales activity if the number of adresses is less than 2.
      * That's because if it is more than 2, it starts a nother fragment with the list
-     * of adresses to choose.
+     * of adresses to choose of the client with the id provided.
      * @param numberOfAdresses
      * @param clientId
      */
@@ -142,6 +142,16 @@ public class ClientsFragment extends Fragment {
             Intent intent = new Intent(getActivity(), AddSaleActivity.class);
             intent.putExtra(Constants.CLIENT_ID_KEY, clientId);
             startActivity(intent);
+        } else {
+            Bundle args = new Bundle();
+            args.putString(Constants.CLIENT_ID_KEY, clientId);
+            ClientAdressesFragment fragment = new ClientAdressesFragment();
+            fragment.setArguments(args);
+            this.getFragmentManager().beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+
         }
     }
 
