@@ -101,14 +101,14 @@ public class ClientsFragment extends Fragment {
                 viewHolder.getAddSaleButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String clientId = getRef(position).getKey();
+                        final String clientId = getRef(position).getKey();
+
 
                         FirebaseDb.sClientAdressRef.child(clientId).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                long adressNum = dataSnapshot.getChildrenCount();
-                                Log.i("NUMBER OF CHILDREN", String.valueOf(adressNum));
-                                System.out.println(String.valueOf(adressNum));
+                                long clientAdressNum = dataSnapshot.getChildrenCount();
+                                startSalesActivity(clientAdressNum, clientId);
                             }
 
                             @Override
@@ -118,9 +118,7 @@ public class ClientsFragment extends Fragment {
                         });
 
 
-                        Intent intent = new Intent(getActivity(), AddSaleActivity.class);
-                        intent.putExtra(Constants.CLIENT_ID_KEY, clientId);
-                        startActivity(intent);
+
                     }
                 });
 
@@ -130,6 +128,21 @@ public class ClientsFragment extends Fragment {
             }
         };
         mClientAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * This method start the sales activity if the number of adresses is less than 2.
+     * That's because if it is more than 2, it starts a nother fragment with the list
+     * of adresses to choose.
+     * @param numberOfAdresses
+     * @param clientId
+     */
+    private void startSalesActivity(long numberOfAdresses, String clientId) {
+        if (numberOfAdresses < 2) {
+            Intent intent = new Intent(getActivity(), AddSaleActivity.class);
+            intent.putExtra(Constants.CLIENT_ID_KEY, clientId);
+            startActivity(intent);
+        }
     }
 
 }
