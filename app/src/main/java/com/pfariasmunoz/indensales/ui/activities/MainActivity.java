@@ -48,10 +48,13 @@ public class MainActivity extends AppCompatActivity
     private static final String ANONYMOUS = "anonymous";
     private String mUserName = ANONYMOUS;
 
+
+    // views for the drawer views
     private TextView mNavBarUserEmailTextView;
     private TextView mNavBarUserNameTextView;
     private ImageView mNavBarUserPhotoImageView;
 
+    // Firebase authentication
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     // recuest code for firebase sign in
