@@ -13,11 +13,17 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.pfariasmunoz.indensales.R;
+import com.pfariasmunoz.indensales.data.FirebaseDb;
+import com.pfariasmunoz.indensales.data.models.Client;
+import com.pfariasmunoz.indensales.utils.Constants;
 
 public class SalesBarFragment extends Fragment {
-
-    private FirebaseUser mUser;
+    TextView mClientNameTextView;
+    TextView mClinetRutTextView;
 
 
     public SalesBarFragment() {
@@ -35,7 +41,24 @@ public class SalesBarFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
-        Log.i("USUARIO ACTUAL", mUser.getDisplayName());
+        mClientNameTextView = (TextView) view.findViewById(R.id.tv_client_name);
+        mClinetRutTextView = (TextView) view.findViewById(R.id.tv_client_rut);
+        final String clientId = getActivity().getIntent().getStringExtra(Constants.CLIENT_ID_KEY);
+        FirebaseDb.sClientsRef.child(clientId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Client client = dataSnapshot.getValue(Client.class);
+                String clientName = client.getNombre();
+                String clientRut = client.getRut();
+                mClientNameTextView.setText(clientName);
+                mClinetRutTextView.setText(clientRut);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

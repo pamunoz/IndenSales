@@ -26,6 +26,7 @@ import com.pfariasmunoz.indensales.data.models.Adress;
 import com.pfariasmunoz.indensales.data.models.Client;
 import com.pfariasmunoz.indensales.ui.activities.AddSaleActivity;
 import com.pfariasmunoz.indensales.ui.viewholders.ClientViewHolder;
+import com.pfariasmunoz.indensales.utils.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +39,9 @@ public class ClientsFragment extends Fragment {
     private RecyclerView mClientRecyclerView;
     private FirebaseRecyclerAdapter<Client, ClientViewHolder> mClientAdapter;
     private ProgressBar mLoadingIndicatorProgressBar;
+
+    // client info to start the sales
+    public static final String CLIENT_ID_KEY = "client_id_key";
 
     public ClientsFragment() {
         // Required empty public constructor
@@ -93,12 +97,13 @@ public class ClientsFragment extends Fragment {
             @Override
             protected void populateViewHolder(
                     final ClientViewHolder viewHolder,
-                    final Client model, int position) {
+                    final Client model, final int position) {
                 viewHolder.getAddSaleButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        String clientId = getRef(position).getKey();
                         Intent intent = new Intent(getActivity(), AddSaleActivity.class);
-
+                        intent.putExtra(Constants.CLIENT_ID_KEY, clientId);
                         startActivity(intent);
                     }
                 });
