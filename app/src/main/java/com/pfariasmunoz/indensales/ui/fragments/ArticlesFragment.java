@@ -60,6 +60,7 @@ public class ArticlesFragment extends BaseFragment {
                 FirebaseDb.sArticlesRef) {
             @Override
             protected void populateViewHolder(final ArticleViewHolder viewHolder, Article model, int position) {
+
                 viewHolder.setTextOnViews(model);
 
                 viewHolder.setAmount(mAmount);

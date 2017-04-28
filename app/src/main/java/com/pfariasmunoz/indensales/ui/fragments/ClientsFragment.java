@@ -102,14 +102,28 @@ public class ClientsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String clientId = getRef(position).getKey();
+
+                        FirebaseDb.sClientAdressRef.child(clientId).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                long adressNum = dataSnapshot.getChildrenCount();
+                                Log.i("NUMBER OF CHILDREN", String.valueOf(adressNum));
+                                System.out.println(String.valueOf(adressNum));
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
                         Intent intent = new Intent(getActivity(), AddSaleActivity.class);
                         intent.putExtra(Constants.CLIENT_ID_KEY, clientId);
                         startActivity(intent);
                     }
                 });
 
-
-                String clientUid = FirebaseDb.getUid(getRef(position));
                 viewHolder.setTextOnViews(model);
                 mLoadingIndicatorProgressBar.setVisibility(View.GONE);
                 mClientRecyclerView.setVisibility(View.VISIBLE);
