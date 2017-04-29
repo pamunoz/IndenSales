@@ -4,17 +4,17 @@ package com.pfariasmunoz.indensales.data.models;
  * Created by Pablo Farias on 17-04-17.
  */
 
-public class Adress {
+public class Address {
     private String ciudad;
     private String comuna;
     private String direccion;
     private String telefono;
     private String zona;
 
-    public Adress() {
+    public Address() {
     }
 
-    public Adress(String ciudad, String comuna, String direccion, String telefono, String zona) {
+    public Address(String ciudad, String comuna, String direccion, String telefono, String zona) {
         this.ciudad = ciudad;
         this.comuna = comuna;
         this.direccion = direccion;

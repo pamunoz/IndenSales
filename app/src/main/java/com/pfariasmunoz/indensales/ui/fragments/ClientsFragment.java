@@ -131,7 +131,7 @@ public class ClientsFragment extends Fragment {
      * @param clientId
      */
     private void startSalesActivity(long numberOfAdresses, String clientId) {
-        if (numberOfAdresses < 2) {
+        if (numberOfAdresses > 2) {
             Intent intent = new Intent(getActivity(), AddSaleActivity.class);
             intent.putExtra(Constants.CLIENT_ID_KEY, clientId);
             startActivity(intent);
