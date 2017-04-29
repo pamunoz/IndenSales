@@ -7,29 +7,22 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.FirebaseDb;
-import com.pfariasmunoz.indensales.data.models.Adress;
 import com.pfariasmunoz.indensales.data.models.Client;
 import com.pfariasmunoz.indensales.ui.activities.AddSaleActivity;
 import com.pfariasmunoz.indensales.ui.viewholders.ClientViewHolder;
 import com.pfariasmunoz.indensales.utils.Constants;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -145,7 +138,7 @@ public class ClientsFragment extends Fragment {
         } else {
             Bundle args = new Bundle();
             args.putString(Constants.CLIENT_ID_KEY, clientId);
-            ClientAdressesFragment fragment = new ClientAdressesFragment();
+            ClientAddressesFragment fragment = new ClientAddressesFragment();
             fragment.setArguments(args);
             this.getFragmentManager().beginTransaction()
                     .replace(R.id.container, fragment)
