@@ -18,14 +18,16 @@ public class AddressViewHolder extends RecyclerView.ViewHolder {
     TextView mClientCommuneTextView;
     TextView mClientPhoneTextView;
     TextView mClientZoneTextView;
+    private View mRootView;
 
     public AddressViewHolder(View itemView) {
         super(itemView);
-        mClientAddressTextView = (TextView) itemView.findViewById(R.id.tv_client_address);
-        mClinetCityTextView = (TextView) itemView.findViewById(R.id.tv_client_city);
-        mClientCommuneTextView = (TextView) itemView.findViewById(R.id.tv_client_commune);
-        mClientPhoneTextView = (TextView) itemView.findViewById(R.id.tv_client_phone);
-        mClientZoneTextView = (TextView) itemView.findViewById(R.id.tv_client_zone);
+        mRootView = itemView;
+        mClientAddressTextView = (TextView) mRootView.findViewById(R.id.tv_client_address);
+        mClinetCityTextView = (TextView) mRootView.findViewById(R.id.tv_client_city);
+        mClientCommuneTextView = (TextView) mRootView.findViewById(R.id.tv_client_commune);
+        mClientPhoneTextView = (TextView) mRootView.findViewById(R.id.tv_client_phone);
+        mClientZoneTextView = (TextView) mRootView.findViewById(R.id.tv_client_zone);
     }
 
     public void setTextsOnViews(Address address) {
@@ -34,5 +36,9 @@ public class AddressViewHolder extends RecyclerView.ViewHolder {
         mClientCommuneTextView.setText(address.getComuna());
         mClientPhoneTextView.setText(address.getTelefono());
         mClientZoneTextView.setText(address.getZona());
+    }
+
+    public View getRootView() {
+        return mRootView;
     }
 }

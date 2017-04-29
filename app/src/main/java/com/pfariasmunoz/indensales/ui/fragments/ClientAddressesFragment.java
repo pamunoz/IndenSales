@@ -1,6 +1,7 @@
 package com.pfariasmunoz.indensales.ui.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.data.models.Address;
+import com.pfariasmunoz.indensales.ui.activities.AddSaleActivity;
 import com.pfariasmunoz.indensales.ui.viewholders.AddressViewHolder;
 import com.pfariasmunoz.indensales.utils.Constants;
 
@@ -53,9 +55,11 @@ public class ClientAddressesFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
     }
 
+
+
     public void setUpAdapter() {
         Bundle args = getArguments();
-        String clientId = args.getString(Constants.CLIENT_ID_KEY);
+        final String clientId = args.getString(Constants.CLIENT_ID_KEY);
         if (mAdapter == null) {
             mAdapter = new FirebaseRecyclerAdapter<Address, AddressViewHolder>(
                     Address.class,
@@ -66,7 +70,16 @@ public class ClientAddressesFragment extends Fragment {
                 @Override
                 protected void populateViewHolder(AddressViewHolder viewHolder, Address model, int position) {
                     viewHolder.setTextsOnViews(model);
+                    viewHolder.getRootView().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), AddSaleActivity.class);
+                            intent.putExtra(Constants.CLIENT_ID_KEY, clientId);
+                            startActivity(intent);
+                        }
+                    });
                 }
+
             };
         } else {
             mAdapter.cleanup();
