@@ -33,13 +33,12 @@ public class FirebaseDb {
         }
     }
 
-    public void createArticleSale(Article article, ArrayList<Sale> sales) {
+    public void createArticleSale(Article article, Sale sale) {
         ArrayList<ArticleSale> articleSales = new ArrayList<>();
 
     }
 
     public Sale createSale(String currentClientId, FirebaseUser user, String currentAddressId) {
-
         boolean isApproved = false;
         long currentTime = System.currentTimeMillis();
         String stringCurrentTime = String.valueOf(currentTime);

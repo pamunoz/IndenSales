@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +21,17 @@ import com.pfariasmunoz.indensales.ui.viewholders.ArticleViewHolder;
 import com.pfariasmunoz.indensales.utils.MathHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ArticlesFragment extends BaseFragment {
+    private Sale mSale;
 
-    private ArrayList<Sale> mSalesList = new ArrayList<>();
     private ArrayList<ArticleSale> mArticleSaleList = new ArrayList<>();
+    private Map<String, Integer> mArticlesMap = new HashMap<>();
 
     private int mAmount;
     private String mTotalPrice;
@@ -77,6 +81,16 @@ public class ArticlesFragment extends BaseFragment {
                 viewHolder.getAddButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        long currentTime = System.currentTimeMillis();
+                        String stringCurrentTime = String.valueOf(currentTime);
+                        // TODO: finish creating current sale for this fragment
+                        //mSale = new Sale(false, currentTime, null, null, null);
+                        String articleKey = getRef(position).getKey();
+                        int count = mArticlesMap.containsKey(articleKey) ? mArticlesMap.get(articleKey) : 0;
+                        mArticlesMap.put(articleKey, count + 1);
+                        
+                        Log.i("ARTICLE KEY : " + articleKey, " " + String.valueOf(count));
+
 
                         viewHolder.getTotalPriceTextView()
                                 .setText(MathHelper.setTotalPrice(mAmount, viewHolder
