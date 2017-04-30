@@ -8,9 +8,9 @@ public class Sale {
 
     private boolean aprob;
     private String fecha;
-    private long idcliente;
-    private long iddireccion;
-    private long idvendedor;
+    private String idcliente;
+    private String iddireccion;
+    private String idvendedor;
     private long total;
 
     public Sale() {
@@ -18,9 +18,9 @@ public class Sale {
 
     public Sale(boolean aprob,
                 String fecha,
-                long idcliente,
-                long iddireccion,
-                long idvendedor,
+                String idcliente,
+                String iddireccion,
+                String idvendedor,
                 long total) {
         this.aprob = aprob;
         this.fecha = fecha;
@@ -38,15 +38,15 @@ public class Sale {
         return fecha;
     }
 
-    public long getIdcliente() {
+    public String getIdcliente() {
         return idcliente;
     }
 
-    public long getIddireccion() {
+    public String getIddireccion() {
         return iddireccion;
     }
 
-    public long getIdvendedor() {
+    public String getIdvendedor() {
         return idvendedor;
     }
 

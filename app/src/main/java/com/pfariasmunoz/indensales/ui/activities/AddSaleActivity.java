@@ -7,6 +7,8 @@ import com.pfariasmunoz.indensales.R;
 
 public class AddSaleActivity extends AppCompatActivity {
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

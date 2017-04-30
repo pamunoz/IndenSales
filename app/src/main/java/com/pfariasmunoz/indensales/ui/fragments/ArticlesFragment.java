@@ -14,13 +14,20 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.data.models.Article;
+import com.pfariasmunoz.indensales.data.models.ArticleSale;
+import com.pfariasmunoz.indensales.data.models.Sale;
 import com.pfariasmunoz.indensales.ui.viewholders.ArticleViewHolder;
 import com.pfariasmunoz.indensales.utils.MathHelper;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ArticlesFragment extends BaseFragment {
+
+    private ArrayList<Sale> mSalesList = new ArrayList<>();
+    private ArrayList<ArticleSale> mArticleSaleList = new ArrayList<>();
 
     private int mAmount;
     private String mTotalPrice;
@@ -59,7 +66,7 @@ public class ArticlesFragment extends BaseFragment {
                 ArticleViewHolder.class,
                 FirebaseDb.sArticlesRef) {
             @Override
-            protected void populateViewHolder(final ArticleViewHolder viewHolder, Article model, int position) {
+            protected void populateViewHolder(final ArticleViewHolder viewHolder, Article model, final int position) {
 
                 viewHolder.setTextOnViews(model);
 
@@ -70,7 +77,7 @@ public class ArticlesFragment extends BaseFragment {
                 viewHolder.getAddButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mAmount++;
+
                         viewHolder.getTotalPriceTextView()
                                 .setText(MathHelper.setTotalPrice(mAmount, viewHolder
                                         .getStringPrice()));
@@ -102,6 +109,8 @@ public class ArticlesFragment extends BaseFragment {
         super.onDestroy();
         if (mArticleAdapter != null) mArticleAdapter.cleanup();
     }
+
+
 
 
 }

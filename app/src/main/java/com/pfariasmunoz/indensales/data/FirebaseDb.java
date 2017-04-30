@@ -1,7 +1,14 @@
 package com.pfariasmunoz.indensales.data;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.pfariasmunoz.indensales.data.models.Article;
+import com.pfariasmunoz.indensales.data.models.ArticleSale;
+import com.pfariasmunoz.indensales.data.models.Client;
+import com.pfariasmunoz.indensales.data.models.Sale;
+
+import java.util.ArrayList;
 
 /**
  * Created by Pablo Farias on 16-04-17.
@@ -24,5 +31,22 @@ public class FirebaseDb {
         } else {
             return "Nothing found";
         }
+    }
+
+    public void createArticleSale(Article article, ArrayList<Sale> sales) {
+        ArrayList<ArticleSale> articleSales = new ArrayList<>();
+
+    }
+
+    public Sale createSale(String currentClientId, FirebaseUser user, String currentAddressId) {
+
+        boolean isApproved = false;
+        long currentTime = System.currentTimeMillis();
+        String stringCurrentTime = String.valueOf(currentTime);
+        String clientId = currentClientId;
+        String addressId = currentAddressId;
+        String userId = user.getUid();
+        long total = 0;
+        return new Sale(isApproved, stringCurrentTime, clientId, addressId, userId, total);
     }
 }
