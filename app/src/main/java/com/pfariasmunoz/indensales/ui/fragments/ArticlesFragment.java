@@ -28,6 +28,8 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class ArticlesFragment extends BaseFragment {
+
+    public static final String TAG = ArticlesFragment.class.getSimpleName();
     private Sale mSale;
 
     private ArrayList<ArticleSale> mArticleSaleList = new ArrayList<>();
@@ -68,51 +70,40 @@ public class ArticlesFragment extends BaseFragment {
                 Article.class,
                 R.layout.item_article,
                 ArticleViewHolder.class,
-                FirebaseDb.sArticlesRef) {
+                FirebaseDb.sArticlesRef.limitToFirst(20)) {
             @Override
-            protected void populateViewHolder(final ArticleViewHolder viewHolder, Article model, final int position) {
+            protected void populateViewHolder(
+                    final ArticleViewHolder viewHolder,
+                    Article model, final int position) {
 
                 viewHolder.setTextOnViews(model);
+                String key = getRef(position).getKey();
+                Log.i(TAG, "THE KEY IS: " + key);
 
-                viewHolder.setAmount(mAmount);
-                String totalPrice = MathHelper.setTotalPrice(mAmount, model.getPrecio());
+                if (mArticlesMap.isEmpty() || !mArticlesMap.containsKey(key)) {
+                    viewHolder.setAmount(0);
+                    viewHolder.setTotalPrice(0);
+                } else {
+                    viewHolder.setTotalPrice(mArticlesMap.get(key));
+                    viewHolder.setAmount(mArticlesMap.get(key));
+                }
 
 
                 viewHolder.getAddButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        long currentTime = System.currentTimeMillis();
-                        String stringCurrentTime = String.valueOf(currentTime);
-                        // TODO: finish creating current sale for this fragment
-                        //mSale = new Sale(false, currentTime, null, null, null);
                         String articleKey = getRef(position).getKey();
-                        int count = mArticlesMap.containsKey(articleKey) ? mArticlesMap.get(articleKey) : 0;
-                        mArticlesMap.put(articleKey, count + 1);
-                        
-                        Log.i("ARTICLE KEY : " + articleKey, " " + String.valueOf(count));
-
-
-                        viewHolder.getTotalPriceTextView()
-                                .setText(MathHelper.setTotalPrice(mAmount, viewHolder
-                                        .getStringPrice()));
-                        viewHolder.setAmount(mAmount);
+                        addArticle(articleKey, viewHolder);
                     }
                 });
 
                 viewHolder.getSubstractButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (mAmount > 0) {
-                            mAmount--;
-                        }
-                        viewHolder.getTotalPriceTextView()
-                                .setText(MathHelper.setTotalPrice(mAmount, viewHolder
-                                        .getStringPrice()));
-                        viewHolder.setAmount(mAmount);
+                        String articleKey = getRef(position).getKey();
+                        subtractArticle(articleKey, viewHolder);
                     }
                 });
-
-                viewHolder.getTotalPriceTextView().setText(totalPrice);
             }
         };
         mArticlesRecyclerView.setAdapter(mArticleAdapter);
@@ -124,6 +115,39 @@ public class ArticlesFragment extends BaseFragment {
         if (mArticleAdapter != null) mArticleAdapter.cleanup();
     }
 
+    private void addArticle(String articleKey, ArticleViewHolder viewHolder) {
+        if (!mArticlesMap.isEmpty()) {
+            if (mArticlesMap.containsKey(articleKey)) {
+                mArticlesMap.put(articleKey, mArticlesMap.get(articleKey) + 1);
+            } else {
+                mArticlesMap.put(articleKey, 1);
+            }
+        } else {
+            mArticlesMap.put(articleKey, 1);
+            Log.i(TAG, "Key: " + articleKey + " and value: " + mArticlesMap.get(articleKey) + " Added");
+        }
+        viewHolder.setTotalPrice(mArticlesMap.get(articleKey));
+        viewHolder.setAmount(mArticlesMap.get(articleKey));
+    }
+
+    private void subtractArticle(String articleKey, ArticleViewHolder viewHolder) {
+        if (mArticlesMap.size() == 0) {
+            return;
+        } else if (mArticlesMap.containsKey(articleKey)) {
+            // if the amount of this article is 0, remove it from the map
+            if (mArticlesMap.get(articleKey) <= 1) {
+                mArticlesMap.remove(articleKey);
+                viewHolder.setTotalPrice(0);
+                viewHolder.setAmount(0);
+            } else {
+                mArticlesMap.put(articleKey, mArticlesMap.get(articleKey) - 1);
+                viewHolder.setTotalPrice(mArticlesMap.get(articleKey));
+                viewHolder.setAmount(mArticlesMap.get(articleKey));
+            }
+        } else {
+            return;
+        }
+    }
 
 
 

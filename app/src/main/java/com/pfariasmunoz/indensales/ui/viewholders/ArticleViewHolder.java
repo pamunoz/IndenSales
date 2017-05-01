@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.models.Article;
+import com.pfariasmunoz.indensales.utils.MathHelper;
 
 /**
  * Created by Pablo Farias on 17-04-17.
@@ -64,5 +65,10 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
     public String getStringPrice() {
         return mPriceTextView.getText().toString().trim();
+    }
+
+    public void setTotalPrice(int amount) {
+        String totalPrice = MathHelper.setTotalPrice(amount, getStringPrice());
+        mTotalPriceTextView.setText(totalPrice);
     }
 }
