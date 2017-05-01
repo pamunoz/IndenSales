@@ -35,7 +35,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.ui.fragments.ArticlesFragment;
+import com.pfariasmunoz.indensales.ui.fragments.ClientAddressesFragment;
 import com.pfariasmunoz.indensales.ui.fragments.ClientsFragment;
+import com.pfariasmunoz.indensales.utils.Constants;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -262,6 +264,31 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * This method start the sales activity if the number of adresses is less than 2.
+     * That's because if it is more than 2, it starts a nother fragment with the list
+     * of adresses to choose of the client with the id provided.
+     * @param numberOfAdresses
+     * @param clientId
+     */
+    public void startSalesActivity(long numberOfAdresses, String clientId) {
+        if (numberOfAdresses < 2) {
+            Intent intent = new Intent(this, AddSaleActivity.class);
+            intent.putExtra(Constants.CLIENT_ID_KEY, clientId);
+            startActivity(intent);
+        } else {
+            Bundle args = new Bundle();
+            args.putString(Constants.CLIENT_ID_KEY, clientId);
+            ClientAddressesFragment fragment = new ClientAddressesFragment();
+            fragment.setArguments(args);
+            this.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+
+        }
     }
 
 }

@@ -21,6 +21,7 @@ import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.data.models.Client;
 import com.pfariasmunoz.indensales.ui.activities.AddSaleActivity;
+import com.pfariasmunoz.indensales.ui.activities.MainActivity;
 import com.pfariasmunoz.indensales.ui.viewholders.ClientViewHolder;
 import com.pfariasmunoz.indensales.utils.Constants;
 
@@ -32,6 +33,7 @@ public class ClientsFragment extends Fragment {
     private RecyclerView mClientRecyclerView;
     private FirebaseRecyclerAdapter<Client, ClientViewHolder> mClientAdapter;
     private ProgressBar mLoadingIndicatorProgressBar;
+    private MainActivity mActivity;
 
     // client info to start the sales
     public static final String CLIENT_ID_KEY = "client_id_key";
@@ -46,6 +48,7 @@ public class ClientsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        mActivity = ((MainActivity)getActivity());
         return inflater.inflate(R.layout.fragment_clients, container, false);
     }
 
@@ -101,7 +104,7 @@ public class ClientsFragment extends Fragment {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 long clientAdressNum = dataSnapshot.getChildrenCount();
-                                startSalesActivity(clientAdressNum, clientId);
+                                mActivity.startSalesActivity(clientAdressNum, clientId);
                             }
 
                             @Override
@@ -123,29 +126,6 @@ public class ClientsFragment extends Fragment {
         mClientAdapter.notifyDataSetChanged();
     }
 
-    /**
-     * This method start the sales activity if the number of adresses is less than 2.
-     * That's because if it is more than 2, it starts a nother fragment with the list
-     * of adresses to choose of the client with the id provided.
-     * @param numberOfAdresses
-     * @param clientId
-     */
-    private void startSalesActivity(long numberOfAdresses, String clientId) {
-        if (numberOfAdresses < 2) {
-            Intent intent = new Intent(getActivity(), AddSaleActivity.class);
-            intent.putExtra(Constants.CLIENT_ID_KEY, clientId);
-            startActivity(intent);
-        } else {
-            Bundle args = new Bundle();
-            args.putString(Constants.CLIENT_ID_KEY, clientId);
-            ClientAddressesFragment fragment = new ClientAddressesFragment();
-            fragment.setArguments(args);
-            this.getFragmentManager().beginTransaction()
-                    .replace(R.id.container, fragment)
-                    .addToBackStack(null)
-                    .commit();
 
-        }
-    }
 
 }

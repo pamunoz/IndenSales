@@ -16,6 +16,7 @@ import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.data.models.Article;
 import com.pfariasmunoz.indensales.data.models.ArticleSale;
 import com.pfariasmunoz.indensales.data.models.Sale;
+import com.pfariasmunoz.indensales.ui.activities.AddSaleActivity;
 import com.pfariasmunoz.indensales.ui.viewholders.ArticleViewHolder;
 
 import java.util.ArrayList;
@@ -29,10 +30,10 @@ public class ArticlesFragment extends Fragment {
 
     public static final String TAG = ArticlesFragment.class.getSimpleName();
 
-    private Map<String, Integer> mArticlesMap = new HashMap<>();
     private RecyclerView mArticlesRecyclerView;
     private FirebaseRecyclerAdapter<Article, ArticleViewHolder> mArticleAdapter;
     private View mRootView;
+    private AddSaleActivity mActivity;
 
     public ArticlesFragment() {
         // Required empty public constructor
@@ -44,6 +45,7 @@ public class ArticlesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_articles, container, false);
+        mActivity = ((AddSaleActivity)getActivity());
         initializeViews();
         return mRootView;
     }
@@ -71,12 +73,12 @@ public class ArticlesFragment extends Fragment {
                 String key = getRef(position).getKey();
                 Log.i(TAG, "THE KEY IS: " + key);
 
-                if (mArticlesMap.isEmpty() || !mArticlesMap.containsKey(key)) {
+                if (mActivity.getArticlesMap().isEmpty() || !mActivity.getArticlesMap().containsKey(key)) {
                     viewHolder.setAmount(0);
                     viewHolder.setTotalPrice(0);
                 } else {
-                    viewHolder.setTotalPrice(mArticlesMap.get(key));
-                    viewHolder.setAmount(mArticlesMap.get(key));
+                    viewHolder.setTotalPrice(mActivity.getArticlesMap().get(key));
+                    viewHolder.setAmount(mActivity.getArticlesMap().get(key));
                 }
 
 
@@ -84,7 +86,7 @@ public class ArticlesFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String articleKey = getRef(position).getKey();
-                        addArticle(articleKey, viewHolder);
+                        mActivity.addArticle(articleKey, viewHolder);
                     }
                 });
 
@@ -92,7 +94,7 @@ public class ArticlesFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         String articleKey = getRef(position).getKey();
-                        subtractArticle(articleKey, viewHolder);
+                        mActivity.subtractArticle(articleKey, viewHolder);
                     }
                 });
             }
@@ -105,41 +107,5 @@ public class ArticlesFragment extends Fragment {
         super.onDestroy();
         if (mArticleAdapter != null) mArticleAdapter.cleanup();
     }
-
-    private void addArticle(String articleKey, ArticleViewHolder viewHolder) {
-        if (!mArticlesMap.isEmpty()) {
-            if (mArticlesMap.containsKey(articleKey)) {
-                mArticlesMap.put(articleKey, mArticlesMap.get(articleKey) + 1);
-            } else {
-                mArticlesMap.put(articleKey, 1);
-            }
-        } else {
-            mArticlesMap.put(articleKey, 1);
-            Log.i(TAG, "Key: " + articleKey + " and value: " + mArticlesMap.get(articleKey) + " Added");
-        }
-        viewHolder.setTotalPrice(mArticlesMap.get(articleKey));
-        viewHolder.setAmount(mArticlesMap.get(articleKey));
-    }
-
-    private void subtractArticle(String articleKey, ArticleViewHolder viewHolder) {
-        if (mArticlesMap.size() == 0) {
-            return;
-        } else if (mArticlesMap.containsKey(articleKey)) {
-            // if the amount of this article is 0, remove it from the map
-            if (mArticlesMap.get(articleKey) <= 1) {
-                mArticlesMap.remove(articleKey);
-                viewHolder.setTotalPrice(0);
-                viewHolder.setAmount(0);
-            } else {
-                mArticlesMap.put(articleKey, mArticlesMap.get(articleKey) - 1);
-                viewHolder.setTotalPrice(mArticlesMap.get(articleKey));
-                viewHolder.setAmount(mArticlesMap.get(articleKey));
-            }
-        } else {
-            return;
-        }
-    }
-
-
 
 }
