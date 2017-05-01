@@ -7,12 +7,15 @@ import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.pfariasmunoz.indensales.R;
+import com.pfariasmunoz.indensales.data.models.Article;
+import com.pfariasmunoz.indensales.data.models.ArticleSale;
 import com.pfariasmunoz.indensales.data.models.Sale;
 import com.pfariasmunoz.indensales.ui.fragments.ArticlesFragment;
 import com.pfariasmunoz.indensales.ui.fragments.SalesBarFragment;
 import com.pfariasmunoz.indensales.ui.viewholders.ArticleViewHolder;
 import com.pfariasmunoz.indensales.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -22,6 +25,7 @@ public class AddSaleActivity extends AppCompatActivity {
 
 
     private Map<String, Integer> mArticlesMap = new HashMap<>();
+    private ArrayList<ArticleSale> mArticleSales = new ArrayList<>();
     private String mClientId;
     private FirebaseUser mUser;
     private String mUserId;
@@ -91,14 +95,36 @@ public class AddSaleActivity extends AppCompatActivity {
         return mUserId;
     }
 
-    public Sale createSale(Long totalPrice) {
+    public Sale createSale() {
         boolean aprob = false;
         long currentTime = System.currentTimeMillis();
         String time = String.valueOf(currentTime);
         String clientId = mClientId;
         String clientAddressId = mClientAddressId;
         String userId = mUserId;
+        Long totalPrice = getTotalPrice();
         return new Sale(aprob, time, clientId, clientAddressId, userId, totalPrice);
+    }
+
+    public void addArticleSale(Article article, String articleId) {
+        Iterator it = mArticlesMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            int amount = mArticlesMap.get(articleId);
+            long price = Long.valueOf(article.getPrecio());
+            Long totalPrice = amount * price;
+            ArticleSale articleSale = new ArticleSale(amount, totalPrice);
+            mArticleSales.add(articleSale);
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+    }
+
+    private Long getTotalPrice() {
+        Long result = 0L;
+        for (ArticleSale articleSale : mArticleSales) {
+            result += articleSale.getTotal();
+        }
+        return result;
     }
 
 }
