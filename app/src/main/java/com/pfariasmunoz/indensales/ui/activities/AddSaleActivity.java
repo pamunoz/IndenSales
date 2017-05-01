@@ -14,6 +14,7 @@ import com.pfariasmunoz.indensales.ui.viewholders.ArticleViewHolder;
 import com.pfariasmunoz.indensales.utils.Constants;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class AddSaleActivity extends AppCompatActivity {
@@ -23,19 +24,10 @@ public class AddSaleActivity extends AppCompatActivity {
     private Map<String, Integer> mArticlesMap = new HashMap<>();
     private String mClientId;
     private FirebaseUser mUser;
-    private String userId;
+    private String mUserId;
+    private String mClientAddressId;
 
-    public String getClientId() {
-        return mClientId;
-    }
 
-    public FirebaseUser getUser() {
-        return mUser;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +36,8 @@ public class AddSaleActivity extends AppCompatActivity {
 
         mClientId = getIntent().getStringExtra(Constants.CLIENT_ID_KEY);
         mUser = FirebaseAuth.getInstance().getCurrentUser();
-        userId = mUser.getUid();
+        mUserId = mUser.getUid();
+        mClientAddressId = getIntent().getStringExtra(Constants.ADDRESS_ID_KEY);
     }
 
 
@@ -86,8 +79,26 @@ public class AddSaleActivity extends AppCompatActivity {
         return mArticlesMap;
     }
 
-    public Sale createSale() {
-        long currentTime = System.currentTimeMillis();
-        return new Sale();
+    public String getClientId() {
+        return mClientId;
     }
+
+    public FirebaseUser getUser() {
+        return mUser;
+    }
+
+    public String getUserId() {
+        return mUserId;
+    }
+
+    public Sale createSale(Long totalPrice) {
+        boolean aprob = false;
+        long currentTime = System.currentTimeMillis();
+        String time = String.valueOf(currentTime);
+        String clientId = mClientId;
+        String clientAddressId = mClientAddressId;
+        String userId = mUserId;
+        return new Sale(aprob, time, clientId, clientAddressId, userId, totalPrice);
+    }
+
 }

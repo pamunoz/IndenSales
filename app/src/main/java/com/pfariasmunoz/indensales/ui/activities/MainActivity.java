@@ -273,10 +273,11 @@ public class MainActivity extends AppCompatActivity
      * @param numberOfAdresses
      * @param clientId
      */
-    public void startSalesActivity(long numberOfAdresses, String clientId) {
+    public void startSalesActivity(long numberOfAdresses, String clientId, String addressId) {
         if (numberOfAdresses < 2) {
             Intent intent = new Intent(this, AddSaleActivity.class);
             intent.putExtra(Constants.CLIENT_ID_KEY, clientId);
+            intent.putExtra(Constants.ADDRESS_ID_KEY, addressId);
             startActivity(intent);
         } else {
             Bundle args = new Bundle();
@@ -290,5 +291,7 @@ public class MainActivity extends AppCompatActivity
 
         }
     }
+
+
 
 }

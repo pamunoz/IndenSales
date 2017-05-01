@@ -100,11 +100,13 @@ public class ClientsFragment extends Fragment {
                         final String clientId = getRef(position).getKey();
 
 
+
                         FirebaseDb.sClientAdressRef.child(clientId).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 long clientAdressNum = dataSnapshot.getChildrenCount();
-                                mActivity.startSalesActivity(clientAdressNum, clientId);
+                                String addressId = FirebaseDb.sClientAdressRef.child(clientId).getKey();
+                                mActivity.startSalesActivity(clientAdressNum, clientId, addressId);
                             }
 
                             @Override
