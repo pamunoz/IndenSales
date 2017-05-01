@@ -4,7 +4,6 @@ package com.pfariasmunoz.indensales.ui.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import com.pfariasmunoz.indensales.data.models.Article;
 import com.pfariasmunoz.indensales.data.models.ArticleSale;
 import com.pfariasmunoz.indensales.data.models.Sale;
 import com.pfariasmunoz.indensales.ui.viewholders.ArticleViewHolder;
-import com.pfariasmunoz.indensales.utils.MathHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,17 +25,11 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ArticlesFragment extends BaseFragment {
+public class ArticlesFragment extends Fragment {
 
     public static final String TAG = ArticlesFragment.class.getSimpleName();
-    private Sale mSale;
 
-    private ArrayList<ArticleSale> mArticleSaleList = new ArrayList<>();
     private Map<String, Integer> mArticlesMap = new HashMap<>();
-
-    private int mAmount;
-    private String mTotalPrice;
-
     private RecyclerView mArticlesRecyclerView;
     private FirebaseRecyclerAdapter<Article, ArticleViewHolder> mArticleAdapter;
     private View mRootView;
@@ -52,7 +44,6 @@ public class ArticlesFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_articles, container, false);
-        mAmount = 0;
         initializeViews();
         return mRootView;
     }
