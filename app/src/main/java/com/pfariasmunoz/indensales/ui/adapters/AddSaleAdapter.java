@@ -10,20 +10,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.models.Article;
 
 import java.util.List;
 
-/**
- * Created by Pablo Farias on 02-05-17.
- */
-
 public class AddSaleAdapter
-        extends RecyclerView.Adapter<AddSaleAdapter.ArticleViewHolder>
-        {
+        extends RecyclerView.Adapter<AddSaleAdapter.ArticleViewHolder> {
 
     private List<Article> mArticles;
 
@@ -38,12 +32,9 @@ public class AddSaleAdapter
         return new ArticleViewHolder(itemView);
     }
 
-    @Override
-    public int getItemCount() {
-        return 0;
-    }
 
-            @Override
+
+    @Override
     public void onBindViewHolder(ArticleViewHolder holder, int position) {
         Article article = mArticles.get(position);
         holder.mArticlePriceTextView.setText(article.getPrecio());
@@ -51,6 +42,12 @@ public class AddSaleAdapter
         holder.mArticleTotalPriceTextView.setText(article.getPrecio());
         holder.mArticleAmountTextView.setText(String.valueOf(0));
     }
+
+    @Override
+    public int getItemCount() {
+        return mArticles.size();
+    }
+
     public class ArticleViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener{
         TextView mArticleDescriptionTextView;
@@ -64,7 +61,7 @@ public class AddSaleAdapter
         ImageButton mSubstracArticleImageButton;
 
 
-        public ArticleViewHolder(final View itemView) {
+        public ArticleViewHolder(View itemView) {
             super(itemView);
             mArticleDescriptionTextView = (TextView) itemView.findViewById(R.id.tv_article_description);
             mArticlePriceTextView = (TextView) itemView.findViewById(R.id.tv_article_price);
@@ -110,4 +107,6 @@ public class AddSaleAdapter
             return true;
         }
     }
+
+
 }

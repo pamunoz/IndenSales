@@ -34,7 +34,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.FirebaseDb;
-import com.pfariasmunoz.indensales.ui.fragments.ArticlesFragment;
+//import com.pfariasmunoz.indensales.ui.fragments.ArticlesFragment;
 import com.pfariasmunoz.indensales.ui.fragments.ClientAddressesFragment;
 import com.pfariasmunoz.indensales.ui.fragments.ClientsFragment;
 import com.pfariasmunoz.indensales.utils.Constants;
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity
             // Handle singing out of the app
             AuthUI.getInstance().signOut(this);
         } else if (id == R.id.nav_articles_fragemnt) {
-            initializeFragment(new ArticlesFragment());
+            //initializeFragment(new ArticlesFragment());
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
