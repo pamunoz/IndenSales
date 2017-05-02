@@ -2,10 +2,6 @@ package com.pfariasmunoz.indensales.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -18,10 +14,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pfariasmunoz.indensales.R;
-import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.data.models.Article;
 import com.pfariasmunoz.indensales.data.models.ArticleSale;
-import com.pfariasmunoz.indensales.ui.adapters.AddSaleAdapter;
 import com.pfariasmunoz.indensales.ui.adapters.ArticlesAdapter;
 import com.pfariasmunoz.indensales.utils.Constants;
 
@@ -88,14 +82,6 @@ public class AddSaleActivity extends AppCompatActivity {
         mClientAddressTextView = (TextView) findViewById(R.id.tv_client_address);
         mArticleAmountTextView = (TextView) findViewById(R.id.tv_article_amount);
         mTotalSalesPriceTextView = (TextView) findViewById(R.id.tv_sale_total_price);
-
-        // initialize articles listview and its adapter
-
-//        mAddSaleAdapter = new AddSaleAdapter(mArticles);
-//        mLayoutManager = new LinearLayoutManager(getApplicationContext());
-//        mArticlesRecyclerView.setLayoutManager(mLayoutManager);
-//        mArticlesRecyclerView.setItemAnimator(new DefaultItemAnimator());
-//        mArticlesRecyclerView.setAdapter(mAddSaleAdapter);
 
 
         mClientId = getIntent().getStringExtra(Constants.CLIENT_ID_KEY);

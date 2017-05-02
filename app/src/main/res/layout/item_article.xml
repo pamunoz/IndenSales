@@ -38,6 +38,8 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingEnd="8dp"
+            android:layout_toStartOf="@+id/tv_label_article_total_price"
+            android:layout_toLeftOf="@+id/tv_label_article_total_price"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             />
@@ -108,8 +110,6 @@
             android:paddingRight="4dp"
             android:layout_toLeftOf="@+id/imb_down_arrow"
             android:layout_toStartOf="@+id/imb_down_arrow"
-            android:layout_toEndOf="@+id/tv_article_description"
-            android:layout_toRightOf="@+id/tv_article_description"
             android:gravity="center_horizontal"/>
 
         <TextView
