@@ -12,15 +12,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.models.Article;
 
+import java.util.HashMap;
 import java.util.List;
-
-/**
- * Created by Pablo Farias on 02-05-17.
- */
 
 public class ArticlesAdapter extends ArrayAdapter<Article> {
 
@@ -45,7 +43,7 @@ public class ArticlesAdapter extends ArrayAdapter<Article> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        Article article = getItem(position);
+        final Article article = getItem(position);
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
@@ -62,8 +60,72 @@ public class ArticlesAdapter extends ArrayAdapter<Article> {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.articleDescriptionTextView.setText(article.getDescripcion());
-        viewHolder.articlePriceTextView.setText(article.getPrecio());
+
+        String description = "";
+        String price = "";
+        if (article != null) {
+            description = article.getDescripcion();
+            price = article.getPrecio();
+        }
+        viewHolder.articleDescriptionTextView.setText(description);
+        viewHolder.articlePriceTextView.setText(price);
+        // Set listener on add button
+        viewHolder.addButton.setTag(article);
+        viewHolder.addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Article article = (Article) v.getTag();
+                Toast.makeText(getContext(), "Article to add: " + article.getPrecio(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Set listener on subtract button
+        viewHolder.subtractButton.setTag(article);
+        viewHolder.subtractButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Article article1 = (Article) v.getTag();
+                Toast.makeText(getContext(), "Article to subtract" + article.getPrecio(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return convertView;
     }
+
+
+
+    public void addArticle(String articleKey, HashMap<String, Integer> map) {
+        if (!map.isEmpty()) {
+            if (map.containsKey(articleKey)) {
+                map.put(articleKey, map.get(articleKey) + 1);
+            } else {
+                map.put(articleKey, 1);
+            }
+        } else {
+            map.put(articleKey, 1);
+        }
+//        viewHolder.setTotalPrice(mArticlesMap.get(articleKey));
+//        viewHolder.setAmount(mArticlesMap.get(articleKey));
+    }
+
+    public void subtractArticle(String articleKey, HashMap<String, Integer> map) {
+        if (map.size() == 0) {
+            return;
+        } else if (map.containsKey(articleKey)) {
+            // if the amount of this article is 0, remove it from the map
+            if (map.get(articleKey) <= 1) {
+                map.remove(articleKey);
+//                viewHolder.setTotalPrice(0);
+//                viewHolder.setAmount(0);
+            } else {
+                map.put(articleKey, map.get(articleKey) - 1);
+//                map.setTotalPrice(map.get(articleKey));
+//                viewHolder.setAmount(map.get(articleKey));
+            }
+        } else {
+            return;
+        }
+    }
+
+
 }

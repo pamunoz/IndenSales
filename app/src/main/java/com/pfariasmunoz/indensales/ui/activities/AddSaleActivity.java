@@ -196,7 +196,6 @@ public class AddSaleActivity extends AppCompatActivity {
             mArticlesReference.removeEventListener(mArticleValueEventListener);
             mArticleValueEventListener = null;
         }
-
     }
 
 
@@ -206,38 +205,7 @@ public class AddSaleActivity extends AppCompatActivity {
         detachDatabaseReadListner();
     }
 
-//    public void addArticle(String articleKey, ArticleViewHolder1 viewHolder) {
-//        if (!mArticlesMap.isEmpty()) {
-//            if (mArticlesMap.containsKey(articleKey)) {
-//                mArticlesMap.put(articleKey, mArticlesMap.get(articleKey) + 1);
-//            } else {
-//                mArticlesMap.put(articleKey, 1);
-//            }
-//        } else {
-//            mArticlesMap.put(articleKey, 1);
-//        }
-//        viewHolder.setTotalPrice(mArticlesMap.get(articleKey));
-//        viewHolder.setAmount(mArticlesMap.get(articleKey));
-//    }
-//
-//    public void subtractArticle(String articleKey, ArticleViewHolder1 viewHolder) {
-//        if (mArticlesMap.size() == 0) {
-//            return;
-//        } else if (mArticlesMap.containsKey(articleKey)) {
-//            // if the amount of this article is 0, remove it from the map
-//            if (mArticlesMap.get(articleKey) <= 1) {
-//                mArticlesMap.remove(articleKey);
-//                viewHolder.setTotalPrice(0);
-//                viewHolder.setAmount(0);
-//            } else {
-//                mArticlesMap.put(articleKey, mArticlesMap.get(articleKey) - 1);
-//                viewHolder.setTotalPrice(mArticlesMap.get(articleKey));
-//                viewHolder.setAmount(mArticlesMap.get(articleKey));
-//            }
-//        } else {
-//            return;
-//        }
-//    }
+
 //
 //    public Map<String, Integer> getArticlesMap() {
 //        return mArticlesMap;
