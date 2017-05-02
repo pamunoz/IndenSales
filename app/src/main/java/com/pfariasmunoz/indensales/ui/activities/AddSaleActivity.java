@@ -2,6 +2,7 @@ package com.pfariasmunoz.indensales.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -14,8 +15,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pfariasmunoz.indensales.R;
+import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.data.models.Article;
 import com.pfariasmunoz.indensales.data.models.ArticleSale;
+import com.pfariasmunoz.indensales.data.models.Client;
 import com.pfariasmunoz.indensales.ui.adapters.ArticlesAdapter;
 import com.pfariasmunoz.indensales.utils.Constants;
 
@@ -34,11 +37,8 @@ public class AddSaleActivity extends AppCompatActivity {
     private String mUserId;
     private String mClientAddressId;
 
-    //private RecyclerView mArticlesRecyclerView;
     private ListView mArticlesListView;
     private ArticlesAdapter mArticlesAdapter;
-    //private AddSaleAdapter mAddSaleAdapter;
-    //private RecyclerView.LayoutManager mLayoutManager;
 
     private TextView mClientNameTextView;
     private TextView mClientRutTextView;
@@ -48,14 +48,14 @@ public class AddSaleActivity extends AppCompatActivity {
 
     private List<Article> mArticles = new ArrayList<>();
     private String mUsername;
-    private ChildEventListener mChildArticlesEventListener;
     private ValueEventListener mArticleValueEventListener;
     private DatabaseReference mArticlesReference;
 
     // Firebase instance variables
-    private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mArticlesDatabaseReference;
-    private ChildEventListener mChildEventListener;
+    private ChildEventListener mChildArticlesEventListener;
+    private DatabaseReference mClientDatabaseReference;
+    private ValueEventListener mClientValueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +63,15 @@ public class AddSaleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_sale);
 
         // Initialize Firebase components
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mClientId = getIntent().getStringExtra(Constants.CLIENT_ID_KEY);
+        mClientAddressId = getIntent().getStringExtra(Constants.ADDRESS_ID_KEY);
 
-        mArticlesDatabaseReference = mFirebaseDatabase.getReference().child("articulos");
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
+        mUserId = mUser.getUid();
+
+        //mArticlesDatabaseReference = mFirebaseDatabase.getReference().child("articulos");
+        mArticlesDatabaseReference = FirebaseDb.sArticlesRef;
+        mClientDatabaseReference = FirebaseDb.sClientsRef.child(mClientId);
 
 
         // initialize refererences to views
@@ -84,10 +90,11 @@ public class AddSaleActivity extends AppCompatActivity {
         mTotalSalesPriceTextView = (TextView) findViewById(R.id.tv_sale_total_price);
 
 
-        mClientId = getIntent().getStringExtra(Constants.CLIENT_ID_KEY);
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
-        mUserId = mUser.getUid();
-        mClientAddressId = getIntent().getStringExtra(Constants.ADDRESS_ID_KEY);
+
+
+
+
+        Log.i(TAG, "CLIENT ID: " + mClientId);
 
         attachDatabaseReadListener();
     }
@@ -122,8 +129,25 @@ public class AddSaleActivity extends AppCompatActivity {
                 }
             };
             mArticlesDatabaseReference.addChildEventListener(mChildArticlesEventListener);
-
         }
+        if (mClientValueEventListener == null) {
+            mClientValueEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Client client = dataSnapshot.getValue(Client.class);
+                    mClientNameTextView.setText(client.getNombre());
+                    mClientRutTextView.setText(client.getRut());
+                    Log.i(TAG, "NOMBRE CLIENTE: " + client.getNombre() + " RUT CLIENTE" + client.getRut());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+            mClientDatabaseReference.addValueEventListener(mClientValueEventListener);
+        }
+
     }
 
     private void detachDatabaseReadListner() {
