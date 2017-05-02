@@ -6,6 +6,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,12 +15,14 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.data.models.Article;
 import com.pfariasmunoz.indensales.data.models.ArticleSale;
 import com.pfariasmunoz.indensales.ui.adapters.AddSaleAdapter;
+import com.pfariasmunoz.indensales.ui.adapters.ArticlesAdapter;
 import com.pfariasmunoz.indensales.utils.Constants;
 
 import java.util.ArrayList;
@@ -37,9 +40,11 @@ public class AddSaleActivity extends AppCompatActivity {
     private String mUserId;
     private String mClientAddressId;
 
-    private RecyclerView mArticlesRecyclerView;
-    private AddSaleAdapter mAddSaleAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    //private RecyclerView mArticlesRecyclerView;
+    private ListView mArticlesListView;
+    private ArticlesAdapter mArticlesAdapter;
+    //private AddSaleAdapter mAddSaleAdapter;
+    //private RecyclerView.LayoutManager mLayoutManager;
 
     private TextView mClientNameTextView;
     private TextView mClientRutTextView;
@@ -53,16 +58,31 @@ public class AddSaleActivity extends AppCompatActivity {
     private ValueEventListener mArticleValueEventListener;
     private DatabaseReference mArticlesReference;
 
+    // Firebase instance variables
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mArticlesDatabaseReference;
+    private ChildEventListener mChildEventListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_sale);
 
+        // Initialize Firebase components
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
 
-        mArticlesReference = FirebaseDb.sArticlesRef;
+        mArticlesDatabaseReference = mFirebaseDatabase.getReference().child("articulos");
+
 
         // initialize refererences to views
-        mArticlesRecyclerView = (RecyclerView) findViewById(R.id.rv_articles);
+        //mArticlesRecyclerView = (RecyclerView) findViewById(R.id.rv_articles);
+        mArticlesListView = (ListView) findViewById(R.id.lv_articles_list);
+
+        List<Article> articleList = new ArrayList<>();
+        mArticlesAdapter = new ArticlesAdapter(this, R.layout.item_article, articleList);
+        mArticlesListView.setAdapter(mArticlesAdapter);
+
+        // set the other views
         mClientNameTextView = (TextView) findViewById(R.id.tv_client_name);
         mClientRutTextView = (TextView) findViewById(R.id.tv_client_rut);
         mClientAddressTextView = (TextView) findViewById(R.id.tv_client_address);
@@ -71,11 +91,11 @@ public class AddSaleActivity extends AppCompatActivity {
 
         // initialize articles listview and its adapter
 
-        mAddSaleAdapter = new AddSaleAdapter(mArticles);
-        mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        mArticlesRecyclerView.setLayoutManager(mLayoutManager);
-        mArticlesRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mArticlesRecyclerView.setAdapter(mAddSaleAdapter);
+//        mAddSaleAdapter = new AddSaleAdapter(mArticles);
+//        mLayoutManager = new LinearLayoutManager(getApplicationContext());
+//        mArticlesRecyclerView.setLayoutManager(mLayoutManager);
+//        mArticlesRecyclerView.setItemAnimator(new DefaultItemAnimator());
+//        mArticlesRecyclerView.setAdapter(mAddSaleAdapter);
 
 
         mClientId = getIntent().getStringExtra(Constants.CLIENT_ID_KEY);
@@ -87,13 +107,27 @@ public class AddSaleActivity extends AppCompatActivity {
     }
 
     private void attachDatabaseReadListener() {
-        if (mArticleValueEventListener == null) {
-            mArticleValueEventListener = new ValueEventListener() {
+        if (mChildArticlesEventListener == null) {
+            mChildArticlesEventListener = new ChildEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     Article article = dataSnapshot.getValue(Article.class);
-                    Log.i(TAG, " ||||||||||||||Article descriptions: " + article.getDescripcion());
-                    mArticles.add(article);
+                    mArticlesAdapter.add(article);
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
                 }
 
                 @Override
@@ -101,7 +135,7 @@ public class AddSaleActivity extends AppCompatActivity {
 
                 }
             };
-            FirebaseDb.sArticlesRef.addValueEventListener(mArticleValueEventListener);
+            mArticlesDatabaseReference.addChildEventListener(mChildArticlesEventListener);
 
         }
     }
