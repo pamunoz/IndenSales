@@ -53,9 +53,6 @@ public class AddSaleActivity extends AppCompatActivity {
     private ValueEventListener mArticleValueEventListener;
     private DatabaseReference mArticlesReference;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +62,7 @@ public class AddSaleActivity extends AppCompatActivity {
         mArticlesReference = FirebaseDb.sArticlesRef;
 
         // initialize refererences to views
-        mArticlesRecyclerView = (RecyclerView) findViewById(R.id.rv_articles_2);
+        mArticlesRecyclerView = (RecyclerView) findViewById(R.id.rv_articles);
         mClientNameTextView = (TextView) findViewById(R.id.tv_client_name);
         mClientRutTextView = (TextView) findViewById(R.id.tv_client_rut);
         mClientAddressTextView = (TextView) findViewById(R.id.tv_client_address);
