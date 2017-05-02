@@ -1,28 +1,6 @@
 package com.pfariasmunoz.indensales.ui.fragments;
 
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.pfariasmunoz.indensales.R;
-import com.pfariasmunoz.indensales.data.FirebaseDb;
-import com.pfariasmunoz.indensales.data.models.Article;
-import com.pfariasmunoz.indensales.data.models.ArticleSale;
-import com.pfariasmunoz.indensales.data.models.Sale;
-import com.pfariasmunoz.indensales.ui.activities.AddSaleActivity;
-import com.pfariasmunoz.indensales.ui.viewholders.ArticleViewHolder;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -31,7 +9,7 @@ import java.util.Map;
 //    public static final String TAG = ArticlesFragment.class.getSimpleName();
 //
 //    private RecyclerView mArticlesRecyclerView;
-//    private FirebaseRecyclerAdapter<Article, ArticleViewHolder> mArticleAdapter;
+//    private FirebaseRecyclerAdapter<Article, ArticleViewHolder1> mArticleAdapter;
 //    private View mRootView;
 //    private AddSaleActivity mActivity;
 //
@@ -59,14 +37,14 @@ import java.util.Map;
 //    }
 //
 //    private void setupAdapter() {
-//        mArticleAdapter = new FirebaseRecyclerAdapter<Article, ArticleViewHolder>(
+//        mArticleAdapter = new FirebaseRecyclerAdapter<Article, ArticleViewHolder1>(
 //                Article.class,
 //                R.layout.item_article,
-//                ArticleViewHolder.class,
+//                ArticleViewHolder1.class,
 //                FirebaseDb.sArticlesRef.limitToFirst(20)) {
 //            @Override
 //            protected void populateViewHolder(
-//                    final ArticleViewHolder viewHolder,
+//                    final ArticleViewHolder1 viewHolder,
 //                    Article model, final int position) {
 //
 //                viewHolder.setTextOnViews(model);

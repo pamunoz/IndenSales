@@ -14,7 +14,7 @@ import com.pfariasmunoz.indensales.utils.MathHelper;
  * Created by Pablo Farias on 17-04-17.
  */
 
-public class ArticleViewHolder extends RecyclerView.ViewHolder {
+public class ArticleViewHolder1 extends RecyclerView.ViewHolder {
     private TextView mDescriptionTextView;
     private TextView mPriceTextView;
     private TextView mTotalPriceTextView;
@@ -25,7 +25,7 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
 
 
-    public ArticleViewHolder(View itemView) {
+    public ArticleViewHolder1(View itemView) {
         super(itemView);
         mView = itemView;
         mDescriptionTextView = (TextView) mView.findViewById(R.id.tv_article_description);

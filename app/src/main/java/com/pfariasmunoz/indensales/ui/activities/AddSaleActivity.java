@@ -19,15 +19,11 @@ import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.data.models.Article;
 import com.pfariasmunoz.indensales.data.models.ArticleSale;
-import com.pfariasmunoz.indensales.data.models.Sale;
 import com.pfariasmunoz.indensales.ui.adapters.AddSaleAdapter;
-import com.pfariasmunoz.indensales.ui.fragments.SalesBarFragment;
-import com.pfariasmunoz.indensales.ui.viewholders.ArticleViewHolder;
 import com.pfariasmunoz.indensales.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -128,7 +124,7 @@ public class AddSaleActivity extends AppCompatActivity {
         detachDatabaseReadListner();
     }
 
-//    public void addArticle(String articleKey, ArticleViewHolder viewHolder) {
+//    public void addArticle(String articleKey, ArticleViewHolder1 viewHolder) {
 //        if (!mArticlesMap.isEmpty()) {
 //            if (mArticlesMap.containsKey(articleKey)) {
 //                mArticlesMap.put(articleKey, mArticlesMap.get(articleKey) + 1);
@@ -142,7 +138,7 @@ public class AddSaleActivity extends AppCompatActivity {
 //        viewHolder.setAmount(mArticlesMap.get(articleKey));
 //    }
 //
-//    public void subtractArticle(String articleKey, ArticleViewHolder viewHolder) {
+//    public void subtractArticle(String articleKey, ArticleViewHolder1 viewHolder) {
 //        if (mArticlesMap.size() == 0) {
 //            return;
 //        } else if (mArticlesMap.containsKey(articleKey)) {
