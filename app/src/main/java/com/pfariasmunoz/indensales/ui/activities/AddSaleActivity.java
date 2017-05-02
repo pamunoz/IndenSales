@@ -2,14 +2,18 @@ package com.pfariasmunoz.indensales.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.models.Article;
 import com.pfariasmunoz.indensales.data.models.ArticleSale;
 import com.pfariasmunoz.indensales.data.models.Sale;
+import com.pfariasmunoz.indensales.ui.adapters.AddSaleAdapter;
 import com.pfariasmunoz.indensales.ui.fragments.ArticlesFragment;
 import com.pfariasmunoz.indensales.ui.fragments.SalesBarFragment;
 import com.pfariasmunoz.indensales.ui.viewholders.ArticleViewHolder;
@@ -18,6 +22,7 @@ import com.pfariasmunoz.indensales.utils.Constants;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class AddSaleActivity extends AppCompatActivity {
@@ -31,12 +36,37 @@ public class AddSaleActivity extends AppCompatActivity {
     private String mUserId;
     private String mClientAddressId;
 
+    private RecyclerView mArticlesRecyclerView;
+    private AddSaleAdapter mAddSaleAdapter;
+
+    private TextView mClientNameTextView;
+    private TextView mClientRutTextView;
+    private TextView mClientAddressTextView;
+    private TextView mArticleAmountTextView;
+    private TextView mTotalSalesPriceTextView;
+
+    private String mUsername;
+    private ChildEventListener mChildEventListener;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_sale);
+
+        // initialize refererences to views
+        mArticlesRecyclerView = (RecyclerView) findViewById(R.id.rv_articles);
+        mClientNameTextView = (TextView) findViewById(R.id.tv_client_name);
+        mClientRutTextView = (TextView) findViewById(R.id.tv_client_rut);
+        mClientAddressTextView = (TextView) findViewById(R.id.tv_client_address);
+        mArticleAmountTextView = (TextView) findViewById(R.id.tv_article_amount);
+        mTotalSalesPriceTextView = (TextView) findViewById(R.id.tv_sale_total_price);
+
+        // initialize articles listview and its adapter
+        List<Article> articles = new ArrayList<>();
+        mAddSaleAdapter = new AddSaleAdapter(articles);
+        mArticlesRecyclerView.setAdapter(mAddSaleAdapter);
 
         mClientId = getIntent().getStringExtra(Constants.CLIENT_ID_KEY);
         mUser = FirebaseAuth.getInstance().getCurrentUser();
