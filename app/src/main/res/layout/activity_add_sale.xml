@@ -8,6 +8,132 @@
     android:orientation="vertical"
     tools:context="com.pfariasmunoz.indensales.ui.activities.AddSaleActivity">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_articles"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingTop="8dp"
+        android:paddingRight="16dp"
+        android:paddingEnd="16dp"
+        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
+        android:paddingBottom="8dp"
+        android:layout_weight="2"
+        android:background="#81F781">
+
+        <TextView
+            android:id="@+id/tv_client_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Nombre Cliente"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:paddingLeft="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"/>
+        <TextView
+            android:id="@+id/tv_client_rut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="11.111.111-1"
+            android:paddingStart="8dp"
+            android:paddingLeft="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_below="@+id/tv_client_name"/>
+        <TextView
+            android:id="@+id/tv_cient_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
+            android:layout_below="@+id/tv_client_rut"
+            tools:text="Avda Ortuzar 1068, Santiago, Melipilla"/>
+        <ToggleButton
+            tools:textOff="Agregar Venta"
+            tools:textOn="Cancelar Venta"
+            android:id="@+id/tb_togle_crear_venta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            />
+
+
+
+        <TextView
+            android:id="@+id/tv_articles_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="23"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:paddingEnd="8dp"
+            android:paddingRight="8dp"
+            android:paddingStart="4dp"
+            android:paddingLeft="4dp"
+            android:gravity="center"
+            android:paddingTop="8dp"/>
+        <TextView
+            android:id="@+id/tv_label_articles_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Cantidad"
+            android:paddingTop="8dp"
+            android:paddingRight="4dp"
+            android:paddingEnd="4dp"
+            android:paddingLeft="4dp"
+            android:paddingStart="4dp"
+            android:layout_toLeftOf="@+id/tv_articles_amount"
+            android:layout_toStartOf="@+id/tv_articles_amount"
+            android:layout_toRightOf="@+id/tb_togle_crear_venta"
+            android:layout_toEndOf="@+id/tb_togle_crear_venta"
+            android:layout_alignParentTop="true"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/tv_label_sale_total_price"
+            android:layout_width="wrap_content"
+            android:layout_below="@+id/tv_articles_amount"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            tools:text="Precio Total"/>
+        <TextView
+            android:id="@+id/tv_sale_total_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="$120.000"
+            android:textSize="18sp"
+            android:layout_below="@+id/tv_label_sale_total_price"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+
+        <TextView
+            android:id="@+id/tv_is_sales_aproved"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/tw__composer_red"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/tw__composer_white"
+            tools:text="Venta no aprovada"/>
+
+
+
+    </RelativeLayout>
+    <!--
     <fragment
         android:id="@+id/fl_articles"
         android:layout_width="match_parent"
@@ -20,6 +146,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:name="com.pfariasmunoz.indensales.ui.fragments.SalesBarFragment"/>
+        android:name="com.pfariasmunoz.indensales.ui.fragments.SalesBarFragment"/> -->
 
 </LinearLayout>
