@@ -43,6 +43,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/bt_crear_venta"
+            android:layout_toStartOf="@+id/bt_crear_venta"
             android:paddingLeft="8dp"
             android:paddingStart="8dp"
             android:paddingTop="4dp"
@@ -58,7 +60,7 @@
             android:paddingBottom="4dp"
             android:layout_below="@+id/tv_client_name"/>
         <TextView
-            android:id="@+id/tv_cient_address"
+            android:id="@+id/tv_client_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="8dp"
@@ -66,15 +68,14 @@
             android:paddingTop="4dp"
             android:layout_below="@+id/tv_client_rut"
             tools:text="Avda Ortuzar 1068, Santiago, Melipilla"/>
-        <ToggleButton
-            tools:textOff="Agregar Venta"
-            tools:textOn="Cancelar Venta"
-            android:id="@+id/tb_togle_crear_venta"
+        <Button
+            android:id="@+id/bt_crear_venta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
+            android:text="Crear Venta"
             />
 
 
@@ -104,8 +105,8 @@
             android:paddingStart="4dp"
             android:layout_toLeftOf="@+id/tv_articles_amount"
             android:layout_toStartOf="@+id/tv_articles_amount"
-            android:layout_toRightOf="@+id/tb_togle_crear_venta"
-            android:layout_toEndOf="@+id/tb_togle_crear_venta"
+            android:layout_toRightOf="@+id/bt_crear_venta"
+            android:layout_toEndOf="@+id/bt_crear_venta"
             android:layout_alignParentTop="true"
             android:gravity="center"/>
         <TextView

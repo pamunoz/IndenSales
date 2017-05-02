@@ -5,28 +5,20 @@ package com.pfariasmunoz.indensales.data.models;
  */
 
 public class Address {
-    private String ciudad;
     private String comuna;
+    private String zona;
     private String direccion;
     private String telefono;
-    private String zona;
+    private String ciudad;
 
     public Address() {
     }
 
-    public Address(String ciudad, String comuna, String direccion, String telefono, String zona) {
-        this.ciudad = ciudad;
+    public Address(String comuna, String zona, String direccion, String telefono, String ciudad) {
         this.comuna = comuna;
+        this.zona = zona;
         this.direccion = direccion;
         this.telefono = telefono;
-        this.zona = zona;
-    }
-
-    public String getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
     }
 
@@ -36,6 +28,14 @@ public class Address {
 
     public void setComuna(String comuna) {
         this.comuna = comuna;
+    }
+
+    public String getZona() {
+        return zona;
+    }
+
+    public void setZona(String zona) {
+        this.zona = zona;
     }
 
     public String getDireccion() {
@@ -54,11 +54,11 @@ public class Address {
         this.telefono = telefono;
     }
 
-    public String getZona() {
-        return zona;
+    public String getCiudad() {
+        return ciudad;
     }
 
-    public void setZona(String zona) {
-        this.zona = zona;
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
     }
 }
