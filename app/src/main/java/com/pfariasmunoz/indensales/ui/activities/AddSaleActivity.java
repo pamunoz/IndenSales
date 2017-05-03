@@ -105,13 +105,33 @@ public class AddSaleActivity extends AppCompatActivity {
             @Override
             protected void populateView(View view, final Article model, final int position) {
 
-                ((TextView) view.findViewById(R.id.tv_article_description)).setText(model.getDescripcion());
-                ((TextView) view.findViewById(R.id.tv_article_price)).setText(model.getPrecio());
-
+                final TextView articleDescriptionTextView = (TextView) view.findViewById(R.id.tv_article_description);
+                final TextView articlePriceTextView = (TextView) view.findViewById(R.id.tv_article_price);
                 final TextView articleAmountTextView = (TextView) view.findViewById(R.id.tv_article_amount);
                 final TextView articleTotalPriceTextView = (TextView) view.findViewById(R.id.tv_article_total_price);
 
-                ((ImageButton) view.findViewById(R.id.imb_up_arrow)).setOnClickListener(new View.OnClickListener() {
+                final ImageButton addArticleToSaleButton = (ImageButton) view.findViewById(R.id.imb_up_arrow);
+                final ImageButton subtractArticleOfSaleButton = (ImageButton) view.findViewById(R.id.imb_down_arrow);
+
+                if (mArticlesMap.isEmpty()) {
+                    articleAmountTextView.setText("0");
+                    articleTotalPriceTextView.setText("0");
+                } else {
+                    if (mArticlesMap.containsKey(getRef(position).getKey())) {
+                        Long totalPrice = mArticlesMap.get(getRef(position).getKey()) * Long.valueOf(model.getPrecio());
+                        String stringTotalPrice = String.valueOf(totalPrice);
+                        articleTotalPriceTextView.setText(stringTotalPrice);
+                        articleAmountTextView.setText(String.valueOf(mArticlesMap.get(getRef(position).getKey())));
+                    } else {
+                        articleAmountTextView.setText("0");
+                        articleTotalPriceTextView.setText("0");
+                    }
+                }
+
+                articleDescriptionTextView.setText(model.getDescripcion());
+                articlePriceTextView.setText(model.getPrecio());
+
+                addArticleToSaleButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String articleKey = getRef(position).getKey();
@@ -130,7 +150,6 @@ public class AddSaleActivity extends AppCompatActivity {
 
                                 Long totalPrice = mArticlesMap.get(articleKey) * Long.valueOf(model.getPrecio());
                                 String stringTotalPrice = String.valueOf(totalPrice);
-                                Toast.makeText(mActivity, "TOTAL: " + stringTotalPrice, Toast.LENGTH_SHORT).show();
 
                                 articleTotalPriceTextView.setText(stringTotalPrice);
                                 articleAmountTextView.setText(String.valueOf(mArticlesMap.get(articleKey)));
@@ -140,7 +159,6 @@ public class AddSaleActivity extends AppCompatActivity {
 
                             Long totalPrice = mArticlesMap.get(articleKey) * Long.valueOf(model.getPrecio());
                             String stringTotalPrice = String.valueOf(totalPrice);
-                            Toast.makeText(mActivity, "TOTAL: " + stringTotalPrice, Toast.LENGTH_SHORT).show();
 
                             articleTotalPriceTextView.setText(stringTotalPrice);
                             articleAmountTextView.setText(String.valueOf(mArticlesMap.get(articleKey)));
@@ -148,7 +166,7 @@ public class AddSaleActivity extends AppCompatActivity {
 
                     }
                 });
-                ((ImageButton) view.findViewById(R.id.imb_down_arrow)).setOnClickListener(new View.OnClickListener() {
+                subtractArticleOfSaleButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String articleKey = getRef(position).getKey();
@@ -158,8 +176,7 @@ public class AddSaleActivity extends AppCompatActivity {
                             // if the amount of this article is 0, remove it from the map
                             if (mArticlesMap.get(articleKey) <= 1) {
                                 mArticlesMap.remove(articleKey);
-//                viewHolder.setTotalPrice(0);
-//                viewHolder.setAmount(0);
+
                                 articleAmountTextView.setText(String.valueOf(0));
                                 articleTotalPriceTextView.setText(String.valueOf(0));
 
@@ -168,12 +185,9 @@ public class AddSaleActivity extends AppCompatActivity {
 
                                 Long totalPrice = mArticlesMap.get(articleKey) * Long.valueOf(model.getPrecio());
                                 String stringTotalPrice = String.valueOf(totalPrice);
-                                Toast.makeText(mActivity, "TOTAL: " + stringTotalPrice, Toast.LENGTH_SHORT).show();
 
                                 articleTotalPriceTextView.setText(stringTotalPrice);
                                 articleAmountTextView.setText(String.valueOf(mArticlesMap.get(articleKey)));
-//                map.setTotalPrice(map.get(articleKey));
-//                viewHolder.setAmount(map.get(articleKey));
                             }
                         } else {
                             return;
