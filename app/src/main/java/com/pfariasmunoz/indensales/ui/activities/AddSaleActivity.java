@@ -36,7 +36,7 @@ import java.util.Map;
 public class AddSaleActivity extends AppCompatActivity {
     public static final String TAG = AddSaleActivity.class.getSimpleName();
 
-    private Map<String, Integer> mArticlesMap = new HashMap<>();
+    private HashMap<String, Integer> mArticlesMap = new HashMap<>();
     private ArrayList<ArticleSale> mArticleSales = new ArrayList<>();
     private String mClientId;
     private FirebaseUser mUser;
@@ -103,23 +103,82 @@ public class AddSaleActivity extends AppCompatActivity {
                 FirebaseDb.sArticlesRef
         ) {
             @Override
-            protected void populateView(View view, Article model, int position) {
+            protected void populateView(View view, final Article model, final int position) {
 
                 ((TextView) view.findViewById(R.id.tv_article_description)).setText(model.getDescripcion());
                 ((TextView) view.findViewById(R.id.tv_article_price)).setText(model.getPrecio());
 
-                ((TextView) view.findViewById(R.id.tv_article_amount)).setText(String.valueOf(0));
-                ((TextView) view.findViewById(R.id.tv_article_total_price)).setText(String.valueOf(0));
+                final TextView articleAmountTextView = (TextView) view.findViewById(R.id.tv_article_amount);
+                final TextView articleTotalPriceTextView = (TextView) view.findViewById(R.id.tv_article_total_price);
+
                 ((ImageButton) view.findViewById(R.id.imb_up_arrow)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(mActivity, "BUTTON UP CLICKED", Toast.LENGTH_SHORT).show();
+                        String articleKey = getRef(position).getKey();
+                        if (!mArticlesMap.isEmpty()) {
+                            if (mArticlesMap.containsKey(articleKey)) {
+                                mArticlesMap.put(articleKey, mArticlesMap.get(articleKey) + 1);
+
+                                Long totalPrice = mArticlesMap.get(articleKey) * Long.valueOf(model.getPrecio());
+                                String stringTotalPrice = String.valueOf(totalPrice);
+                                Toast.makeText(mActivity, "TOTAL: " + stringTotalPrice, Toast.LENGTH_SHORT).show();
+
+                                articleTotalPriceTextView.setText(stringTotalPrice);
+                                articleAmountTextView.setText(String.valueOf(mArticlesMap.get(articleKey)));
+                            } else {
+                                mArticlesMap.put(articleKey, 1);
+
+                                Long totalPrice = mArticlesMap.get(articleKey) * Long.valueOf(model.getPrecio());
+                                String stringTotalPrice = String.valueOf(totalPrice);
+                                Toast.makeText(mActivity, "TOTAL: " + stringTotalPrice, Toast.LENGTH_SHORT).show();
+
+                                articleTotalPriceTextView.setText(stringTotalPrice);
+                                articleAmountTextView.setText(String.valueOf(mArticlesMap.get(articleKey)));
+                            }
+                        } else {
+                            mArticlesMap.put(articleKey, 1);
+
+                            Long totalPrice = mArticlesMap.get(articleKey) * Long.valueOf(model.getPrecio());
+                            String stringTotalPrice = String.valueOf(totalPrice);
+                            Toast.makeText(mActivity, "TOTAL: " + stringTotalPrice, Toast.LENGTH_SHORT).show();
+
+                            articleTotalPriceTextView.setText(stringTotalPrice);
+                            articleAmountTextView.setText(String.valueOf(mArticlesMap.get(articleKey)));
+                        }
+
                     }
                 });
                 ((ImageButton) view.findViewById(R.id.imb_down_arrow)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(mActivity, "BUTTON DOWN CLICKED", Toast.LENGTH_SHORT).show();
+                        String articleKey = getRef(position).getKey();
+                        if (mArticlesMap.size() == 0) {
+                            return;
+                        } else if (mArticlesMap.containsKey(articleKey)) {
+                            // if the amount of this article is 0, remove it from the map
+                            if (mArticlesMap.get(articleKey) <= 1) {
+                                mArticlesMap.remove(articleKey);
+//                viewHolder.setTotalPrice(0);
+//                viewHolder.setAmount(0);
+                                articleAmountTextView.setText(String.valueOf(0));
+                                articleTotalPriceTextView.setText(String.valueOf(0));
+
+                            } else {
+                                mArticlesMap.put(articleKey, mArticlesMap.get(articleKey) - 1);
+
+                                Long totalPrice = mArticlesMap.get(articleKey) * Long.valueOf(model.getPrecio());
+                                String stringTotalPrice = String.valueOf(totalPrice);
+                                Toast.makeText(mActivity, "TOTAL: " + stringTotalPrice, Toast.LENGTH_SHORT).show();
+
+                                articleTotalPriceTextView.setText(stringTotalPrice);
+                                articleAmountTextView.setText(String.valueOf(mArticlesMap.get(articleKey)));
+//                map.setTotalPrice(map.get(articleKey));
+//                viewHolder.setAmount(map.get(articleKey));
+                            }
+                        } else {
+                            return;
+                        }
+
                     }
                 });
 
@@ -200,25 +259,6 @@ public class AddSaleActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         detachDatabaseReadListner();
-    }
-
-    public void subtractArticle(String articleKey, HashMap<String, Integer> map) {
-        if (map.size() == 0) {
-            return;
-        } else if (map.containsKey(articleKey)) {
-            // if the amount of this article is 0, remove it from the map
-            if (map.get(articleKey) <= 1) {
-                map.remove(articleKey);
-//                viewHolder.setTotalPrice(0);
-//                viewHolder.setAmount(0);
-            } else {
-                map.put(articleKey, map.get(articleKey) - 1);
-//                map.setTotalPrice(map.get(articleKey));
-//                viewHolder.setAmount(map.get(articleKey));
-            }
-        } else {
-            return;
-        }
     }
 
 

@@ -94,19 +94,7 @@ public class ArticlesAdapter extends ArrayAdapter<Article> {
 
 
 
-    public void addArticle(String articleKey, HashMap<String, Integer> map) {
-        if (!map.isEmpty()) {
-            if (map.containsKey(articleKey)) {
-                map.put(articleKey, map.get(articleKey) + 1);
-            } else {
-                map.put(articleKey, 1);
-            }
-        } else {
-            map.put(articleKey, 1);
-        }
-//        viewHolder.setTotalPrice(mArticlesMap.get(articleKey));
-//        viewHolder.setAmount(mArticlesMap.get(articleKey));
-    }
+
 
 
 
