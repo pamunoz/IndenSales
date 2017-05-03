@@ -57,6 +57,9 @@
             android:layout_height="wrap_content"
             android:paddingLeft="8dp"
             android:paddingStart="8dp"
+            android:paddingEnd="4dp"
+            android:paddingRight="4dp"
+            android:paddingBottom="4dp"
             android:paddingTop="4dp"
             android:layout_below="@+id/tv_client_rut"
             tools:text="Avda Ortuzar 1068, Santiago, Melipilla"/>
@@ -69,8 +72,6 @@
             android:layout_centerInParent="true"
             android:text="Crear Venta"
             />
-
-
 
         <TextView
             android:id="@+id/tv_articles_amount"
@@ -122,6 +123,7 @@
 
         <TextView
             android:id="@+id/tv_is_sales_aproved"
+            android:layout_below="@+id/tv_article_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

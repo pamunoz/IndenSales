@@ -70,7 +70,6 @@ public class AddSaleActivity extends AppCompatActivity {
         // Initialize Firebase components
         mClientId = getIntent().getStringExtra(Constants.CLIENT_ID_KEY);
         mClientAddressId = getIntent().getStringExtra(Constants.ADDRESS_ID_KEY);
-        Log.i(TAG, " ADDRESS ID OF CLIENT: " + mClientAddressId);
 
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         mUserId = mUser.getUid();
@@ -79,16 +78,17 @@ public class AddSaleActivity extends AppCompatActivity {
         mArticlesDatabaseReference = FirebaseDb.sArticlesRef;
         mClientDatabaseReference = FirebaseDb.sClientsRef.child(mClientId);
         mClientAddressDatabaseReference = FirebaseDb.sClientAdressRef.child(mClientId);
+        initializeViews();
 
-
-        // initialize refererences to views
-        //mArticlesRecyclerView = (RecyclerView) findViewById(R.id.rv_articles);
-        mArticlesListView = (ListView) findViewById(R.id.lv_articles_list);
 
         List<Article> articleList = new ArrayList<>();
         mArticlesAdapter = new ArticlesAdapter(this, R.layout.item_article, articleList);
         mArticlesListView.setAdapter(mArticlesAdapter);
 
+        attachDatabaseReadListener();
+    }
+
+    private void initializeViews() {
         // set the other views
         mClientNameTextView = (TextView) findViewById(R.id.tv_client_name);
         mClientRutTextView = (TextView) findViewById(R.id.tv_client_rut);
@@ -97,14 +97,7 @@ public class AddSaleActivity extends AppCompatActivity {
         mTotalSalesPriceTextView = (TextView) findViewById(R.id.tv_sale_total_price);
         mCreateSaleButton = (Button) findViewById(R.id.bt_crear_venta);
 
-
-
-
-
-
-        Log.i(TAG, "CLIENT ID: " + mClientId);
-
-        attachDatabaseReadListener();
+        mArticlesListView = (ListView) findViewById(R.id.lv_articles_list);
     }
 
     private void attachDatabaseReadListener() {
@@ -165,17 +158,12 @@ public class AddSaleActivity extends AppCompatActivity {
                     Address address = dataSnapshot.getValue(Address.class);
                     String reference = dataSnapshot.getRef().toString();
                     mClientAddressTextView.setText(address.getDireccion());
-                    Log.i(TAG, " ADRESS CLIENT: " + address.getDireccion() + " reference: " + reference);
                     String thekey = dataSnapshot.toString();
-                    Log.i(TAG, "CHILDREN: " + thekey);
                     Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
                     for (DataSnapshot data : iterable) {
                         String direccion = data.child("direccion").getValue(String.class);
                         String comuna = data.child("comuna").getValue(String.class);
                         String ciudad = data.child("ciudad").getValue(String.class);
-                        Log.i(TAG, " LA DIRECCION ES: " + address.getDireccion());
-                        Log.i(TAG, "LA DATA ES: " + data.getRef().toString());
-                        Log.i(TAG, "LA DIRECCEIO ES: " + direccion);
                         String longAddress = direccion + "\n" + comuna + ", " + ciudad + ".";
                         mClientAddressTextView.setText(longAddress);
                     }
