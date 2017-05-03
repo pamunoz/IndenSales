@@ -105,7 +105,8 @@
             android:layout_alignParentTop="true"
             android:text="Total: "
             android:paddingTop="8dp"
-
+            android:textSize="18sp"
+            android:textStyle="bold"
             android:layout_toLeftOf="@+id/imb_down_arrow"
             android:layout_toStartOf="@+id/imb_down_arrow"
             android:gravity="center_horizontal"/>
@@ -119,16 +120,13 @@
             android:maxLines="1"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:paddingEnd="8dp"
+            android:minWidth="40dp"
             android:gravity="center"
-            android:paddingRight="8dp"
             android:layout_toLeftOf="@+id/imb_down_arrow"
             android:layout_toStartOf="@+id/imb_down_arrow"
             android:layout_toRightOf="@+id/tv_article_description"
             android:layout_toEndOf="@+id/tv_article_description"
-            android:paddingStart="8dp"
             tools:text="$120.000"
-            android:paddingLeft="8dp"
             android:layout_below="@+id/tv_label_article_total_price"/>
 
     </RelativeLayout>
