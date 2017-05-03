@@ -108,24 +108,7 @@ public class ArticlesAdapter extends ArrayAdapter<Article> {
 //        viewHolder.setAmount(mArticlesMap.get(articleKey));
     }
 
-    public void subtractArticle(String articleKey, HashMap<String, Integer> map) {
-        if (map.size() == 0) {
-            return;
-        } else if (map.containsKey(articleKey)) {
-            // if the amount of this article is 0, remove it from the map
-            if (map.get(articleKey) <= 1) {
-                map.remove(articleKey);
-//                viewHolder.setTotalPrice(0);
-//                viewHolder.setAmount(0);
-            } else {
-                map.put(articleKey, map.get(articleKey) - 1);
-//                map.setTotalPrice(map.get(articleKey));
-//                viewHolder.setAmount(map.get(articleKey));
-            }
-        } else {
-            return;
-        }
-    }
+
 
 
 }

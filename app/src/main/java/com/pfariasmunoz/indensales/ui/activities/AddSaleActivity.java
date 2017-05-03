@@ -2,19 +2,23 @@ package com.pfariasmunoz.indensales.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.data.models.Address;
@@ -62,6 +66,8 @@ public class AddSaleActivity extends AppCompatActivity {
     private DatabaseReference mClientAddressDatabaseReference;
     private ValueEventListener mClientAddressValueEventListener;
 
+    private FirebaseListAdapter<Article> mFirebaseListAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,20 +78,54 @@ public class AddSaleActivity extends AppCompatActivity {
         mClientAddressId = getIntent().getStringExtra(Constants.ADDRESS_ID_KEY);
 
         mUser = FirebaseAuth.getInstance().getCurrentUser();
-        mUserId = mUser.getUid();
+        mUserId = mUser != null ? mUser.getUid() : "Unknown User";
 
         //mArticlesDatabaseReference = mFirebaseDatabase.getReference().child("articulos");
         mArticlesDatabaseReference = FirebaseDb.sArticlesRef;
         mClientDatabaseReference = FirebaseDb.sClientsRef.child(mClientId);
         mClientAddressDatabaseReference = FirebaseDb.sClientAdressRef.child(mClientId);
+
         initializeViews();
 
-
         List<Article> articleList = new ArrayList<>();
-        mArticlesAdapter = new ArticlesAdapter(this, R.layout.item_article, articleList);
-        mArticlesListView.setAdapter(mArticlesAdapter);
+        setupAdapter();
+//        mArticlesAdapter = new ArticlesAdapter(this, R.layout.item_article, articleList);
+//        mArticlesListView.setAdapter(mArticlesAdapter);
 
         attachDatabaseReadListener();
+    }
+
+    private void setupAdapter() {
+        mFirebaseListAdapter = new FirebaseListAdapter<Article>(
+                this,
+                Article.class,
+                R.layout.item_article,
+                FirebaseDb.sArticlesRef
+        ) {
+            @Override
+            protected void populateView(View view, Article model, int position) {
+
+                ((TextView) view.findViewById(R.id.tv_article_description)).setText(model.getDescripcion());
+                ((TextView) view.findViewById(R.id.tv_article_price)).setText(model.getPrecio());
+
+                ((TextView) view.findViewById(R.id.tv_article_amount)).setText(String.valueOf(0));
+                ((TextView) view.findViewById(R.id.tv_article_total_price)).setText(String.valueOf(0));
+                ((ImageButton) view.findViewById(R.id.imb_up_arrow)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(mActivity, "BUTTON UP CLICKED", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                ((ImageButton) view.findViewById(R.id.imb_down_arrow)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(mActivity, "BUTTON DOWN CLICKED", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        };
+        mArticlesListView.setAdapter(mFirebaseListAdapter);
     }
 
     private void initializeViews() {
@@ -102,37 +142,6 @@ public class AddSaleActivity extends AppCompatActivity {
 
     private void attachDatabaseReadListener() {
 
-        // Add listener to the articles
-        if (mChildArticlesEventListener == null) {
-            mChildArticlesEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Article article = dataSnapshot.getValue(Article.class);
-                    mArticlesAdapter.add(article);
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            };
-            mArticlesDatabaseReference.addChildEventListener(mChildArticlesEventListener);
-        }
         // Add listener to the clients
         if (mClientValueEventListener == null) {
             mClientValueEventListener = new ValueEventListener() {
@@ -191,6 +200,25 @@ public class AddSaleActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         detachDatabaseReadListner();
+    }
+
+    public void subtractArticle(String articleKey, HashMap<String, Integer> map) {
+        if (map.size() == 0) {
+            return;
+        } else if (map.containsKey(articleKey)) {
+            // if the amount of this article is 0, remove it from the map
+            if (map.get(articleKey) <= 1) {
+                map.remove(articleKey);
+//                viewHolder.setTotalPrice(0);
+//                viewHolder.setAmount(0);
+            } else {
+                map.put(articleKey, map.get(articleKey) - 1);
+//                map.setTotalPrice(map.get(articleKey));
+//                viewHolder.setAmount(map.get(articleKey));
+            }
+        } else {
+            return;
+        }
     }
 
 
