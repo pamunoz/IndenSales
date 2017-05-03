@@ -81,7 +81,7 @@ public class AddSaleActivity extends AppCompatActivity {
 
         // Initialize Firebase components
         mClientId = getIntent().getStringExtra(Constants.CLIENT_ID_KEY);
-        mClientAddressId = getIntent().getStringExtra(Constants.ADDRESS_ID_KEY);
+        mClientAddressId = "unknown";
 
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         mUserId = mUser != null ? mUser.getUid() : "Unknown User";
@@ -218,6 +218,7 @@ public class AddSaleActivity extends AppCompatActivity {
                     String thekey = dataSnapshot.toString();
                     Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
                     for (DataSnapshot data : iterable) {
+                        mClientAddressId = data.getKey();
                         String direccion = data.child("direccion").getValue(String.class);
                         String comuna = data.child("comuna").getValue(String.class);
                         String ciudad = data.child("ciudad").getValue(String.class);
