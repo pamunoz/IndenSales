@@ -1,9 +1,15 @@
 package com.pfariasmunoz.indensales.data.models;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Pablo Farias on 20-04-17.
  */
-
+@IgnoreExtraProperties
 public class Sale {
 
     private boolean aprob;
@@ -52,5 +58,18 @@ public class Sale {
 
     public long getTotal() {
         return total;
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("aprob", aprob);
+        result.put("fecha", fecha);
+        result.put("idcliente", idcliente);
+        result.put("iddireccion", iddireccion);
+        result.put("idvendedor", idvendedor);
+        result.put("total", total);
+
+        return result;
     }
 }

@@ -26,11 +26,14 @@ import com.pfariasmunoz.indensales.data.models.Address;
 import com.pfariasmunoz.indensales.data.models.Article;
 import com.pfariasmunoz.indensales.data.models.ArticleSale;
 import com.pfariasmunoz.indensales.data.models.Client;
+import com.pfariasmunoz.indensales.data.models.Sale;
 import com.pfariasmunoz.indensales.ui.adapters.ArticlesAdapter;
 import com.pfariasmunoz.indensales.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class AddSaleActivity extends AppCompatActivity {
     public static final String TAG = AddSaleActivity.class.getSimpleName();
@@ -165,6 +168,24 @@ public class AddSaleActivity extends AppCompatActivity {
         mTotalSalesPriceTextView.setText(String.valueOf(mTotalPrice));
         mCreateSaleButton = (Button) findViewById(R.id.bt_crear_venta);
         mArticlesListView = (ListView) findViewById(R.id.lv_articles_list);
+        mCreateSaleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Sale sale = new Sale(
+                        false, String.valueOf(System.currentTimeMillis()),
+                        mClientId,
+                        mClientAddressId,
+                        mUserId,
+                        mTotalPrice);
+                DatabaseReference ref = FirebaseDb.sSalesRef.push();
+
+                ref.setValue(sale);
+
+                String uid = ref.getKey();
+
+                saveAllSalesArticles(uid);
+            }
+        });
     }
 
     private void attachDatabaseReadListener() {
@@ -313,5 +334,18 @@ public class AddSaleActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void saveAllSalesArticles(String saleKey) {
+        Iterator it = mArticlesSalesMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            String articlekey = (String) pair.getKey();
+            ArticleSale articleSale = (ArticleSale) pair.getValue();
+            FirebaseDb.sArticlesSalesRef.child(saleKey).child(articlekey).setValue(articleSale);
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+    }
+
+
 
 }
