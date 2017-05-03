@@ -237,6 +237,12 @@ public class AddSaleActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mFirebaseListAdapter.cleanup();
+    }
+
     private void detachDatabaseReadListner() {
         if (mArticleValueEventListener != null) {
             mArticlesReference.removeEventListener(mArticleValueEventListener);
