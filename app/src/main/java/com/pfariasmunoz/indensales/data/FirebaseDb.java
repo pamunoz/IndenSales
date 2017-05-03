@@ -9,6 +9,7 @@ import com.pfariasmunoz.indensales.data.models.Client;
 import com.pfariasmunoz.indensales.data.models.Sale;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Pablo Farias on 16-04-17.
@@ -47,5 +48,22 @@ public class FirebaseDb {
         String userId = user.getUid();
         long total = 0;
         return new Sale(isApproved, stringCurrentTime, clientId, addressId, userId, total);
+    }
+
+    public void createSale(
+            HashMap<String,
+            Integer> articlesMap,
+            String clientId,
+            String clientAddressId, String userId,
+            Long totalPrice) {
+        boolean aprob = false;
+        long currentTime = System.currentTimeMillis();
+        String time = String.valueOf(currentTime);
+        Sale sale =  new Sale(aprob, time, clientId, clientAddressId, userId, totalPrice);
+        FirebaseDb.sSalesRef.push().setValue(sale);
+    }
+
+    public void addAllTotals(HashMap<String, Integer> map, long totalSalePrice) {
+
     }
 }

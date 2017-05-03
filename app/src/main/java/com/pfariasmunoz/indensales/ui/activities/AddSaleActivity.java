@@ -2,6 +2,7 @@ package com.pfariasmunoz.indensales.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -30,14 +31,15 @@ import com.pfariasmunoz.indensales.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class AddSaleActivity extends AppCompatActivity {
     public static final String TAG = AddSaleActivity.class.getSimpleName();
 
     private HashMap<String, Integer> mArticlesMap = new HashMap<>();
     private ArrayList<ArticleSale> mArticleSales = new ArrayList<>();
+    private HashMap<String, ArticleSale> mArticlesSalesMap = new HashMap<>();
+    private Long mTotalPrice;
+
     private String mClientId;
     private FirebaseUser mUser;
     private String mUserId;
@@ -53,8 +55,6 @@ public class AddSaleActivity extends AppCompatActivity {
     private TextView mTotalSalesPriceTextView;
     private Button mCreateSaleButton;
 
-    private List<Article> mArticles = new ArrayList<>();
-    private String mUsername;
     private ValueEventListener mArticleValueEventListener;
     private DatabaseReference mArticlesReference;
 
@@ -73,6 +73,8 @@ public class AddSaleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_sale);
 
+        mTotalPrice = 0L;
+
         // Initialize Firebase components
         mClientId = getIntent().getStringExtra(Constants.CLIENT_ID_KEY);
         mClientAddressId = getIntent().getStringExtra(Constants.ADDRESS_ID_KEY);
@@ -86,11 +88,7 @@ public class AddSaleActivity extends AppCompatActivity {
         mClientAddressDatabaseReference = FirebaseDb.sClientAdressRef.child(mClientId);
 
         initializeViews();
-
-        List<Article> articleList = new ArrayList<>();
         setupAdapter();
-//        mArticlesAdapter = new ArticlesAdapter(this, R.layout.item_article, articleList);
-//        mArticlesListView.setAdapter(mArticlesAdapter);
 
         attachDatabaseReadListener();
     }
@@ -139,8 +137,10 @@ public class AddSaleActivity extends AppCompatActivity {
                             if (mArticlesMap.containsKey(articleKey)) {
                                 mArticlesMap.put(articleKey, mArticlesMap.get(articleKey) + 1);
 
-                                Long totalPrice = mArticlesMap.get(articleKey) * Long.valueOf(model.getPrecio());
-                                String stringTotalPrice = String.valueOf(totalPrice);
+                                Long totaArticlelPrice = mArticlesMap.get(articleKey) * Long.valueOf(model.getPrecio());
+                                mTotalPrice += totaArticlelPrice;
+                                mTotalSalesPriceTextView.setText(String.valueOf(mTotalPrice));
+                                String stringTotalPrice = String.valueOf(totaArticlelPrice);
                                 Toast.makeText(mActivity, "TOTAL: " + stringTotalPrice, Toast.LENGTH_SHORT).show();
 
                                 articleTotalPriceTextView.setText(stringTotalPrice);
@@ -157,9 +157,10 @@ public class AddSaleActivity extends AppCompatActivity {
                         } else {
                             mArticlesMap.put(articleKey, 1);
 
-                            Long totalPrice = mArticlesMap.get(articleKey) * Long.valueOf(model.getPrecio());
-                            String stringTotalPrice = String.valueOf(totalPrice);
-
+                            Long totaArticlelPrice = mArticlesMap.get(articleKey) * Long.valueOf(model.getPrecio());
+                            mTotalPrice += totaArticlelPrice;
+                            mTotalSalesPriceTextView.setText(String.valueOf(mTotalPrice));
+                            String stringTotalPrice = String.valueOf(totaArticlelPrice);
                             articleTotalPriceTextView.setText(stringTotalPrice);
                             articleAmountTextView.setText(String.valueOf(mArticlesMap.get(articleKey)));
                         }
@@ -176,15 +177,17 @@ public class AddSaleActivity extends AppCompatActivity {
                             // if the amount of this article is 0, remove it from the map
                             if (mArticlesMap.get(articleKey) <= 1) {
                                 mArticlesMap.remove(articleKey);
-
+                                mTotalSalesPriceTextView.setText(String.valueOf(mTotalPrice));
                                 articleAmountTextView.setText(String.valueOf(0));
                                 articleTotalPriceTextView.setText(String.valueOf(0));
 
                             } else {
                                 mArticlesMap.put(articleKey, mArticlesMap.get(articleKey) - 1);
 
-                                Long totalPrice = mArticlesMap.get(articleKey) * Long.valueOf(model.getPrecio());
-                                String stringTotalPrice = String.valueOf(totalPrice);
+                                Long totaArticlelPrice = mArticlesMap.get(articleKey) * Long.valueOf(model.getPrecio());
+                                mTotalPrice -= totaArticlelPrice;
+                                mTotalSalesPriceTextView.setText(String.valueOf(mTotalPrice));
+                                String stringTotalPrice = String.valueOf(totaArticlelPrice);
 
                                 articleTotalPriceTextView.setText(stringTotalPrice);
                                 articleAmountTextView.setText(String.valueOf(mArticlesMap.get(articleKey)));
@@ -276,53 +279,20 @@ public class AddSaleActivity extends AppCompatActivity {
     }
 
 
-//
-//    public Map<String, Integer> getArticlesMap() {
-//        return mArticlesMap;
-//    }
-//
-//    public String getClientId() {
-//        return mClientId;
-//    }
-//
-//    public FirebaseUser getUser() {
-//        return mUser;
-//    }
-//
-//    public String getUserId() {
-//        return mUserId;
-//    }
-//
-//    public Sale createSale() {
-//        boolean aprob = false;
-//        long currentTime = System.currentTimeMillis();
-//        String time = String.valueOf(currentTime);
-//        String clientId = mClientId;
-//        String clientAddressId = mClientAddressId;
-//        String userId = mUserId;
-//        Long totalPrice = getTotalPrice();
-//        return new Sale(aprob, time, clientId, clientAddressId, userId, totalPrice);
-//    }
-//
-//    public void addArticleSale(Article article, String articleId) {
-//        Iterator it = mArticlesMap.entrySet().iterator();
-//        while (it.hasNext()) {
-//            Map.Entry pair = (Map.Entry)it.next();
-//            int amount = mArticlesMap.get(articleId);
-//            long price = Long.valueOf(article.getPrecio());
-//            Long totalPrice = amount * price;
-//            ArticleSale articleSale = new ArticleSale(amount, totalPrice);
-//            mArticleSales.add(articleSale);
-//            it.remove(); // avoids a ConcurrentModificationException
-//        }
-//    }
-//
-//    private Long getTotalPrice() {
-//        Long result = 0L;
-//        for (ArticleSale articleSale : mArticleSales) {
-//            result += articleSale.getTotal();
-//        }
-//        return result;
-//    }
+    private void addToArticlesSaleAndUpdateViews(
+            String key,
+            Article article,
+            TextView articlesAmountTextView,
+            TextView articlesTotalPriceTextView) {
+        if (mArticlesSalesMap.isEmpty()) {
+            int amount = 1;
+            Long articlePrice = Long.valueOf(article.getPrecio());
+            mArticlesSalesMap.put(key, new ArticleSale(amount, articlePrice));
+            mTotalPrice += articlePrice;
+            mTotalSalesPriceTextView.setText(String.valueOf(mTotalPrice));
+            articlesTotalPriceTextView.setText(article.getPrecio());
+            articlesAmountTextView.setText(String.valueOf(mArticlesSalesMap.get(key).getCantidad()));
+        }
+    }
 
 }
