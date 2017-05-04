@@ -76,6 +76,8 @@ public class AddSaleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_sale);
 
+        setTitle("Articulos en Venta");
+
         mTotalPrice = 0L;
         mTotalAmount = 0;
 

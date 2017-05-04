@@ -49,6 +49,7 @@ public class ClientsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mActivity = ((MainActivity)getActivity());
+        mActivity.setTitle("Clientes");
         return inflater.inflate(R.layout.fragment_clients, container, false);
     }
 
