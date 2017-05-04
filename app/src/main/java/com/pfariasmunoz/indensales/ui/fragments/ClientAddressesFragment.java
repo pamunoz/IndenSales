@@ -17,6 +17,7 @@ import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.data.models.Address;
 import com.pfariasmunoz.indensales.ui.activities.AddSaleActivity;
+import com.pfariasmunoz.indensales.ui.activities.MainActivity;
 import com.pfariasmunoz.indensales.ui.viewholders.AddressViewHolder;
 import com.pfariasmunoz.indensales.utils.Constants;
 
@@ -28,6 +29,7 @@ public class ClientAddressesFragment extends Fragment {
     RecyclerView mRecyclerView;
     private FirebaseRecyclerAdapter<Address, AddressViewHolder> mAdapter;
     private DividerItemDecoration mDividerItemDecoration;
+    private MainActivity mActivity;
 
 
     public ClientAddressesFragment() {
@@ -45,6 +47,8 @@ public class ClientAddressesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mActivity = ((MainActivity)getActivity());
+        mActivity.setTitle("Seleccione Una Dirección");
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_addresses);
         mRecyclerView.setHasFixedSize(false);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());

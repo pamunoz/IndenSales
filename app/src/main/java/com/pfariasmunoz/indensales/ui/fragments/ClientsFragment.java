@@ -34,6 +34,7 @@ public class ClientsFragment extends Fragment {
     private FirebaseRecyclerAdapter<Client, ClientViewHolder> mClientAdapter;
     private ProgressBar mLoadingIndicatorProgressBar;
     private MainActivity mActivity;
+    private Query mQuery;
 
     // client info to start the sales
     public static final String CLIENT_ID_KEY = "client_id_key";
@@ -85,12 +86,12 @@ public class ClientsFragment extends Fragment {
     }
 
     private void setupAdapter() {
-        Query clientsRef = FirebaseDb.sClientsRef;
+        mQuery = FirebaseDb.sClientsRef.orderByChild("nombre").startAt("S");
         mClientAdapter = new FirebaseRecyclerAdapter<Client, ClientViewHolder>(
                 Client.class,
                 R.layout.item_client,
                 ClientViewHolder.class,
-                clientsRef) {
+                mQuery) {
             @Override
             protected void populateViewHolder(
                     final ClientViewHolder viewHolder,
@@ -102,12 +103,16 @@ public class ClientsFragment extends Fragment {
 
 
 
-                        FirebaseDb.sClientAdressRef.child(clientId).addValueEventListener(new ValueEventListener() {
+                        FirebaseDb.sClientAdressRef
+                                .child(clientId).addValueEventListener(
+                                        new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 long clientAdressNum = dataSnapshot.getChildrenCount();
-                                String addressId = FirebaseDb.sClientAdressRef.child(clientId).getKey();
-                                mActivity.startSalesActivity(clientAdressNum, clientId, addressId);
+                                String addressId = FirebaseDb.sClientAdressRef
+                                        .child(clientId).getKey();
+                                mActivity.startSalesActivity(
+                                        clientAdressNum, clientId, addressId);
                             }
 
                             @Override

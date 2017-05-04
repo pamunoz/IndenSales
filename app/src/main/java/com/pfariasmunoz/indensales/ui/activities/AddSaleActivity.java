@@ -2,14 +2,11 @@ package com.pfariasmunoz.indensales.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,10 +24,8 @@ import com.pfariasmunoz.indensales.data.models.Article;
 import com.pfariasmunoz.indensales.data.models.ArticleSale;
 import com.pfariasmunoz.indensales.data.models.Client;
 import com.pfariasmunoz.indensales.data.models.Sale;
-import com.pfariasmunoz.indensales.ui.adapters.ArticlesAdapter;
 import com.pfariasmunoz.indensales.utils.Constants;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -49,7 +44,6 @@ public class AddSaleActivity extends AppCompatActivity {
     private String mClientAddressId;
 
     private ListView mArticlesListView;
-    private ArticlesAdapter mArticlesAdapter;
 
     private TextView mClientNameTextView;
     private TextView mClientRutTextView;

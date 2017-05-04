@@ -28,4 +28,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- for searching clients -->
+    <string name="search_clients_hint">Search for Clients</string>
 </resources>
