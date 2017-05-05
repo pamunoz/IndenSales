@@ -1,15 +1,20 @@
 package com.pfariasmunoz.indensales.ui.activities;
 
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -31,6 +36,7 @@ import com.pfariasmunoz.indensales.data.models.Client;
 import com.pfariasmunoz.indensales.data.models.Sale;
 import com.pfariasmunoz.indensales.ui.viewholders.ArticlesViewHolder;
 import com.pfariasmunoz.indensales.utils.Constants;
+import com.pfariasmunoz.indensales.utils.MathHelper;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,6 +48,7 @@ public class AddSaleActivity extends AppCompatActivity {
     private HashMap<String, ArticleSale> mArticlesSalesMap = new HashMap<>();
     private Long mTotalPrice;
     private int mTotalAmount;
+    private String mDescriptionQuery;
 
     private String mClientId;
     private FirebaseUser mUser;
@@ -69,12 +76,15 @@ public class AddSaleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_add_sale);
 
         setTitle("Articulos en Venta");
 
         mTotalPrice = 0L;
         mTotalAmount = 0;
+        mDescriptionQuery = "";
+
 
         // Initialize Firebase components
         mClientId = getIntent().getStringExtra(Constants.CLIENT_ID_KEY);
@@ -94,7 +104,7 @@ public class AddSaleActivity extends AppCompatActivity {
     }
 
     private void setupAdapter() {
-        mAdapter = getAdapter(FirebaseDb.sArticlesRef.orderByKey().startAt("05").limitToFirst(5));
+        mAdapter = getAdapter(FirebaseDb.getArticlesDescriptionQuery(mDescriptionQuery).limitToFirst(50));
     }
 
     private FirebaseRecyclerAdapter<Article, ArticlesViewHolder> getAdapter(Query query) {
@@ -338,4 +348,48 @@ public class AddSaleActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Toast.makeText(this, "function not available", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.action_search) {
+            SearchView searchView = (SearchView) item.getActionView();
+            searchView.setQueryHint("Search for Articles");
+
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+
+                    if (MathHelper.isNumeric(newText)) {
+                        Query query = FirebaseDb.getArticlesCodeQuery(newText).limitToFirst(30);
+                        mAdapter = getAdapter(query);
+                    } else {
+                        String text = newText.toUpperCase();
+                        Query query = FirebaseDb.getArticlesDescriptionQuery(text);
+                        mAdapter = getAdapter(query);
+                    }
+                    mAdapter.notifyDataSetChanged();
+                    mArticlesListView.swapAdapter(mAdapter, false);
+                    return false;
+                }
+            });
+        }
+
+
+
+        return super.onOptionsItemSelected(item);
+    }
 }

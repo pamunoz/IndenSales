@@ -45,13 +45,19 @@ public class FirebaseDb {
     }
 
     public static Query getClientsNameQuery(String newName) {
-        return FirebaseDb.sClientsRef.orderByChild(DbContract.CLIENT_NAME_KEY).startAt(newName);
+        return sClientsRef.orderByChild(DbContract.CLIENT_NAME_KEY).startAt(newName);
     }
 
     public static Query getClientsRutQuery(String newRut) {
-        return FirebaseDb.sClientsRef.orderByChild(DbContract.CLIENT_RUT_KEY).startAt(newRut);
+        return sClientsRef.orderByChild(DbContract.CLIENT_RUT_KEY).startAt(newRut);
     }
 
+    public static Query getArticlesCodeQuery(String newCode) {
+        return sArticlesRef.orderByKey().equalTo(newCode);
+    }
 
+    public static Query getArticlesDescriptionQuery(String newDescription) {
+        return sArticlesRef.orderByChild(DbContract.ARTICLES_DESCRIPTION_KEY).startAt(newDescription);
+    }
 
 }
