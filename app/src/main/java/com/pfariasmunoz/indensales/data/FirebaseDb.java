@@ -52,4 +52,6 @@ public class FirebaseDb {
         return FirebaseDb.sClientsRef.orderByChild(DbContract.CLIENT_RUT_KEY).startAt(newRut);
     }
 
+
+
 }

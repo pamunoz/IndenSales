@@ -19,6 +19,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import com.pfariasmunoz.indensales.R;
@@ -38,7 +39,6 @@ import java.util.Map;
 public class AddSaleActivity extends AppCompatActivity {
     public static final String TAG = AddSaleActivity.class.getSimpleName();
 
-    private HashMap<String, Integer> mArticlesMap = new HashMap<>();
     private HashMap<String, ArticleSale> mArticlesSalesMap = new HashMap<>();
     private Long mTotalPrice;
     private int mTotalAmount;
@@ -57,12 +57,8 @@ public class AddSaleActivity extends AppCompatActivity {
     private TextView mTotalSalesPriceTextView;
     private Button mCreateSaleButton;
 
-    private ValueEventListener mArticleValueEventListener;
-    private DatabaseReference mArticlesReference;
 
     // Firebase instance variables
-    private DatabaseReference mArticlesDatabaseReference;
-    private ChildEventListener mChildArticlesEventListener;
     private DatabaseReference mClientDatabaseReference;
     private ValueEventListener mClientValueEventListener;
     private DatabaseReference mClientAddressDatabaseReference;
@@ -88,52 +84,57 @@ public class AddSaleActivity extends AppCompatActivity {
         mUserId = mUser != null ? mUser.getUid() : "Unknown User";
 
         //mArticlesDatabaseReference = mFirebaseDatabase.getReference().child("articulos");
-        mArticlesDatabaseReference = FirebaseDb.sArticlesRef;
         mClientDatabaseReference = FirebaseDb.sClientsRef.child(mClientId);
         mClientAddressDatabaseReference = FirebaseDb.sClientAdressRef.child(mClientId);
 
         initializeViews();
         setupAdapter();
-
+        mArticlesListView.setAdapter(mAdapter);
         attachDatabaseReadListener();
     }
 
     private void setupAdapter() {
+        mAdapter = getAdapter(FirebaseDb.sArticlesRef.orderByKey().startAt("05").limitToFirst(5));
+    }
 
-
-
-        mAdapter = new FirebaseRecyclerAdapter<Article, ArticlesViewHolder>(
+    private FirebaseRecyclerAdapter<Article, ArticlesViewHolder> getAdapter(Query query) {
+        return new FirebaseRecyclerAdapter<Article, ArticlesViewHolder>(
                 Article.class,
                 R.layout.item_article,
                 ArticlesViewHolder.class,
-                FirebaseDb.sArticlesRef
+                query
         ) {
             @Override
             protected void populateViewHolder(final ArticlesViewHolder viewHolder, final Article model, final int position) {
-
-                Log.i(TAG, model.getDescripcion());
 
                 if (mArticlesSalesMap.isEmpty()) {
                     viewHolder.setAmountAndPriceToZero();
                 }
 
+
+                Log.i(TAG, "THE ARTICLE KEY IS: " + getRef(position).getKey());
+
                 if (mArticlesSalesMap.containsKey(getRef(position).getKey())) {
                     String currentKey = getRef(position).getKey();
-                    String currentArticlesAmount = String.valueOf(mArticlesSalesMap.get(currentKey).getCantidad());
-                    String currentArticlesTotalPrice = String.valueOf(mArticlesSalesMap.get(currentKey).getTotal());
+                    String currentArticlesAmount =
+                            String.valueOf(mArticlesSalesMap.get(currentKey).getCantidad());
+                    String currentArticlesTotalPrice =
+                            String.valueOf(mArticlesSalesMap.get(currentKey).getTotal());
                     viewHolder.setArticleAmount(currentArticlesAmount);
                     viewHolder.setArticleTotalPrice(currentArticlesTotalPrice);
                 }
 
                 viewHolder.setDescriptionAndPrice(model);
 
-                viewHolder.getAddArticleToSaleButton().setOnClickListener(new View.OnClickListener() {
+                viewHolder.getAddArticleToSaleButton()
+                        .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String articleKey = getRef(position).getKey();
                         addToArticlesSaleAndUpdateViews(
                                 articleKey, model,
-                                viewHolder.getArticleAmountTextView(), viewHolder.getArticleTotalPriceTextView());
+                                viewHolder.getArticleAmountTextView(),
+                                viewHolder.getArticleTotalPriceTextView());
                     }
                 });
 
@@ -143,14 +144,16 @@ public class AddSaleActivity extends AppCompatActivity {
 
                         String articleKey = getRef(position).getKey();
                         subtractToArticlesSalesAndUpdateViews(
-                                articleKey, model, viewHolder.getArticleAmountTextView(), viewHolder.getArticleTotalPriceTextView());
+                                articleKey, model,
+                                viewHolder.getArticleAmountTextView(),
+                                viewHolder.getArticleTotalPriceTextView());
 
                     }
                 });
 
             }
         };
-        mArticlesListView.setAdapter(mAdapter);
+
     }
 
     private void initializeViews() {
@@ -165,7 +168,6 @@ public class AddSaleActivity extends AppCompatActivity {
         mCreateSaleButton = (Button) findViewById(R.id.bt_crear_venta);
         mArticlesListView = (RecyclerView) findViewById(R.id.lv_articles_list);
         mArticlesListView.setLayoutManager(new LinearLayoutManager(this));
-        Log.i(TAG, "RECYCLERVIEW CREATED");
         mCreateSaleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -240,20 +242,6 @@ public class AddSaleActivity extends AppCompatActivity {
         super.onDestroy();
         mAdapter.cleanup();
     }
-
-    private void detachDatabaseReadListner() {
-        if (mArticleValueEventListener != null) {
-            mArticlesReference.removeEventListener(mArticleValueEventListener);
-            mArticleValueEventListener = null;
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        detachDatabaseReadListner();
-    }
-
 
     private void subtractToArticlesSalesAndUpdateViews(
             String key,
@@ -349,7 +337,5 @@ public class AddSaleActivity extends AppCompatActivity {
             it.remove(); // avoids a ConcurrentModificationException
         }
     }
-
-
 
 }
