@@ -2,6 +2,9 @@ package com.pfariasmunoz.indensales.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -9,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -24,6 +28,7 @@ import com.pfariasmunoz.indensales.data.models.Article;
 import com.pfariasmunoz.indensales.data.models.ArticleSale;
 import com.pfariasmunoz.indensales.data.models.Client;
 import com.pfariasmunoz.indensales.data.models.Sale;
+import com.pfariasmunoz.indensales.ui.viewholders.ArticlesViewHolder;
 import com.pfariasmunoz.indensales.utils.Constants;
 
 import java.util.HashMap;
@@ -43,7 +48,7 @@ public class AddSaleActivity extends AppCompatActivity {
     private String mUserId;
     private String mClientAddressId;
 
-    private ListView mArticlesListView;
+    private RecyclerView mArticlesListView;
 
     private TextView mClientNameTextView;
     private TextView mClientRutTextView;
@@ -63,7 +68,7 @@ public class AddSaleActivity extends AppCompatActivity {
     private DatabaseReference mClientAddressDatabaseReference;
     private ValueEventListener mClientAddressValueEventListener;
 
-    private FirebaseListAdapter<Article> mFirebaseListAdapter;
+    private FirebaseRecyclerAdapter<Article, ArticlesViewHolder> mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,63 +99,58 @@ public class AddSaleActivity extends AppCompatActivity {
     }
 
     private void setupAdapter() {
-        mFirebaseListAdapter = new FirebaseListAdapter<Article>(
-                this,
+
+
+
+        mAdapter = new FirebaseRecyclerAdapter<Article, ArticlesViewHolder>(
                 Article.class,
                 R.layout.item_article,
+                ArticlesViewHolder.class,
                 FirebaseDb.sArticlesRef
         ) {
             @Override
-            protected void populateView(View view, final Article model, final int position) {
+            protected void populateViewHolder(final ArticlesViewHolder viewHolder, final Article model, final int position) {
 
-                final TextView articleDescriptionTextView = (TextView) view.findViewById(R.id.tv_article_description);
-                final TextView articlePriceTextView = (TextView) view.findViewById(R.id.tv_article_price);
-                final TextView articleAmountTextView = (TextView) view.findViewById(R.id.tv_article_amount);
-                final TextView articleTotalPriceTextView = (TextView) view.findViewById(R.id.tv_article_total_price);
+                Log.i(TAG, model.getDescripcion());
 
-                final ImageButton addArticleToSaleButton = (ImageButton) view.findViewById(R.id.imb_up_arrow);
-                final ImageButton subtractArticleOfSaleButton = (ImageButton) view.findViewById(R.id.imb_down_arrow);
-
-                if (mArticlesMap.isEmpty()) {
-                    articleAmountTextView.setText("0");
-                    articleTotalPriceTextView.setText("0");
+                if (mArticlesSalesMap.isEmpty()) {
+                    viewHolder.setAmountAndPriceToZero();
                 }
 
                 if (mArticlesSalesMap.containsKey(getRef(position).getKey())) {
                     String currentKey = getRef(position).getKey();
                     String currentArticlesAmount = String.valueOf(mArticlesSalesMap.get(currentKey).getCantidad());
                     String currentArticlesTotalPrice = String.valueOf(mArticlesSalesMap.get(currentKey).getTotal());
-                    articleAmountTextView.setText(currentArticlesAmount);
-                    articleTotalPriceTextView.setText(currentArticlesTotalPrice);
+                    viewHolder.setArticleAmount(currentArticlesAmount);
+                    viewHolder.setArticleTotalPrice(currentArticlesTotalPrice);
                 }
 
+                viewHolder.setDescriptionAndPrice(model);
 
-                articleDescriptionTextView.setText(model.getDescripcion());
-                articlePriceTextView.setText(model.getPrecio());
-
-                addArticleToSaleButton.setOnClickListener(new View.OnClickListener() {
+                viewHolder.getAddArticleToSaleButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String articleKey = getRef(position).getKey();
                         addToArticlesSaleAndUpdateViews(
                                 articleKey, model,
-                                articleAmountTextView, articleTotalPriceTextView);
-
+                                viewHolder.getArticleAmountTextView(), viewHolder.getArticleTotalPriceTextView());
                     }
                 });
-                subtractArticleOfSaleButton.setOnClickListener(new View.OnClickListener() {
+
+                viewHolder.getSubtractArticleFromSalesButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         String articleKey = getRef(position).getKey();
                         subtractToArticlesSalesAndUpdateViews(
-                                articleKey, model, articleAmountTextView, articleTotalPriceTextView);
+                                articleKey, model, viewHolder.getArticleAmountTextView(), viewHolder.getArticleTotalPriceTextView());
 
                     }
                 });
 
             }
         };
-        mArticlesListView.setAdapter(mFirebaseListAdapter);
+        mArticlesListView.setAdapter(mAdapter);
     }
 
     private void initializeViews() {
@@ -163,7 +163,9 @@ public class AddSaleActivity extends AppCompatActivity {
         mTotalSalesPriceTextView = (TextView) findViewById(R.id.tv_sale_total_price);
         mTotalSalesPriceTextView.setText(String.valueOf(mTotalPrice));
         mCreateSaleButton = (Button) findViewById(R.id.bt_crear_venta);
-        mArticlesListView = (ListView) findViewById(R.id.lv_articles_list);
+        mArticlesListView = (RecyclerView) findViewById(R.id.lv_articles_list);
+        mArticlesListView.setLayoutManager(new LinearLayoutManager(this));
+        Log.i(TAG, "RECYCLERVIEW CREATED");
         mCreateSaleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -236,7 +238,7 @@ public class AddSaleActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mFirebaseListAdapter.cleanup();
+        mAdapter.cleanup();
     }
 
     private void detachDatabaseReadListner() {
@@ -245,7 +247,6 @@ public class AddSaleActivity extends AppCompatActivity {
             mArticleValueEventListener = null;
         }
     }
-
 
     @Override
     protected void onPause() {
