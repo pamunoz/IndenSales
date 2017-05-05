@@ -29,6 +29,9 @@ import com.pfariasmunoz.indensales.ui.activities.AddSaleActivity;
 import com.pfariasmunoz.indensales.ui.activities.MainActivity;
 import com.pfariasmunoz.indensales.ui.viewholders.ClientViewHolder;
 import com.pfariasmunoz.indensales.utils.Constants;
+import com.pfariasmunoz.indensales.utils.MathHelper;
+
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,7 +43,7 @@ public class ClientsFragment extends Fragment {
     private ProgressBar mLoadingIndicatorProgressBar;
     private MainActivity mActivity;
     private Query mQuery;
-    private String mStringQuery;
+    private String mDefaultQuery;
 
     // client info to start the sales
     public static final String CLIENT_ID_KEY = "client_id_key";
@@ -66,7 +69,7 @@ public class ClientsFragment extends Fragment {
     @Override
     public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(rootView, savedInstanceState);
-        mStringQuery = "";
+        mDefaultQuery = "";
         mClientRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_clients);
         mLoadingIndicatorProgressBar = (ProgressBar) rootView.findViewById(R.id.pb_loading_indicator);
         mClientRecyclerView.setHasFixedSize(false);
@@ -95,12 +98,17 @@ public class ClientsFragment extends Fragment {
     }
 
     private void setupAdapter() {
-        mQuery = FirebaseDb.sClientsRef.orderByChild("nombre").startAt(mStringQuery);
-        mClientAdapter = new FirebaseRecyclerAdapter<Client, ClientViewHolder>(
+        Query nameQuery = FirebaseDb.getClientsNameQuery(mDefaultQuery);
+        mClientAdapter = getFirebaseAdapter(nameQuery);
+        mClientAdapter.notifyDataSetChanged();
+    }
+
+    private FirebaseRecyclerAdapter<Client, ClientViewHolder> getFirebaseAdapter(Query query) {
+        return new FirebaseRecyclerAdapter<Client, ClientViewHolder>(
                 Client.class,
                 R.layout.item_client,
                 ClientViewHolder.class,
-                mQuery) {
+                query) {
 
             @Override
             protected void populateViewHolder(
@@ -112,21 +120,21 @@ public class ClientsFragment extends Fragment {
                         final String clientId = getRef(position).getKey();
                         FirebaseDb.sClientAdressRef
                                 .child(clientId).addValueEventListener(
-                                        new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                long clientAdressNum = dataSnapshot.getChildrenCount();
-                                String addressId = FirebaseDb.sClientAdressRef
-                                        .child(clientId).getKey();
-                                mActivity.startSalesActivity(
-                                        clientAdressNum, clientId, addressId);
-                            }
+                                new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        long clientAdressNum = dataSnapshot.getChildrenCount();
+                                        String addressId = FirebaseDb.sClientAdressRef
+                                                .child(clientId).getKey();
+                                        mActivity.startSalesActivity(
+                                                clientAdressNum, clientId, addressId);
+                                    }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
+                                    }
+                                });
                     }
                 });
 
@@ -135,8 +143,9 @@ public class ClientsFragment extends Fragment {
                 mClientRecyclerView.setVisibility(View.VISIBLE);
             }
         };
-        mClientAdapter.notifyDataSetChanged();
+
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -166,49 +175,16 @@ public class ClientsFragment extends Fragment {
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                    mQuery = FirebaseDb.sClientsRef.orderByChild("nombre").startAt(newText).limitToFirst(50);
-                    FirebaseRecyclerAdapter<Client, ClientViewHolder> adapter =
-                    new FirebaseRecyclerAdapter<Client, ClientViewHolder>(
-                            Client.class,
-                            R.layout.item_client,
-                            ClientViewHolder.class,
-                            mQuery) {
-
-                        @Override
-                        protected void populateViewHolder(
-                                final ClientViewHolder viewHolder,
-                                final Client model, final int position) {
-                            viewHolder.getAddSaleButton().setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    final String clientId = getRef(position).getKey();
-                                    FirebaseDb.sClientAdressRef
-                                            .child(clientId).addValueEventListener(
-                                            new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    long clientAdressNum = dataSnapshot.getChildrenCount();
-                                                    String addressId = FirebaseDb.sClientAdressRef
-                                                            .child(clientId).getKey();
-                                                    mActivity.startSalesActivity(
-                                                            clientAdressNum, clientId, addressId);
-                                                }
-
-                                                @Override
-                                                public void onCancelled(DatabaseError databaseError) {
-
-                                                }
-                                            });
-                                }
-                            });
-
-                            viewHolder.setTextOnViews(model);
-                            mLoadingIndicatorProgressBar.setVisibility(View.GONE);
-                            mClientRecyclerView.setVisibility(View.VISIBLE);
-                        }
-                    };
+                    if (MathHelper.isNumeric(newText)) {
+                        Query nameQuery = FirebaseDb.getClientsRutQuery(newText);
+                        mClientAdapter = getFirebaseAdapter(nameQuery);
+                    } else {
+                        String text = newText.toUpperCase();
+                        Query nameQuery = FirebaseDb.getClientsNameQuery(text);
+                        mClientAdapter = getFirebaseAdapter(nameQuery);
+                    }
                     mClientAdapter.notifyDataSetChanged();
-                    mClientRecyclerView.swapAdapter(adapter, false);
+                    mClientRecyclerView.swapAdapter(mClientAdapter, false);
                     return false;
                 }
             });

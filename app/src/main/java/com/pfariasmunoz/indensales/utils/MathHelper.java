@@ -16,4 +16,9 @@ public class MathHelper {
         BigDecimal totalPrice = decimalAmount.multiply(decimalPrice);
         return totalPrice.setScale(2, RoundingMode.CEILING).toString();
     }
+
+    public static boolean isNumeric(String inputData) {
+        return inputData.matches("[-+]?\\d+(\\.\\d+)?");
+    }
+
 }

@@ -10,5 +10,7 @@ public class DbContract {
     protected static final String CLIENT_ADRES_ND = "cliente-direcciones";
     protected static final String ARTICLES_SALE_ND = "venta-articulos";
     protected static final String SALES_ND = "ventas";
+    protected static final String CLIENT_NAME_KEY = "nombre";
+    protected static final String CLIENT_RUT_KEY = "rut";
 
 }

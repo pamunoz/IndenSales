@@ -1,12 +1,22 @@
 package com.pfariasmunoz.indensales.data;
 
+import android.view.View;
+import android.widget.ProgressBar;
+
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.models.Article;
 import com.pfariasmunoz.indensales.data.models.ArticleSale;
 import com.pfariasmunoz.indensales.data.models.Client;
 import com.pfariasmunoz.indensales.data.models.Sale;
+import com.pfariasmunoz.indensales.ui.viewholders.ClientViewHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,36 +44,12 @@ public class FirebaseDb {
         }
     }
 
-    public void createArticleSale(Article article, Sale sale) {
-        ArrayList<ArticleSale> articleSales = new ArrayList<>();
-
+    public static Query getClientsNameQuery(String newName) {
+        return FirebaseDb.sClientsRef.orderByChild(DbContract.CLIENT_NAME_KEY).startAt(newName);
     }
 
-    public Sale createSale(String currentClientId, FirebaseUser user, String currentAddressId) {
-        boolean isApproved = false;
-        long currentTime = System.currentTimeMillis();
-        String stringCurrentTime = String.valueOf(currentTime);
-        String clientId = currentClientId;
-        String addressId = currentAddressId;
-        String userId = user.getUid();
-        long total = 0;
-        return new Sale(isApproved, stringCurrentTime, clientId, addressId, userId, total);
+    public static Query getClientsRutQuery(String newRut) {
+        return FirebaseDb.sClientsRef.orderByChild(DbContract.CLIENT_RUT_KEY).startAt(newRut);
     }
 
-    public void createSale(
-            HashMap<String,
-            Integer> articlesMap,
-            String clientId,
-            String clientAddressId, String userId,
-            Long totalPrice) {
-        boolean aprob = false;
-        long currentTime = System.currentTimeMillis();
-        String time = String.valueOf(currentTime);
-        Sale sale =  new Sale(aprob, time, clientId, clientAddressId, userId, totalPrice);
-        FirebaseDb.sSalesRef.push().setValue(sale);
-    }
-
-    public void addAllTotals(HashMap<String, Integer> map, long totalSalePrice) {
-
-    }
 }
