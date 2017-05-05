@@ -48,7 +48,7 @@ public class ClientAddressesFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mActivity = ((MainActivity)getActivity());
-        mActivity.setTitle("Seleccione Una Dirección");
+        mActivity.setTitle(mActivity.getResources().getString(R.string.client_addresses_fragment_title));
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_addresses);
         mRecyclerView.setHasFixedSize(false);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());

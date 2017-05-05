@@ -59,7 +59,7 @@ public class ClientsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mActivity = ((MainActivity)getActivity());
-        mActivity.setTitle("Clientes");
+        mActivity.setTitle(mActivity.getResources().getString(R.string.clients_fragment_title));
         return inflater.inflate(R.layout.fragment_clients, container, false);
     }
 
@@ -166,7 +166,7 @@ public class ClientsFragment extends Fragment {
             return true;
         } else if (id == R.id.action_search) {
             SearchView searchView = (SearchView) item.getActionView();
-            searchView.setQueryHint("Search for Clients");
+            searchView.setQueryHint(mActivity.getResources().getString(R.string.search_clients_hint));
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {

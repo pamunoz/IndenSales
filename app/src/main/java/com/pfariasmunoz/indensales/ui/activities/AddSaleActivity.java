@@ -79,7 +79,7 @@ public class AddSaleActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_add_sale);
 
-        setTitle("Articulos en Venta");
+        setTitle(getResources().getString(R.string.sales_activity_title));
 
         mTotalPrice = 0L;
         mTotalAmount = 0;
@@ -359,10 +359,10 @@ public class AddSaleActivity extends AppCompatActivity {
 
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Toast.makeText(this, "function not available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.function_not_available), Toast.LENGTH_SHORT).show();
         } else if (id == R.id.action_search) {
             SearchView searchView = (SearchView) item.getActionView();
-            searchView.setQueryHint("Search for Articles");
+            searchView.setQueryHint(getResources().getString(R.string.search_articles_hint));
 
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override

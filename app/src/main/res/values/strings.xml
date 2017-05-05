@@ -9,7 +9,7 @@
     <string name="facebook_application_id" translatable="false">269716826826589</string>
     <!-- Facebook Application ID, prefixed by 'fb'.  Enables Chrome Custom tabs. -->
     <string name="facebook_login_protocol_scheme" translatable="false">fb269716826826589</string>
-    <string name="action_search">Search</string>
+    <string name="action_search" translatable="false">Search</string>
 
     <!-- - - - - - - - - - - - - - -
      - Used by SunshineDateUtils  -
@@ -22,13 +22,34 @@
     <string name="tomorrow">Tomorrow</string>
 
     <!-- Date format -->
-    <string name="format_full_friendly_date">
+    <string name="format_full_friendly_date" translatable="false">
         <xliff:g id="month">%1$s</xliff:g>, <xliff:g id="day">%2$s</xliff:g>
     </string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
     <!-- for searching clients -->
     <string name="search_clients_hint">Search for Clients</string>
+
+    <string name="search_articles_hint">Search for Articles</string>
+
+    <string name="function_not_available">Function not available</string>
+
+    <string name="sales_activity_title">Articles for sale</string>
+
+    <string name="clients_fragment_title">Clients</string>
+
+    <string name="client_addresses_fragment_title">Client Addresses</string>
+    <string name="total_article_price">Total</string>
+    <string name="add_sale_button">Add Sale</string>
+    <string name="client_name">Not Available</string>
+    <string name="make_sale_button">Make Sale</string>
+    <string name="sale_not_aproved">Sale not Aproved</string>
+    <string name="client_address">Not Available</string>
+    <string name="client_commune">Not Available</string>
+    <string name="client_city">Not Available</string>
+    <string name="client_phone">Not Available</string>
+    <string name="client_zone">Not Available</string>
+    <string name="total_price">Total</string>
 </resources>

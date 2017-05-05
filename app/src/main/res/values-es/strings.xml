@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Inden Sales</string>
+    <string name="action_settings">Configuración</string>
+    <string name="add_sale_button">Agregar Venta</string>
+    <string name="client_address">No disponible</string>
+    <string name="client_addresses_fragment_title">Direcciones del Cliente</string>
+    <string name="client_city">No Disponible</string>
+    <string name="client_commune">No Disponible</string>
+    <string name="client_name">No Disponible</string>
+    <string name="client_phone">No Disponible</string>
+    <string name="client_zone">No Disponible</string>
+    <string name="clients_fragment_title">Clientes</string>
+    <string name="function_not_available">Función no disponible</string>
+    <string name="make_sale_button">Agrebar venta</string>
+</resources>

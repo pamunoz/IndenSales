@@ -31,7 +31,7 @@
             android:id="@+id/tv_client_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Nombre Cliente"
+            android:text="@string/client_name"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
@@ -70,7 +70,7 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
-            android:text="Crear Venta"
+            android:text="@string/make_sale_button"
             />
 
         <TextView
@@ -109,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            tools:text="Precio Total"/>
+            android:text="@string/total_price"/>
         <TextView
             android:id="@+id/tv_sale_total_price"
             android:layout_width="wrap_content"
@@ -123,17 +123,19 @@
 
         <TextView
             android:id="@+id/tv_is_sales_aproved"
-            android:layout_below="@+id/tv_article_price"
+            android:layout_below="@+id/tv_client_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/tw__composer_red"
-            android:textAlignment="center"
+            android:gravity="center"
             android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textSize="18sp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:textColor="@color/tw__composer_white"
-            tools:text="Venta no aprovada"/>
+            android:text="@string/sale_not_aproved"/>
 
 
 
