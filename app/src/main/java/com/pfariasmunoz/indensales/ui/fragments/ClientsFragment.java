@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,6 +40,7 @@ public class ClientsFragment extends Fragment {
     private ProgressBar mLoadingIndicatorProgressBar;
     private MainActivity mActivity;
     private Query mQuery;
+    private String mStringQuery;
 
     // client info to start the sales
     public static final String CLIENT_ID_KEY = "client_id_key";
@@ -64,6 +66,7 @@ public class ClientsFragment extends Fragment {
     @Override
     public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(rootView, savedInstanceState);
+        mStringQuery = "";
         mClientRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_clients);
         mLoadingIndicatorProgressBar = (ProgressBar) rootView.findViewById(R.id.pb_loading_indicator);
         mClientRecyclerView.setHasFixedSize(false);
@@ -71,6 +74,7 @@ public class ClientsFragment extends Fragment {
         mClientRecyclerView.setVisibility(View.INVISIBLE);
 
         mClientRecyclerView.setAdapter(mClientAdapter);
+
     }
 
     // This event fires 2nd, before views are created for the fragment
@@ -91,12 +95,13 @@ public class ClientsFragment extends Fragment {
     }
 
     private void setupAdapter() {
-        mQuery = FirebaseDb.sClientsRef.orderByChild("nombre").startAt("S");
+        mQuery = FirebaseDb.sClientsRef.orderByChild("nombre").startAt(mStringQuery);
         mClientAdapter = new FirebaseRecyclerAdapter<Client, ClientViewHolder>(
                 Client.class,
                 R.layout.item_client,
                 ClientViewHolder.class,
                 mQuery) {
+
             @Override
             protected void populateViewHolder(
                     final ClientViewHolder viewHolder,
@@ -105,9 +110,6 @@ public class ClientsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         final String clientId = getRef(position).getKey();
-
-
-
                         FirebaseDb.sClientAdressRef
                                 .child(clientId).addValueEventListener(
                                         new ValueEventListener() {
@@ -125,9 +127,6 @@ public class ClientsFragment extends Fragment {
 
                             }
                         });
-
-
-
                     }
                 });
 
@@ -167,6 +166,49 @@ public class ClientsFragment extends Fragment {
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
+                    mQuery = FirebaseDb.sClientsRef.orderByChild("nombre").startAt(newText).limitToFirst(50);
+                    FirebaseRecyclerAdapter<Client, ClientViewHolder> adapter =
+                    new FirebaseRecyclerAdapter<Client, ClientViewHolder>(
+                            Client.class,
+                            R.layout.item_client,
+                            ClientViewHolder.class,
+                            mQuery) {
+
+                        @Override
+                        protected void populateViewHolder(
+                                final ClientViewHolder viewHolder,
+                                final Client model, final int position) {
+                            viewHolder.getAddSaleButton().setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    final String clientId = getRef(position).getKey();
+                                    FirebaseDb.sClientAdressRef
+                                            .child(clientId).addValueEventListener(
+                                            new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    long clientAdressNum = dataSnapshot.getChildrenCount();
+                                                    String addressId = FirebaseDb.sClientAdressRef
+                                                            .child(clientId).getKey();
+                                                    mActivity.startSalesActivity(
+                                                            clientAdressNum, clientId, addressId);
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+                                }
+                            });
+
+                            viewHolder.setTextOnViews(model);
+                            mLoadingIndicatorProgressBar.setVisibility(View.GONE);
+                            mClientRecyclerView.setVisibility(View.VISIBLE);
+                        }
+                    };
+                    mClientAdapter.notifyDataSetChanged();
+                    mClientRecyclerView.swapAdapter(adapter, false);
                     return false;
                 }
             });
@@ -174,4 +216,5 @@ public class ClientsFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
