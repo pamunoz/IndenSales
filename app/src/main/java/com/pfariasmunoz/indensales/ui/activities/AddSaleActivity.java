@@ -222,10 +222,6 @@ public class AddSaleActivity extends AppCompatActivity {
             mClientAddressValueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Address address = dataSnapshot.getValue(Address.class);
-                    String reference = dataSnapshot.getRef().toString();
-                    mClientAddressTextView.setText(address.getDireccion());
-                    String thekey = dataSnapshot.toString();
                     Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
                     for (DataSnapshot data : iterable) {
                         mClientAddressId = data.getKey();

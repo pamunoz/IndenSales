@@ -12,5 +12,5 @@
     <string name="client_zone">No Disponible</string>
     <string name="clients_fragment_title">Clientes</string>
     <string name="function_not_available">Función no disponible</string>
-    <string name="make_sale_button">Agrebar venta</string>
+    <string name="make_sale_button">Agregar venta</string>
 </resources>

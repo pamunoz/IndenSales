@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -73,7 +74,11 @@ public class ClientsFragment extends Fragment {
         mClientRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_clients);
         mLoadingIndicatorProgressBar = (ProgressBar) rootView.findViewById(R.id.pb_loading_indicator);
         mClientRecyclerView.setHasFixedSize(false);
-        mClientRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mClientRecyclerView.setLayoutManager(layoutManager);
+        DividerItemDecoration dividerItemDecoration =
+                new DividerItemDecoration(mClientRecyclerView.getContext(), layoutManager.getOrientation());
+        mClientRecyclerView.addItemDecoration(dividerItemDecoration);
         mClientRecyclerView.setVisibility(View.INVISIBLE);
 
         mClientRecyclerView.setAdapter(mClientAdapter);

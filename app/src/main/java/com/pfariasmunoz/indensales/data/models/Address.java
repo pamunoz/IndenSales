@@ -1,9 +1,5 @@
 package com.pfariasmunoz.indensales.data.models;
 
-/**
- * Created by Pablo Farias on 17-04-17.
- */
-
 public class Address {
     private String comuna;
     private String zona;
