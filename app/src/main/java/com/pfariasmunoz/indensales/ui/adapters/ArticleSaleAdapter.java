@@ -35,32 +35,13 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.
     List<ArticleSale> mArticleSaleList = new ArrayList<>();
     List<Article> mArticleList = new ArrayList<>();
     List<String> mArticlesKeys = new ArrayList<>();
+    Query mQuery;
+    ValueEventListener mEventListener;
 
     public ArticleSaleAdapter(Query articlesQuery) {
-        articlesQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println();
-                Log.i(TAG, "Got snapshot with "+ dataSnapshot.getChildrenCount()+" children");
-                mArticleList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Article article = snapshot.getValue(Article.class);
-                    String articleKey = snapshot.getKey();
-                    mArticleList.add(article);
-                    ArticleSale articleSale = new ArticleSale(0, 0L);
-                    mArticleSaleList.add(articleSale);
-
-                    mArticlesKeys.add(articleKey);
-                }
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+        this.mQuery = articlesQuery;
+        mEventListener = setUpListener();
+        mQuery.addValueEventListener(mEventListener);
     }
 
     @Override
@@ -73,6 +54,34 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
         ArticleViewHolder viewHolder = new ArticleViewHolder(view);
         return viewHolder;
+    }
+
+    private ValueEventListener setUpListener() {
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mArticleList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Article article = snapshot.getValue(Article.class);
+                    String articleKey = snapshot.getKey();
+                    mArticleList.add(article);
+                    ArticleSale articleSale = new ArticleSale(0, 0L);
+                    mArticleSaleList.add(articleSale);
+                    mArticlesKeys.add(articleKey);
+                }
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        return listener;
+    }
+
+    public void cleanup() {
+        mQuery.removeEventListener(mEventListener);
     }
 
     @Override
@@ -123,6 +132,29 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.
         return mContext;
     }
 
+    public List<ArticleSale> getArticleSaleList() {
+        if (mArticleSaleList != null) {
+            return mArticleSaleList;
+        } else {
+            return null;
+        }
+    }
+
+    public void logArticlesSales() {
+        List<ArticleSale> sales = getArticleSaleList();
+        for (ArticleSale sale : sales) {
+            Log.i(TAG, "TOTAL: " + String.valueOf(sale.getTotal()) + " AMOUNT: " + String.valueOf(sale.getCantidad()));
+        }
+    }
+
+    public List<Article> getArticleList() {
+        return mArticleList;
+    }
+
+    public List<String> getArticlesKeys() {
+        return mArticlesKeys;
+    }
+
     class ArticleViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.iv_article_image)
         ImageView mArticleImageView;
@@ -146,4 +178,5 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.
             ButterKnife.bind(this, itemView);
         }
     }
+
 }

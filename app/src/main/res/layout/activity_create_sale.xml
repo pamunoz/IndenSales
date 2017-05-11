@@ -1,11 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_numbers"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</FrameLayout>
+        android:layout_height="0dp"
+        android:layout_weight="5"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingTop="8dp"
+        android:scrollbars="vertical"
+        android:paddingRight="16dp"
+        android:paddingEnd="16dp"
+        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
+        android:paddingBottom="8dp"
+        android:layout_weight="2"
+        android:background="#81F781">
+
+        <TextView
+            android:id="@+id/tv_client_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/client_name"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/bt_crear_venta"
+            android:layout_toStartOf="@+id/bt_crear_venta"
+            android:paddingLeft="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"/>
+        <TextView
+            android:id="@+id/tv_client_rut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="11.111.111-1"
+            android:paddingStart="8dp"
+            android:paddingLeft="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_below="@+id/tv_client_name"/>
+        <TextView
+            android:id="@+id/tv_client_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="4dp"
+            android:paddingRight="4dp"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:layout_below="@+id/tv_client_rut"
+            tools:text="Avda Ortuzar 1068, Santiago, Melipilla"/>
+        <Button
+            android:id="@+id/bt_create_sale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:text="@string/make_sale_button"
+            />
+
+        <TextView
+            android:id="@+id/tv_articles_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="23"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:paddingEnd="8dp"
+            android:paddingRight="8dp"
+            android:paddingStart="4dp"
+            android:paddingLeft="4dp"
+            android:gravity="center"
+            android:paddingTop="8dp"/>
+        <TextView
+            android:id="@+id/tv_label_articles_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Cantidad"
+            android:paddingTop="8dp"
+            android:paddingRight="4dp"
+            android:paddingEnd="4dp"
+            android:paddingLeft="4dp"
+            android:paddingStart="4dp"
+            android:layout_toLeftOf="@+id/tv_articles_amount"
+            android:layout_toStartOf="@+id/tv_articles_amount"
+            android:layout_toRightOf="@+id/bt_crear_venta"
+            android:layout_toEndOf="@+id/bt_crear_venta"
+            android:layout_alignParentTop="true"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/tv_label_sale_total_price"
+            android:layout_width="wrap_content"
+            android:layout_below="@+id/tv_articles_amount"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="@string/total_price"/>
+        <TextView
+            android:id="@+id/tv_sale_total_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="$120.000"
+            android:textSize="18sp"
+            android:layout_below="@+id/tv_label_sale_total_price"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+
+        <TextView
+            android:id="@+id/tv_is_sales_aproved"
+            android:layout_below="@+id/tv_client_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/tw__composer_red"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textSize="18sp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/tw__composer_white"
+            android:text="@string/sale_not_aproved"/>
+
+
+
+    </RelativeLayout>
+</LinearLayout>
