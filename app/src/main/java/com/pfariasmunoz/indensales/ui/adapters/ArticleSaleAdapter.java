@@ -52,17 +52,6 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.
 
                     mArticlesKeys.add(articleKey);
                 }
-                for (Article article : mArticleList) {
-                    Log.i(TAG, "ARTICLE ADDED: " + article.getDescripcion());
-                }
-                for (String key : mArticlesKeys) {
-                    Log.i(TAG, "ARTICLE KEY: " + key);
-                }
-
-                for (ArticleSale sale : mArticleSaleList) {
-                    Log.i(TAG, "AMOUNT: " + sale.getCantidad() + " TOTAL: " + sale.getTotal());
-                }
-
                 notifyDataSetChanged();
             }
 
@@ -91,7 +80,7 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.
 
         final ArticleSale articleSale = mArticleSaleList.get(position);
         final Article article = mArticleList.get(position);
-        final String code = mArticlesKeys.get(position);
+        String code = mArticlesKeys.get(position);
         holder.mArticleDescriptionTextView.setText(article.getDescripcion());
         holder.mArticlePriceTextView.setText(article.getPrecio());
         holder.mArticleCodeTextView.setText(code);
@@ -100,16 +89,26 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.
         holder.mAddArticleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 int amount = articleSale.getCantidad() + 1;
-                long total = articleSale.getTotal() == 0L ? Long.valueOf(article.getPrecio()) : Long.valueOf(article.getPrecio()) * articleSale.getCantidad();
-                mArticleSaleList.add(position, new ArticleSale(amount, total));
+                long total = Long.valueOf(article.getPrecio().trim()) * amount;
+                mArticleSaleList.set(position, new ArticleSale(amount, total));
+                notifyDataSetChanged();
             }
         });
         holder.mSubtractArticleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int amount = articleSale.getCantidad() > 0 ? articleSale.getCantidad() - 1 : 0;
-                mArticleSaleList.add(position, new ArticleSale(amount, Long.valueOf(article.getPrecio())));
+                if (articleSale.getCantidad() <= 1) {
+                    mArticleSaleList.set(position, new ArticleSale(0, 0L));
+                } else {
+                    int amount = articleSale.getCantidad() - 1;
+                    long total = Long.valueOf(article.getPrecio()) * amount;
+                    mArticleSaleList.set(position, new ArticleSale(amount, total));
+                }
+                notifyDataSetChanged();
+
+
             }
         });
 
