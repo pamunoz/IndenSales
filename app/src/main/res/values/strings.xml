@@ -52,4 +52,5 @@
     <string name="client_phone">Not Available</string>
     <string name="client_zone">Not Available</string>
     <string name="total_price">Total</string>
+    <string name="title_activity_create_sale">CreateSaleActivity</string>
 </resources>

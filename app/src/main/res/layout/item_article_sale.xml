@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingRight="16dp"
+    android:paddingEnd="16dp"
+    android:paddingLeft="16dp"
+    android:paddingStart="16dp"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_weight="4"
+        android:layout_width="0dp"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <ImageView
+
+            android:id="@+id/iv_article_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"/>
+        <TextView
+            android:id="@+id/tv_article_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="050030"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_weight="6"
+        android:layout_height="match_parent"
+        android:gravity="center|left">
+        <TextView
+            android:id="@+id/tv_article_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="DESCRIPCION"
+            />
+
+        <TextView
+            android:id="@+id/tv_article_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@android:color/holo_red_dark"
+            tools:text="$16.000"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_weight="6"
+        android:layout_width="0dp"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+            android:id="@+id/tv_label_article_total_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_article_price"
+            android:paddingTop="8dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"/>
+
+        <TextView
+            android:id="@+id/tv_article_total_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            tools:text="$120.000"/>
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_article_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:paddingEnd="4dp"
+        android:textColor="@color/authui_colorPrimaryDark"
+        android:paddingRight="4dp"
+        android:paddingStart="4dp"
+        android:paddingLeft="4dp"
+        android:textStyle="bold"
+        android:layout_gravity="center_vertical"
+        tools:text="0"/>
+
+    <LinearLayout
+
+        android:layout_width="0dp"
+        android:layout_weight="5"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/imb_up_arrow"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
+            android:background="@color/tw__transparent"/>
+
+        <ImageButton
+            android:id="@+id/imb_down_arrow"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/tw__transparent"
+            android:src="@drawable/ic_keyboard_arrow_down_black_24dp"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

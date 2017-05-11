@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity
      */
     public void startSalesActivity(long numberOfAdresses, String clientId, String addressId) {
         if (numberOfAdresses < 2) {
-            Intent intent = new Intent(this, AddSaleActivity.class);
+            Intent intent = new Intent(this, CreateSaleActivity.class);
             intent.putExtra(Constants.CLIENT_ID_KEY, clientId);
             intent.putExtra(Constants.ADDRESS_ID_KEY, addressId);
             startActivity(intent);
