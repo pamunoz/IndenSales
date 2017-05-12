@@ -30,7 +30,9 @@ import com.pfariasmunoz.indensales.ui.adapters.ArticleSaleAdapter;
 import com.pfariasmunoz.indensales.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,18 +60,11 @@ public class CreateSaleActivity extends AppCompatActivity {
     private String mClientAddressId;
     private FirebaseUser mUser;
 
-    private long mTotalSalePrice;
-    private int mTotalAmount;
-
     private ValueEventListener mClientListener;
     private ValueEventListener mClientAddressListener;
 
     private Query mClientQuery;
     private Query mClientAddressQuery;
-
-
-    List<ArticleSale> mArticleSaleList;
-    List<Article> mArticleList;
 
     ArticleSaleAdapter mAdapter;
     RecyclerView mRecyclerView;
@@ -80,9 +75,6 @@ public class CreateSaleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_sale);
 
         ButterKnife.bind(this);
-
-        mTotalSalePrice = 0L;
-        mTotalAmount = 0;
 
 
         // Initialize Firebase components
@@ -95,7 +87,7 @@ public class CreateSaleActivity extends AppCompatActivity {
         mClientQuery = FirebaseDb.sClientsRef.child(mClientId);
         mClientAddressQuery = FirebaseDb.sClientAdressRef.child(mClientId).child(mClientAddressId);
 
-        mAdapter = new ArticleSaleAdapter(FirebaseDb.sArticlesRef.limitToFirst(30));
+        mAdapter = new ArticleSaleAdapter(this, FirebaseDb.sArticlesRef.limitToFirst(30));
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_numbers);
         LinearLayoutManager manager = new LinearLayoutManager(this);
@@ -103,6 +95,8 @@ public class CreateSaleActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
+
+        setTotals(0, 0);
 
         attachReadListeners();
     }
@@ -147,50 +141,53 @@ public class CreateSaleActivity extends AppCompatActivity {
 
     @OnClick(R.id.bt_create_sale)
     public void createSale() {
-        List<ArticleSale> sales = mAdapter.getArticleSaleList();
-        List<String> articleskeys = mAdapter.getArticlesKeys();
 
-        List<String> newKeys = new ArrayList<>();
-        List<ArticleSale> articlesForSale = new ArrayList<>();
-        if (sales.size() == articleskeys.size()) {
-            for (int i = 0; i < sales.size(); i++) {
-                if (sales.get(i).getCantidad() > 0) {
-                    articlesForSale.add(sales.get(i));
-                    newKeys.add(articleskeys.get(i));
-                }
-            }
-        }
-
-
-
-        if (articlesForSale.size() == newKeys.size() && articlesForSale.size() > 0) {
-
-            for (ArticleSale articleSale : articlesForSale) {
-                mTotalSalePrice += articleSale.getTotal();
-            }
-
+        Map<String, ArticleSale> articlesForSale = mAdapter.getArticlesForSale();
+        if (articlesForSale != null) {
             Sale sale = new Sale(
                     false, String.valueOf(System.currentTimeMillis()),
                     mClientId,
                     mClientAddressId,
                     mUserId,
-                    mTotalSalePrice);
+                    mAdapter.getTotalPrice());
             DatabaseReference ref = FirebaseDb.sSalesRef.push();
 
             ref.setValue(sale);
 
             String saleUid = ref.getKey();
 
-
-            for (int i = 0; i < articlesForSale.size(); i++) {
-                FirebaseDb.sArticlesSalesRef.child(saleUid).child(newKeys.get(i)).setValue(articlesForSale.get(i));
+            Iterator it = articlesForSale.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                ArticleSale articleSale = (ArticleSale) pair.getValue();
+                String key = (String) pair.getKey();
+                FirebaseDb.sArticlesSalesRef.child(saleUid).child(key).setValue(articleSale);
+                it.remove(); // avoids a ConcurrentModificationException
             }
         }
+
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mAdapter.cleanup();
+        detachReadListeners();
     }
+
+    private void detachReadListeners() {
+        if (mClientListener != null) {
+            mClientQuery.removeEventListener(mClientListener);
+        }
+        if (mClientAddressListener != null) {
+            mClientAddressQuery.removeEventListener(mClientAddressListener);
+        }
+    }
+
+    public void setTotals(long totalPrice, int totalAmount) {
+        mSaleArticlesAmountTextView.setText(String.valueOf(totalAmount));
+        mTotalPriceSaleTextView.setText(String.valueOf(totalPrice));
+    }
+
 }

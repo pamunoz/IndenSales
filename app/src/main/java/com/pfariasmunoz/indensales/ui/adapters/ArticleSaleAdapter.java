@@ -18,10 +18,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.models.Article;
 import com.pfariasmunoz.indensales.data.models.ArticleSale;
+import com.pfariasmunoz.indensales.ui.activities.CreateSaleActivity;
 import com.pfariasmunoz.indensales.ui.viewholders.ArticlesViewHolder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +42,14 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.
     Query mQuery;
     ValueEventListener mEventListener;
 
-    public ArticleSaleAdapter(Query articlesQuery) {
+    // Values for updating the activity views
+    private long mTotalPrice = 0;
+    private int mTotalAmount = 0;
+    private Map<String, ArticleSale> mArticlesForSale = new HashMap<>();
+
+
+    public ArticleSaleAdapter(Context context, Query articlesQuery) {
+        this.mContext = context;
         this.mQuery = articlesQuery;
         mEventListener = setUpListener();
         mQuery.addValueEventListener(mEventListener);
@@ -103,6 +114,7 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.
                 long total = Long.valueOf(article.getPrecio().trim()) * amount;
                 mArticleSaleList.set(position, new ArticleSale(amount, total));
                 notifyDataSetChanged();
+                setToalPriceAndAmount();
             }
         });
         holder.mSubtractArticleButton.setOnClickListener(new View.OnClickListener() {
@@ -116,8 +128,7 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.
                     mArticleSaleList.set(position, new ArticleSale(amount, total));
                 }
                 notifyDataSetChanged();
-
-
+                setToalPriceAndAmount();
             }
         });
 
@@ -140,19 +151,48 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.
         }
     }
 
-    public void logArticlesSales() {
-        List<ArticleSale> sales = getArticleSaleList();
-        for (ArticleSale sale : sales) {
-            Log.i(TAG, "TOTAL: " + String.valueOf(sale.getTotal()) + " AMOUNT: " + String.valueOf(sale.getCantidad()));
-        }
-    }
-
-    public List<Article> getArticleList() {
-        return mArticleList;
-    }
-
     public List<String> getArticlesKeys() {
         return mArticlesKeys;
+    }
+
+    public Map<String, ArticleSale> getArticlesForSale() {
+        boolean areListEqual = mArticlesKeys.size() == mArticleSaleList.size();
+        if (areListEqual) {
+            for (int i = 0; i < mArticlesKeys.size(); i++) {
+                for (int j = 0; j < mArticleSaleList.size(); j++) {
+                    ArticleSale sale = mArticleSaleList.get(i);
+                    String key = mArticlesKeys.get(i);
+                    if (sale.getCantidad() > 0) {
+                        mArticlesForSale.put(key, sale);
+                    }
+                }
+            }
+        }
+        return (mArticlesForSale.size() > 0 ? mArticlesForSale : null);
+    }
+
+    private void setToalPriceAndAmount() {
+        mTotalPrice = 0;
+        mTotalAmount = 0;
+        if (getArticlesForSale() != null) {
+            Iterator it = getArticlesForSale().entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                ArticleSale sale = (ArticleSale) pair.getValue();
+                mTotalPrice += sale.getTotal();
+                mTotalAmount += sale.getCantidad();
+                it.remove(); // avoids a ConcurrentModificationException
+            }
+        }
+        ((CreateSaleActivity)getContext()).setTotals(mTotalPrice, mTotalAmount);
+    }
+
+    public long getTotalPrice() {
+        return mTotalPrice;
+    }
+
+    public int getTotalAmount() {
+        return mTotalAmount;
     }
 
     class ArticleViewHolder extends RecyclerView.ViewHolder{
@@ -178,5 +218,4 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.
             ButterKnife.bind(this, itemView);
         }
     }
-
 }
