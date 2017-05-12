@@ -17,6 +17,7 @@ import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.data.models.Address;
 import com.pfariasmunoz.indensales.ui.activities.AddSaleActivity;
+import com.pfariasmunoz.indensales.ui.activities.CreateSaleActivity;
 import com.pfariasmunoz.indensales.ui.activities.MainActivity;
 import com.pfariasmunoz.indensales.ui.viewholders.AddressViewHolder;
 import com.pfariasmunoz.indensales.utils.Constants;
@@ -72,13 +73,14 @@ public class ClientAddressesFragment extends Fragment {
                     FirebaseDb.sClientAdressRef.child(clientId)
             ) {
                 @Override
-                protected void populateViewHolder(AddressViewHolder viewHolder, Address model, int position) {
+                protected void populateViewHolder(AddressViewHolder viewHolder, Address model, final int position) {
                     viewHolder.setTextsOnViews(model);
                     viewHolder.getRootView().setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(getActivity(), AddSaleActivity.class);
+                            Intent intent = new Intent(getActivity(), CreateSaleActivity.class);
                             intent.putExtra(Constants.CLIENT_ID_KEY, clientId);
+                            intent.putExtra(Constants.ADDRESS_ID_KEY, getRef(position).getKey());
                             startActivity(intent);
                         }
                     });

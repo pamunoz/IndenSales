@@ -128,11 +128,22 @@ public class ClientsFragment extends Fragment {
                                 new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
+                                        String addressId = "";
                                         long clientAdressNum = dataSnapshot.getChildrenCount();
-                                        String addressId = FirebaseDb.sClientAdressRef
-                                                .child(clientId).getKey();
-                                        mActivity.startSalesActivity(
-                                                clientAdressNum, clientId, addressId);
+                                        Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
+                                        if (clientAdressNum < 2) {
+                                            for (DataSnapshot data : iterable) {
+                                                addressId = data.getKey();
+
+                                            }
+                                            mActivity.startSalesActivity(
+                                                    clientAdressNum, clientId, addressId);
+                                        } else {
+                                            mActivity.startSalesActivity(
+                                                    clientAdressNum, clientId, null);
+                                        }
+
+
                                     }
 
                                     @Override
