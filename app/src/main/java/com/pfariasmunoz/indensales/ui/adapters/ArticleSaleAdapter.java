@@ -5,9 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,6 +16,7 @@ import com.pfariasmunoz.indensales.data.models.ArticleSale;
 import com.pfariasmunoz.indensales.ui.activities.CreateSaleActivity;
 import com.pfariasmunoz.indensales.utils.MathHelper;
 import com.pfariasmunoz.indensales.utils.TextHelper;
+import com.pfariasmunoz.indensales.ui.viewholders.ArticleViewHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,11 +24,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 
-public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.ArticleViewHolder> {
+public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> {
 
     public static final String TAG = ArticleSaleAdapter.class.getSimpleName();
 
@@ -194,27 +190,5 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.
     }
 
 
-    class ArticleViewHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.iv_article_image)
-        ImageView mArticleImageView;
-        @BindView(R.id.tv_article_code)
-        TextView mArticleCodeTextView;
-        @BindView(R.id.tv_article_description)
-        TextView mArticleDescriptionTextView;
-        @BindView(R.id.tv_article_price)
-        TextView mArticlePriceTextView;
-        @BindView(R.id.tv_article_total_price)
-        TextView mArticlesTotalPriceTextView;
-        @BindView(R.id.tv_article_amount)
-        TextView mArticlesAmountTextView;
-        @BindView(R.id.imb_up_arrow)
-        ImageButton mAddArticleButton;
-        @BindView(R.id.imb_down_arrow)
-        ImageButton mSubtractArticleButton;
 
-        public ArticleViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-    }
 }

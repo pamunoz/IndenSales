@@ -1,5 +1,6 @@
 package com.pfariasmunoz.indensales.ui.activities;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -58,8 +59,6 @@ public class CreateSaleActivity extends AppCompatActivity {
     TextView mSaleArticlesAmountTextView;
     @BindView(R.id.tv_sale_total_price)
     TextView mTotalPriceSaleTextView;
-    @BindView(R.id.tv_is_sales_aproved)
-    TextView mIsSaleAprovedTextView;
 
     private String mClientId;
     private String mUserId;
@@ -176,6 +175,7 @@ public class CreateSaleActivity extends AppCompatActivity {
                 FirebaseDb.sArticlesSalesRef.child(saleUid).child(key).setValue(articleSale);
                 it.remove(); // avoids a ConcurrentModificationException
             }
+            finish();
         } else {
             Toast.makeText(this, "Add an article to sale", Toast.LENGTH_SHORT).show();
         }

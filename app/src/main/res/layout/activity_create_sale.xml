@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="#e56a54"
     android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_numbers"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#e56a54"
         android:layout_weight="5"/>
 
     <RelativeLayout
@@ -24,7 +24,7 @@
         android:paddingStart="16dp"
         android:paddingBottom="8dp"
         android:layout_weight="2"
-        android:background="#81F781">
+        android:background="@color/tw__transparent">
 
         <TextView
             android:id="@+id/tv_client_name"
@@ -34,8 +34,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/bt_crear_venta"
-            android:layout_toStartOf="@+id/bt_crear_venta"
+            android:layout_toLeftOf="@+id/bt_create_sale"
+            android:layout_toStartOf="@+id/bt_create_sale"
             android:paddingLeft="8dp"
             android:paddingStart="8dp"
             android:paddingTop="4dp"
@@ -97,8 +97,8 @@
             android:paddingStart="4dp"
             android:layout_toLeftOf="@+id/tv_articles_amount"
             android:layout_toStartOf="@+id/tv_articles_amount"
-            android:layout_toRightOf="@+id/bt_crear_venta"
-            android:layout_toEndOf="@+id/bt_crear_venta"
+            android:layout_toRightOf="@+id/bt_create_sale"
+            android:layout_toEndOf="@+id/bt_create_sale"
             android:layout_alignParentTop="true"
             android:gravity="center"/>
         <TextView
@@ -118,25 +118,6 @@
             android:layout_below="@+id/tv_label_sale_total_price"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
-
-
-        <TextView
-            android:id="@+id/tv_is_sales_aproved"
-            android:layout_below="@+id/tv_client_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/tw__composer_red"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textAllCaps="true"
-            android:textSize="18sp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:textColor="@color/tw__composer_white"
-            android:text="@string/sale_not_aproved"/>
-
-
 
     </RelativeLayout>
 </LinearLayout>
