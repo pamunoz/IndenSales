@@ -1,135 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingRight="16dp"
-    android:paddingEnd="16dp"
-    android:paddingLeft="16dp"
-    android:paddingStart="16dp"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp"
-    android:orientation="horizontal">
+    android:background="#005bbb"
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_weight="4"
-        android:layout_width="0dp"
-        android:orientation="vertical"
-        android:layout_height="wrap_content"
-        android:gravity="center">
+    <android.support.v7.widget.CardView
 
-        <ImageView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        card_view:cardCornerRadius="4dp">
 
-            android:id="@+id/iv_article_image"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"/>
-        <TextView
-            android:id="@+id/tv_article_code"
+        <LinearLayout
+
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="050030"/>
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginEnd="18dp"
+            android:orientation="horizontal">
 
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_weight="6"
-        android:layout_height="match_parent"
-        android:gravity="center|left">
-        <TextView
-            android:id="@+id/tv_article_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:text="DESCRIPCION"
-            />
+            <LinearLayout
+                android:layout_weight="4"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:paddingEnd="8dp"
+                android:paddingRight="8dp"
+                android:layout_height="wrap_content"
+                android:gravity="center">
 
-        <TextView
-            android:id="@+id/tv_article_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@android:color/holo_red_dark"
-            tools:text="$16.000"
-            />
+                <ImageView
 
-    </LinearLayout>
-    <LinearLayout
-        android:layout_weight="6"
-        android:layout_width="0dp"
-        android:orientation="vertical"
-        android:layout_gravity="center_vertical"
-        android:layout_height="match_parent"
-        >
+                    android:id="@+id/iv_article_image"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"/>
+                <TextView
+                    android:id="@+id/tv_article_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:textAlignment="center"
+                    android:text="not available"/>
 
-        <TextView
-            android:id="@+id/tv_label_article_total_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/total_article_price"
-            android:paddingTop="8dp"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_gravity="center"
-            android:gravity="center_horizontal"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="6"
+                android:layout_height="match_parent"
+                android:gravity="center|left">
+                <TextView
+                    android:id="@+id/tv_article_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:text="DESCRIPCION"
+                    />
 
-        <TextView
-            android:id="@+id/tv_article_total_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:textSize="18sp"
-            android:layout_gravity="center"
-            tools:text="$120.000"/>
+                <TextView
+                    android:id="@+id/tv_article_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/holo_red_dark"
+                    tools:text="$16.000"
+                    />
 
-    </LinearLayout>
-    <TextView
-        android:id="@+id/tv_article_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:paddingEnd="4dp"
-        android:textColor="@color/authui_colorPrimaryDark"
-        android:paddingRight="4dp"
-        android:paddingStart="4dp"
-        android:paddingLeft="4dp"
-        android:textStyle="bold"
-        android:layout_gravity="center_vertical"
-        tools:text="0"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_weight="6"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                android:layout_height="match_parent"
+                >
 
-    <LinearLayout
+                <TextView
+                    android:id="@+id/tv_label_article_total_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_article_price"
+                    android:paddingTop="8dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:gravity="center_horizontal"/>
 
-        android:layout_width="0dp"
-        android:layout_weight="5"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/tv_article_total_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textSize="18sp"
+                    android:layout_gravity="center"
+                    tools:text="$120.000"/>
 
-        <ImageButton
-            android:id="@+id/imb_up_arrow"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
-            android:background="@color/tw__transparent"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_article_amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.2"
+                android:textSize="20sp"
+                android:paddingEnd="4dp"
+                android:textColor="#3B3636"
+                android:paddingRight="4dp"
+                android:paddingStart="4dp"
+                android:paddingLeft="4dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_gravity="center_vertical|left"
+                tools:text="0"/>
+            <LinearLayout
 
-        <ImageButton
-            android:id="@+id/imb_down_arrow"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/tw__transparent"
-            android:src="@drawable/ic_keyboard_arrow_down_black_24dp"/>
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
 
-    </LinearLayout>
+                <ImageButton
+                    android:id="@+id/imb_up_arrow"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
+                    android:paddingBottom="4dp"
+                    android:tint="#726F6F"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
+                    android:background="@color/tw__transparent"/>
+
+                <ImageButton
+                    android:id="@+id/imb_down_arrow"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
+                    android:paddingTop="4dp"
+                    android:tint="#726F6F"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/tw__transparent"
+                    android:src="@drawable/ic_keyboard_arrow_down_black_24dp"/>
+
+            </LinearLayout>
 
 
-</LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>
+
+
+
+
