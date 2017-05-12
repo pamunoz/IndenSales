@@ -2,14 +2,12 @@ package com.pfariasmunoz.indensales.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,7 +17,6 @@ import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.models.Article;
 import com.pfariasmunoz.indensales.data.models.ArticleSale;
 import com.pfariasmunoz.indensales.ui.activities.CreateSaleActivity;
-import com.pfariasmunoz.indensales.ui.viewholders.ArticlesViewHolder;
 import com.pfariasmunoz.indensales.utils.MathHelper;
 import com.pfariasmunoz.indensales.utils.TextHelper;
 
