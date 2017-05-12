@@ -6,11 +6,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -75,6 +79,10 @@ public class CreateSaleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_sale);
+
+
+
+        setTitle(getResources().getString(R.string.sales_activity_title));
 
         ButterKnife.bind(this);
 
@@ -168,6 +176,8 @@ public class CreateSaleActivity extends AppCompatActivity {
                 FirebaseDb.sArticlesSalesRef.child(saleUid).child(key).setValue(articleSale);
                 it.remove(); // avoids a ConcurrentModificationException
             }
+        } else {
+            Toast.makeText(this, "Add an article to sale", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -178,6 +188,52 @@ public class CreateSaleActivity extends AppCompatActivity {
         super.onPause();
         mAdapter.cleanup();
         detachReadListeners();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_settings:
+                Toast.makeText(this, getResources().getString(R.string.function_not_available), Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_search:
+                SearchView searchView = (SearchView) item.getActionView();
+                searchView.setQueryHint(getResources().getString(R.string.search_articles_hint));
+
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+
+                        if (MathHelper.isNumeric(newText)) {
+                            Query query = FirebaseDb.getArticlesCodeQuery(newText).limitToFirst(30);
+                            mAdapter = new ArticleSaleAdapter(CreateSaleActivity.this, query);
+                        } else {
+                            String text = newText.toUpperCase();
+                            Query query = FirebaseDb.getArticlesDescriptionQuery(text);
+                            mAdapter = new ArticleSaleAdapter(CreateSaleActivity.this, query);
+                        }
+                        mAdapter.notifyDataSetChanged();
+                        mRecyclerView.swapAdapter(mAdapter, false);
+                        return false;
+                    }
+                });
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void detachReadListeners() {

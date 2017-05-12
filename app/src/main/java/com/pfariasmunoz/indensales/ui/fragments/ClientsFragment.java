@@ -119,6 +119,7 @@ public class ClientsFragment extends Fragment {
             protected void populateViewHolder(
                     final ClientViewHolder viewHolder,
                     final Client model, final int position) {
+
                 viewHolder.getAddSaleButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
