@@ -1,5 +1,7 @@
 package com.pfariasmunoz.indensales.utils;
 
+import android.text.TextUtils;
+
 /**
  * Created by Pablo Farias on 21-04-17.
  */
@@ -7,28 +9,30 @@ package com.pfariasmunoz.indensales.utils;
 public class TextHelper {
 
     public static String capitalizeFirestLetter(String text) {
-        String[] words = text.split(" ");
         StringBuilder sb = new StringBuilder();
 
-        if (words.length > 0) {
-
-            for (int i = 0; i < words.length; i++) {
-                if (words[i].contains(".")) {
-                    sb.append(words[i]);
-                    sb.append(" ");
-                } else {
-                    String lastword = words[i].substring(0, 1).toUpperCase() + words[i].substring(1);
-                    if (i < words.length) {
-                        sb.append(lastword);
-                        sb.append(" ");
-                    } else {
-                        sb.append(lastword);
-                    }
-                }
-            }
+        String[] textArray = text.split(" ");
+        for (String word : textArray) {
+            String newword = upperCaseFirst(word) + " ";
+            sb.append(newword);
         }
-        return sb.toString();
+        return sb.toString().trim();
 
+    }
+
+    private static String upperCaseFirst(String value) {
+        String word = "";
+        if (value != null && !TextUtils.isEmpty(value)) {
+
+            word = value.toLowerCase();
+            if (word.length() > 2)
+                return word.substring(0, 1).toUpperCase() + word.substring(1);
+            else {
+                return word.substring(0, 1).toUpperCase();
+            }
+
+        }
+        return word;
     }
 
 }

@@ -2,6 +2,7 @@ package com.pfariasmunoz.indensales.utils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.NumberFormat;
 
 /**
  * Created by Pablo Farias on 26-04-17.
@@ -19,6 +20,18 @@ public class MathHelper {
 
     public static boolean isNumeric(String inputData) {
         return inputData.matches("[-+]?\\d+(\\.\\d+)?");
+
+
+    }
+
+
+    public static String getLocalCurrency(String number) {
+        Long n = 0L;
+        if (MathHelper.isNumeric(number)) {
+            n = Long.valueOf(number);
+        }
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        return String.valueOf(format.format(n));
     }
 
 }

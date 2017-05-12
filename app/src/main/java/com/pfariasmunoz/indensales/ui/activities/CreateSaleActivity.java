@@ -28,6 +28,8 @@ import com.pfariasmunoz.indensales.data.models.Client;
 import com.pfariasmunoz.indensales.data.models.Sale;
 import com.pfariasmunoz.indensales.ui.adapters.ArticleSaleAdapter;
 import com.pfariasmunoz.indensales.utils.Constants;
+import com.pfariasmunoz.indensales.utils.MathHelper;
+import com.pfariasmunoz.indensales.utils.TextHelper;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -110,7 +112,8 @@ public class CreateSaleActivity extends AppCompatActivity {
                     String name = client.getNombre();
                     String rut = client.getRut();
                     String discount = client.getDescuento();
-                    mClientNameTextView.setText(name);
+                    String stringName = TextHelper.capitalizeFirestLetter(name);
+                    mClientNameTextView.setText(stringName);
                     mClientRutTextView.setText(rut);
                 }
             }
@@ -126,7 +129,8 @@ public class CreateSaleActivity extends AppCompatActivity {
                 if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
                     Address address = dataSnapshot.getValue(Address.class);
                     String longAddress = address.getDireccion() + "\n" + address.getComuna() + " " + address.getCiudad();
-                    mClientAddressTextView.setText(longAddress);
+                    String stringLongAddress = TextHelper.capitalizeFirestLetter(longAddress);
+                    mClientAddressTextView.setText(stringLongAddress);
                 }
             }
 
@@ -186,8 +190,9 @@ public class CreateSaleActivity extends AppCompatActivity {
     }
 
     public void setTotals(long totalPrice, int totalAmount) {
+        String stringTotal = MathHelper.getLocalCurrency(String.valueOf(totalPrice));
         mSaleArticlesAmountTextView.setText(String.valueOf(totalAmount));
-        mTotalPriceSaleTextView.setText(String.valueOf(totalPrice));
+        mTotalPriceSaleTextView.setText(stringTotal);
     }
 
 }

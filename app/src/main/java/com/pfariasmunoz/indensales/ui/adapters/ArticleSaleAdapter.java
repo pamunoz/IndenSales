@@ -20,6 +20,8 @@ import com.pfariasmunoz.indensales.data.models.Article;
 import com.pfariasmunoz.indensales.data.models.ArticleSale;
 import com.pfariasmunoz.indensales.ui.activities.CreateSaleActivity;
 import com.pfariasmunoz.indensales.ui.viewholders.ArticlesViewHolder;
+import com.pfariasmunoz.indensales.utils.MathHelper;
+import com.pfariasmunoz.indensales.utils.TextHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,10 +103,13 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.
         final ArticleSale articleSale = mArticleSaleList.get(position);
         final Article article = mArticleList.get(position);
         String code = mArticlesKeys.get(position);
-        holder.mArticleDescriptionTextView.setText(article.getDescripcion());
-        holder.mArticlePriceTextView.setText(article.getPrecio());
+        String stringDescription = TextHelper.capitalizeFirestLetter(article.getDescripcion());
+        holder.mArticleDescriptionTextView.setText(stringDescription);
+        String stringArticlePrice = MathHelper.getLocalCurrency(article.getPrecio());
+        holder.mArticlePriceTextView.setText(stringArticlePrice);
         holder.mArticleCodeTextView.setText(code);
-        holder.mArticlesTotalPriceTextView.setText(String.valueOf(articleSale.getTotal()));
+        String stringArticleTotalPrice = MathHelper.getLocalCurrency(String.valueOf(articleSale.getTotal()));
+        holder.mArticlesTotalPriceTextView.setText(stringArticleTotalPrice);
         holder.mArticlesAmountTextView.setText(String.valueOf(articleSale.getCantidad()));
         holder.mAddArticleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,9 +196,6 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleSaleAdapter.
         return mTotalPrice;
     }
 
-    public int getTotalAmount() {
-        return mTotalAmount;
-    }
 
     class ArticleViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.iv_article_image)
