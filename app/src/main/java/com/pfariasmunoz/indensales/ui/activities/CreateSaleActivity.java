@@ -79,11 +79,7 @@ public class CreateSaleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_sale);
-
-
-
         setTitle(getResources().getString(R.string.sales_activity_title));
-
         ButterKnife.bind(this);
 
 
@@ -184,6 +180,10 @@ public class CreateSaleActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_see_current_sales)
     public void seeCurrentArticlesSales() {
+        updateAdapter(mArticlesQuery, false);
+    }
+
+    private void updateAdapter(Query query, boolean isBeingSearch) {
         List<String> currentKeys = new ArrayList<>();
         List<ArticleSale> currentArticlesSales = new ArrayList<>();
         List<Article> currentArticles = new ArrayList<>();
@@ -195,9 +195,9 @@ public class CreateSaleActivity extends AppCompatActivity {
             }
         }
 
-        mAdapter = new ArticleSaleAdapter(this, mArticlesQuery, currentArticlesSales, currentArticles, currentKeys);
-        Toast.makeText(this, "HELO METHOD!!! " + String.valueOf(mAdapter.getItemCount()), Toast.LENGTH_SHORT).show();
+        mAdapter = new ArticleSaleAdapter(this, query, currentArticlesSales, currentArticles, currentKeys, isBeingSearch);
         mRecyclerView.swapAdapter(mAdapter, false);
+
     }
 
     @Override
@@ -236,14 +236,13 @@ public class CreateSaleActivity extends AppCompatActivity {
 
                         if (MathHelper.isNumeric(newText)) {
                             Query query = FirebaseDb.getArticlesCodeQuery(newText).limitToFirst(30);
-                            mAdapter = new ArticleSaleAdapter(CreateSaleActivity.this, query);
+                            updateAdapter(query, true);
                         } else {
                             String text = newText.toUpperCase();
                             Query query = FirebaseDb.getArticlesDescriptionQuery(text);
-                            mAdapter = new ArticleSaleAdapter(CreateSaleActivity.this, query);
+                            updateAdapter(query, true);
                         }
                         mAdapter.notifyDataSetChanged();
-                        mRecyclerView.swapAdapter(mAdapter, false);
                         return false;
                     }
                 });

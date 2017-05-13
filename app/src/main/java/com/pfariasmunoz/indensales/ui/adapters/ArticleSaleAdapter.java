@@ -38,6 +38,7 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
     private List<String> mArticlesKeys = new ArrayList<>();
     private Query mQuery;
     private ValueEventListener mEventListener;
+    private boolean mIsBeingSearch = false;
 
     // Values for updating the activity views
     private long mTotalPrice = 0;
@@ -53,7 +54,8 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
         mQuery.addValueEventListener(mEventListener);
     }
 
-    public ArticleSaleAdapter(Context context, Query articlesQuery, List<ArticleSale> articleSales, List<Article> articleList, List<String> articlesKeys) {
+    public ArticleSaleAdapter(Context context, Query articlesQuery, List<ArticleSale> articleSales, List<Article> articleList, List<String> articlesKeys, boolean isBeingSearch) {
+        mIsBeingSearch = isBeingSearch;
         // Initialize current data
         mArticleSaleList.addAll(articleSales);
         mArticleList.addAll(articleList);
@@ -85,10 +87,7 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
                     Article article = snapshot.getValue(Article.class);
                     String articleKey = snapshot.getKey();
                     if (!isKeyInList(articleKey, mArticlesKeys)) {
-                        mArticleList.add(article);
-                        ArticleSale articleSale = new ArticleSale(0, 0L);
-                        mArticleSaleList.add(articleSale);
-                        mArticlesKeys.add(articleKey);
+                        addArticleKeyAndEmptyArticleSale(article, articleKey);
                     }
 
                 }
@@ -212,5 +211,24 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
             }
         }
         return false;
+    }
+
+    private void addArticleKeyAndEmptyArticleSale(Article article, String articleKey) {
+        if (mIsBeingSearch) {
+            int itemsOnTop = 10;
+            while (itemsOnTop > 0) {
+                mArticleList.add(0, article);
+                ArticleSale articleSale = new ArticleSale(0, 0L);
+                mArticleSaleList.add(0, articleSale);
+                mArticlesKeys.add(0, articleKey);
+                itemsOnTop--;
+            }
+            mIsBeingSearch = false;
+        }
+        mArticleList.add(article);
+        ArticleSale articleSale = new ArticleSale(0, 0L);
+        mArticleSaleList.add(articleSale);
+        mArticlesKeys.add(articleKey);
+
     }
 }
