@@ -31,9 +31,12 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
     public static final String TAG = ArticleSaleAdapter.class.getSimpleName();
 
     Context mContext;
+    // New Data
     List<ArticleSale> mArticleSaleList = new ArrayList<>();
     List<Article> mArticleList = new ArrayList<>();
     List<String> mArticlesKeys = new ArrayList<>();
+
+
     Query mQuery;
     ValueEventListener mEventListener;
 
@@ -44,11 +47,24 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
 
 
     public ArticleSaleAdapter(Context context, Query articlesQuery) {
+        // Initialize current data
         this.mContext = context;
         this.mQuery = articlesQuery;
         mEventListener = setUpListener();
         mQuery.addValueEventListener(mEventListener);
     }
+
+    public ArticleSaleAdapter(Context context, Query articlesQuery, List<ArticleSale> articleSales, List<Article> articleList, List<String> articlesKeys) {
+        // Initialize current data
+        mArticleSaleList.addAll(articleSales);
+        mArticleList.addAll(articleList);
+        mArticlesKeys.addAll(articlesKeys);
+        this.mContext = context;
+        this.mQuery = articlesQuery;
+        mEventListener = setUpListener();
+        mQuery.addValueEventListener(mEventListener);
+    }
+
 
     @Override
     public ArticleViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -66,7 +82,6 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
         ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mArticleList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Article article = snapshot.getValue(Article.class);
                     String articleKey = snapshot.getKey();
@@ -96,14 +111,8 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
         final ArticleSale articleSale = mArticleSaleList.get(position);
         final Article article = mArticleList.get(position);
         String code = mArticlesKeys.get(position);
-        String stringDescription = TextHelper.capitalizeFirestLetter(article.getDescripcion());
-        holder.mArticleDescriptionTextView.setText(stringDescription);
-        String stringArticlePrice = MathHelper.getLocalCurrency(article.getPrecio());
-        holder.mArticlePriceTextView.setText(stringArticlePrice);
-        holder.mArticleCodeTextView.setText(code);
-        String stringArticleTotalPrice = MathHelper.getLocalCurrency(String.valueOf(articleSale.getTotal()));
-        holder.mArticlesTotalPriceTextView.setText(stringArticleTotalPrice);
-        holder.mArticlesAmountTextView.setText(String.valueOf(articleSale.getCantidad()));
+
+        holder.bind(article, articleSale, code);
         holder.mAddArticleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,18 +148,6 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
 
     private Context getContext() {
         return mContext;
-    }
-
-    public List<ArticleSale> getArticleSaleList() {
-        if (mArticleSaleList != null) {
-            return mArticleSaleList;
-        } else {
-            return null;
-        }
-    }
-
-    public List<String> getArticlesKeys() {
-        return mArticlesKeys;
     }
 
     public Map<String, ArticleSale> getArticlesForSale() {
@@ -189,6 +186,15 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
         return mTotalPrice;
     }
 
+    public List<ArticleSale> getArticleSaleList() {
+        return mArticleSaleList;
+    }
 
+    public List<Article> getArticleList() {
+        return mArticleList;
+    }
 
+    public List<String> getArticlesKeys() {
+        return mArticlesKeys;
+    }
 }

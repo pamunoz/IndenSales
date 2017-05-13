@@ -7,6 +7,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pfariasmunoz.indensales.R;
+import com.pfariasmunoz.indensales.data.models.Article;
+import com.pfariasmunoz.indensales.data.models.ArticleSale;
+import com.pfariasmunoz.indensales.utils.MathHelper;
+import com.pfariasmunoz.indensales.utils.TextHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,5 +40,16 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder{
     public ArticleViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+    }
+
+    public void bind(Article article, ArticleSale articleSale, String code) {
+        String stringDescription = TextHelper.capitalizeFirestLetter(article.getDescripcion());
+        mArticleDescriptionTextView.setText(stringDescription);
+        String stringArticlePrice = MathHelper.getLocalCurrency(article.getPrecio());
+        mArticlePriceTextView.setText(stringArticlePrice);
+        mArticleCodeTextView.setText(code);
+        String stringArticleTotalPrice = MathHelper.getLocalCurrency(String.valueOf(articleSale.getTotal()));
+        mArticlesTotalPriceTextView.setText(stringArticleTotalPrice);
+        mArticlesAmountTextView.setText(String.valueOf(articleSale.getCantidad()));
     }
 }

@@ -70,6 +70,7 @@ public class CreateSaleActivity extends AppCompatActivity {
 
     private Query mClientQuery;
     private Query mClientAddressQuery;
+    private Query mArticlesQuery;
 
     ArticleSaleAdapter mAdapter;
     RecyclerView mRecyclerView;
@@ -95,8 +96,9 @@ public class CreateSaleActivity extends AppCompatActivity {
         // Initialize the queries
         mClientQuery = FirebaseDb.sClientsRef.child(mClientId);
         mClientAddressQuery = FirebaseDb.sClientAdressRef.child(mClientId).child(mClientAddressId);
+        mArticlesQuery = FirebaseDb.sArticlesRef.limitToFirst(30);
 
-        mAdapter = new ArticleSaleAdapter(this, FirebaseDb.sArticlesRef.limitToFirst(30));
+        mAdapter = new ArticleSaleAdapter(this, mArticlesQuery);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_numbers);
         LinearLayoutManager manager = new LinearLayoutManager(this);
@@ -152,33 +154,47 @@ public class CreateSaleActivity extends AppCompatActivity {
 
     @OnClick(R.id.bt_create_sale)
     public void createSale() {
-
-        Map<String, ArticleSale> articlesForSale = mAdapter.getArticlesForSale();
-        if (articlesForSale != null) {
-            Sale sale = new Sale(
-                    false, String.valueOf(System.currentTimeMillis()),
-                    mClientId,
-                    mClientAddressId,
-                    mUserId,
-                    mAdapter.getTotalPrice());
-            DatabaseReference ref = FirebaseDb.sSalesRef.push();
-
-            ref.setValue(sale);
-
-            String saleUid = ref.getKey();
-
-            Iterator it = articlesForSale.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry)it.next();
-                ArticleSale articleSale = (ArticleSale) pair.getValue();
-                String key = (String) pair.getKey();
-                FirebaseDb.sArticlesSalesRef.child(saleUid).child(key).setValue(articleSale);
-                it.remove(); // avoids a ConcurrentModificationException
+        List<String> currentKeys = new ArrayList<>();
+        List<ArticleSale> currentArticlesSales = new ArrayList<>();
+        List<Article> currentArticles = new ArrayList<>();
+        for (int i = 0; i < mAdapter.getArticlesKeys().size(); i++) {
+            if (mAdapter.getArticleSaleList().get(i).getCantidad() > 0) {
+                currentKeys.add(mAdapter.getArticlesKeys().get(i));
+                currentArticlesSales.add(mAdapter.getArticleSaleList().get(i));
+                currentArticles.add(mAdapter.getArticleList().get(i));
             }
-            finish();
-        } else {
-            Toast.makeText(this, "Add an article to sale", Toast.LENGTH_SHORT).show();
         }
+
+        mAdapter = new ArticleSaleAdapter(this, mArticlesQuery, currentArticlesSales, currentArticles, currentKeys);
+        Toast.makeText(this, "HELO METHOD!!! " + String.valueOf(mAdapter.getItemCount()), Toast.LENGTH_SHORT).show();
+        mRecyclerView.swapAdapter(mAdapter, false);
+
+//        Map<String, ArticleSale> articlesForSale = mAdapter.getArticlesForSale();
+//        if (articlesForSale != null) {
+//            Sale sale = new Sale(
+//                    false, String.valueOf(System.currentTimeMillis()),
+//                    mClientId,
+//                    mClientAddressId,
+//                    mUserId,
+//                    mAdapter.getTotalPrice());
+//            DatabaseReference ref = FirebaseDb.sSalesRef.push();
+//
+//            ref.setValue(sale);
+//
+//            String saleUid = ref.getKey();
+//
+//            Iterator it = articlesForSale.entrySet().iterator();
+//            while (it.hasNext()) {
+//                Map.Entry pair = (Map.Entry)it.next();
+//                ArticleSale articleSale = (ArticleSale) pair.getValue();
+//                String key = (String) pair.getKey();
+//                FirebaseDb.sArticlesSalesRef.child(saleUid).child(key).setValue(articleSale);
+//                it.remove(); // avoids a ConcurrentModificationException
+//            }
+//            finish();
+//        } else {
+//            Toast.makeText(this, "Add an article to sale", Toast.LENGTH_SHORT).show();
+//        }
 
 
     }
