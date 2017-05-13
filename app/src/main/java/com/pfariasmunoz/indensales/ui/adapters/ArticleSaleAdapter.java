@@ -2,6 +2,7 @@ package com.pfariasmunoz.indensales.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +33,11 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
 
     Context mContext;
     // New Data
-    List<ArticleSale> mArticleSaleList = new ArrayList<>();
-    List<Article> mArticleList = new ArrayList<>();
-    List<String> mArticlesKeys = new ArrayList<>();
-
-
-    Query mQuery;
-    ValueEventListener mEventListener;
+    private List<ArticleSale> mArticleSaleList = new ArrayList<>();
+    private List<Article> mArticleList = new ArrayList<>();
+    private List<String> mArticlesKeys = new ArrayList<>();
+    private Query mQuery;
+    private ValueEventListener mEventListener;
 
     // Values for updating the activity views
     private long mTotalPrice = 0;
@@ -85,11 +84,17 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Article article = snapshot.getValue(Article.class);
                     String articleKey = snapshot.getKey();
-                    mArticleList.add(article);
-                    ArticleSale articleSale = new ArticleSale(0, 0L);
-                    mArticleSaleList.add(articleSale);
-                    mArticlesKeys.add(articleKey);
+                    if (!isKeyInList(articleKey, mArticlesKeys)) {
+                        mArticleList.add(article);
+                        ArticleSale articleSale = new ArticleSale(0, 0L);
+                        mArticleSaleList.add(articleSale);
+                        mArticlesKeys.add(articleKey);
+                    }
+
                 }
+                Log.i(TAG, "LENGHT OF KEY LIST: " + String.valueOf(mArticlesKeys.size()));
+                Log.i(TAG, "LENGHT OF ARTICLE LIST: " + String.valueOf(mArticleList.size()));
+                Log.i(TAG, "LENGHT OF ARTICLE SALE LIST: " + String.valueOf(mArticleSaleList.size()));
                 notifyDataSetChanged();
             }
 
@@ -196,5 +201,16 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
 
     public List<String> getArticlesKeys() {
         return mArticlesKeys;
+    }
+
+    private boolean isKeyInList(String search, List<String> keys) {
+        for (String key : keys) {
+            if (keys != null && keys.size() > 0) {
+                if (key.trim().contains(search)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

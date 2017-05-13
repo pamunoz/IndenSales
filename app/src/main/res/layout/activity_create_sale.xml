@@ -118,6 +118,13 @@
             android:layout_below="@+id/tv_label_sale_total_price"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"/>
+        <Button
+            android:id="@+id/btn_see_current_sales"
+            android:text="See Current Sales"
+            android:layout_width="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_height="wrap_content"/>
 
     </RelativeLayout>
 </LinearLayout>
