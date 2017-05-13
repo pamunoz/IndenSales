@@ -141,18 +141,6 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
         return mContext;
     }
 
-    public List<ArticleSale> getArticleSaleList() {
-        if (mArticleSaleList != null) {
-            return mArticleSaleList;
-        } else {
-            return null;
-        }
-    }
-
-    public List<String> getArticlesKeys() {
-        return mArticlesKeys;
-    }
-
     public Map<String, ArticleSale> getArticlesForSale() {
         boolean areListEqual = mArticlesKeys.size() == mArticleSaleList.size();
         if (areListEqual) {
@@ -188,7 +176,5 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
     public long getTotalPrice() {
         return mTotalPrice;
     }
-
-
 
 }

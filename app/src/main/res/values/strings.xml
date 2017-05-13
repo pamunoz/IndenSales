@@ -26,9 +26,6 @@
         <xliff:g id="month">%1$s</xliff:g>, <xliff:g id="day">%2$s</xliff:g>
     </string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
-
     <!-- for searching clients -->
     <string name="search_clients_hint">Search for Clients</string>
 
@@ -44,7 +41,7 @@
     <string name="total_article_price">Total</string>
     <string name="add_sale_button">Add Sale</string>
     <string name="client_name">Not Available</string>
-    <string name="make_sale_button">Make Sale</string>
+    <string name="make_sale_button">Finalize Sale</string>
     <string name="sale_not_aproved">Sale not Aproved</string>
     <string name="client_address">Not Available</string>
     <string name="client_commune">Not Available</string>
