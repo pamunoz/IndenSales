@@ -40,7 +40,8 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
     private List<String> mArticlesKeys = new ArrayList<>();
     private Query mQuery;
     private ValueEventListener mEventListener;
-    private boolean mIsBeingSearch = false;
+    private boolean mIsBeingSearchByWord = false;
+    private boolean mIsBeingSearchByCode = false;
 
     // Values for updating the activity views
     private long mTotalPrice = 0;
@@ -56,13 +57,13 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
         mQuery.addValueEventListener(mEventListener);
     }
 
-    public ArticleSaleAdapter(Context context, Query articlesQuery, List<ArticleSale> articleSales, List<Article> articleList, List<String> articlesKeys, boolean isBeingSearch) {
-        mIsBeingSearch = isBeingSearch;
+    public ArticleSaleAdapter(Context context, Query articlesQuery, List<ArticleSale> articleSales, List<Article> articleList, List<String> articlesKeys, boolean isBeingSearchByWord, boolean isBeingSearchByCode) {
+        mIsBeingSearchByWord = isBeingSearchByWord;
+        mIsBeingSearchByCode = isBeingSearchByCode;
         // Initialize current data
         mArticleSaleList.addAll(articleSales);
         mArticleList.addAll(articleList);
         mArticlesKeys.addAll(articlesKeys);
-        setToalPriceAndAmount();
         this.mContext = context;
         this.mQuery = articlesQuery;
         mEventListener = setUpListener();
@@ -91,10 +92,19 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
                     String articleKey = snapshot.getKey();
                     if (!isKeyInList(articleKey, mArticlesKeys)) {
                         addArticleKeyAndEmptyArticleSale(article, articleKey);
+                        notifyDataSetChanged();
                     }
 
                 }
-                notifyDataSetChanged();
+                for (int i = 0; i < mArticlesKeys.size(); i++) {
+                    if (mArticleSaleList.get(i).getCantidad() == 0 && isReapeated(mArticlesKeys.get(i)) > 1) {
+                        mArticlesKeys.remove(i);
+                        mArticleSaleList.remove(i);
+                        mArticleList.remove(i);
+                    }
+                    notifyDataSetChanged();
+                }
+
                 setToalPriceAndAmount();
             }
 
@@ -213,22 +223,46 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
         return false;
     }
 
+    private int isReapeated(String key) {
+        int counter = 0;
+        for (int i = 0; i < mArticlesKeys.size(); i++) {
+            if (key.equals(mArticlesKeys.get(i))) counter++;
+        }
+        return counter;
+    }
+
     private void addArticleKeyAndEmptyArticleSale(Article article, String articleKey) {
-        if (mIsBeingSearch) {
+        if (mIsBeingSearchByWord) {
             int itemsOnTop = 10;
             while (itemsOnTop > 0) {
-                mArticleList.add(0, article);
-                ArticleSale articleSale = new ArticleSale(0, 0L);
-                mArticleSaleList.add(0, articleSale);
-                mArticlesKeys.add(0, articleKey);
-                itemsOnTop--;
+                for (int i = 0; i < mArticlesKeys.size(); i++) {
+                    if (!articleKey.equals(mArticlesKeys.get(i))) {
+                        mArticleList.add(0, article);
+                        ArticleSale articleSale = new ArticleSale(0, 0L);
+                        mArticleSaleList.add(0, articleSale);
+                        mArticlesKeys.add(0, articleKey);
+                        itemsOnTop--;
+                    }
+                }
             }
-            mIsBeingSearch = false;
+            mIsBeingSearchByWord = false;
+        } else if (mIsBeingSearchByCode) {
+            mArticleList.add(0, article);
+            ArticleSale articleSale = new ArticleSale(0, 0L);
+            mArticleSaleList.add(0, articleSale);
+            mArticlesKeys.add(0, articleKey);
+            mIsBeingSearchByCode = false;
+        } else {
+            mArticleList.add(article);
+            ArticleSale articleSale = new ArticleSale(0, 0L);
+            mArticleSaleList.add(articleSale);
+            mArticlesKeys.add(articleKey);
         }
-        mArticleList.add(article);
-        ArticleSale articleSale = new ArticleSale(0, 0L);
-        mArticleSaleList.add(articleSale);
-        mArticlesKeys.add(articleKey);
+    }
 
+    private void logTheList() {
+        Log.i(TAG, "THE SIZE OF THE articles: " + String.valueOf(mArticleList.size()));
+        Log.i(TAG, "THE SIZE OF THE keys: " + String.valueOf(mArticlesKeys.size()));
+        Log.i(TAG, "THE SIZE OF THE articlesales: " + String.valueOf(mArticleSaleList.size()));
     }
 }

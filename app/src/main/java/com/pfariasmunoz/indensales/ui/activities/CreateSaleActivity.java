@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -180,7 +181,7 @@ public class CreateSaleActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_see_current_sales)
     public void seeCurrentArticlesSales() {
-        updateAdapter(mArticlesQuery, false);
+        updateAdapter(mArticlesQuery, false, false);
     }
 
     /**
@@ -189,7 +190,7 @@ public class CreateSaleActivity extends AppCompatActivity {
      * @param query the new query provided
      * @param isBeingSearch the check if the user is searching
      */
-    private void updateAdapter(Query query, boolean isBeingSearch) {
+    private void updateAdapter(Query query, boolean isBeingSearch, boolean isBeingSearchByCode) {
         List<String> currentKeys = new ArrayList<>();
         List<ArticleSale> currentArticlesSales = new ArrayList<>();
         List<Article> currentArticles = new ArrayList<>();
@@ -201,7 +202,7 @@ public class CreateSaleActivity extends AppCompatActivity {
             }
         }
 
-        mAdapter = new ArticleSaleAdapter(this, query, currentArticlesSales, currentArticles, currentKeys, isBeingSearch);
+        mAdapter = new ArticleSaleAdapter(this, query, currentArticlesSales, currentArticles, currentKeys, isBeingSearch, isBeingSearchByCode);
         mRecyclerView.swapAdapter(mAdapter, false);
 
     }
@@ -240,15 +241,20 @@ public class CreateSaleActivity extends AppCompatActivity {
                     @Override
                     public boolean onQueryTextChange(String newText) {
 
-                        if (MathHelper.isNumeric(newText)) {
-                            Query query = FirebaseDb.getArticlesCodeQuery(newText).limitToFirst(30);
-                            updateAdapter(query, true);
-                        } else {
-                            String text = newText.toUpperCase();
-                            Query query = FirebaseDb.getArticlesDescriptionQuery(text);
-                            updateAdapter(query, true);
+                        if (!TextUtils.isEmpty(newText)) {
+                            if (MathHelper.isNumeric(newText)) {
+                                Query query = FirebaseDb.getArticlesCodeQuery(newText).limitToFirst(30);
+                                updateAdapter(query, false, true);
+                            } else {
+                                String text = newText.toUpperCase();
+                                Query query = FirebaseDb.getArticlesDescriptionQuery(text);
+                                updateAdapter(query, true, false);
+                            }
+                            mAdapter.notifyDataSetChanged();
                         }
-                        mAdapter.notifyDataSetChanged();
+                        if (TextUtils.isEmpty(newText)) {
+                            updateAdapter(mArticlesQuery, false, false);
+                        }
                         return false;
                     }
                 });
