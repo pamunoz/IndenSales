@@ -1,9 +1,11 @@
 package com.pfariasmunoz.indensales.ui.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -60,6 +62,7 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
         mArticleSaleList.addAll(articleSales);
         mArticleList.addAll(articleList);
         mArticlesKeys.addAll(articlesKeys);
+        setToalPriceAndAmount();
         this.mContext = context;
         this.mQuery = articlesQuery;
         mEventListener = setUpListener();
@@ -91,10 +94,8 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
                     }
 
                 }
-                Log.i(TAG, "LENGHT OF KEY LIST: " + String.valueOf(mArticlesKeys.size()));
-                Log.i(TAG, "LENGHT OF ARTICLE LIST: " + String.valueOf(mArticleList.size()));
-                Log.i(TAG, "LENGHT OF ARTICLE SALE LIST: " + String.valueOf(mArticleSaleList.size()));
                 notifyDataSetChanged();
+                setToalPriceAndAmount();
             }
 
             @Override
@@ -142,7 +143,6 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
                 setToalPriceAndAmount();
             }
         });
-
     }
 
     @Override

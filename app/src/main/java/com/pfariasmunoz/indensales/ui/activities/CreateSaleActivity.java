@@ -183,6 +183,12 @@ public class CreateSaleActivity extends AppCompatActivity {
         updateAdapter(mArticlesQuery, false);
     }
 
+    /**
+     * This method update the adapter with a new query with the condition if the action
+     * is searching, the other is putting the articles added to the top of the list.
+     * @param query the new query provided
+     * @param isBeingSearch the check if the user is searching
+     */
     private void updateAdapter(Query query, boolean isBeingSearch) {
         List<String> currentKeys = new ArrayList<>();
         List<ArticleSale> currentArticlesSales = new ArrayList<>();
