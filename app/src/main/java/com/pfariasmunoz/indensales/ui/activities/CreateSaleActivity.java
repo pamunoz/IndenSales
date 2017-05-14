@@ -1,9 +1,11 @@
 package com.pfariasmunoz.indensales.ui.activities;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -261,6 +263,29 @@ public class CreateSaleActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mAdapter.getTotalAmount() > 0) {
+            Log.i(TAG, "SIZE OF ARTICLESALE LIST IS: " + mAdapter.getArticleSaleList().size());
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("You have articles in sale car")
+                    .setMessage("You have " + String.valueOf(mAdapter.getTotalAmount()) + " selling\nAre you sure you want to cancel this sale?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        } else {
+            super.onBackPressed();
         }
     }
 

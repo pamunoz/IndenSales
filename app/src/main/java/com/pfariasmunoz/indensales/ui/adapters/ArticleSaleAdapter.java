@@ -202,28 +202,16 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
         return mArticlesKeys;
     }
 
-    private boolean isKeyInList(String search, List<String> keys) {
-        for (String key : keys) {
-            if (keys != null && keys.size() > 0) {
-                if (key.trim().contains(search)) {
-                    Log.i(TAG, "key: " + key + " = " + search);
-                    return true;
-                } else {
-                    Log.i(TAG, "key: " + key + " != " + search);
-
-                }
-
-            }
-        }
-        return false;
-    }
-
     private int isReapeated(String key) {
         int counter = 0;
         for (int i = 0; i < mArticlesKeys.size(); i++) {
             if (key.equals(mArticlesKeys.get(i))) counter++;
         }
         return counter;
+    }
+
+    public int getTotalAmount() {
+        return mTotalAmount;
     }
 
     private void addArticleKeyAndEmptyArticleSale(Article article, String articleKey) {
