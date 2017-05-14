@@ -90,20 +90,10 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Article article = snapshot.getValue(Article.class);
                     String articleKey = snapshot.getKey();
-                    if (!isKeyInList(articleKey, mArticlesKeys)) {
-                        addArticleKeyAndEmptyArticleSale(article, articleKey);
-                        notifyDataSetChanged();
-                    }
-
-                }
-                for (int i = 0; i < mArticlesKeys.size(); i++) {
-                    if (mArticleSaleList.get(i).getCantidad() == 0 && isReapeated(mArticlesKeys.get(i)) > 1) {
-                        mArticlesKeys.remove(i);
-                        mArticleSaleList.remove(i);
-                        mArticleList.remove(i);
-                    }
+                    addArticleKeyAndEmptyArticleSale(article, articleKey);
                     notifyDataSetChanged();
                 }
+
 
                 setToalPriceAndAmount();
             }
@@ -216,8 +206,13 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
         for (String key : keys) {
             if (keys != null && keys.size() > 0) {
                 if (key.trim().contains(search)) {
+                    Log.i(TAG, "key: " + key + " = " + search);
                     return true;
+                } else {
+                    Log.i(TAG, "key: " + key + " != " + search);
+
                 }
+
             }
         }
         return false;
@@ -234,23 +229,47 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
     private void addArticleKeyAndEmptyArticleSale(Article article, String articleKey) {
         if (mIsBeingSearchByWord) {
             int itemsOnTop = 10;
+            List<String> newKeys = new ArrayList<>();
+            List<Article> newArticles = new ArrayList<>();
+            List<ArticleSale> newArticleSales = new ArrayList<>();
             while (itemsOnTop > 0) {
-                for (int i = 0; i < mArticlesKeys.size(); i++) {
-                    if (!articleKey.equals(mArticlesKeys.get(i))) {
-                        mArticleList.add(0, article);
+                if (newKeys.size() > 1) {
+                    if (!newKeys.contains(articleKey.trim())) {
+                        Log.i(TAG, "new keys contains the key");
+                        newArticles.add(article);
                         ArticleSale articleSale = new ArticleSale(0, 0L);
-                        mArticleSaleList.add(0, articleSale);
-                        mArticlesKeys.add(0, articleKey);
-                        itemsOnTop--;
+                        newArticleSales.add(articleSale);
+                        newKeys.add(articleKey);
                     }
+
+                } else {
+                    newArticles.add(article);
+                    ArticleSale articleSale = new ArticleSale(0, 0L);
+                    newArticleSales.add(articleSale);
+                    newKeys.add(articleKey);
                 }
+                itemsOnTop--;
             }
+            mArticleList.addAll(0, newArticles);
+            mArticleSaleList.addAll(0, newArticleSales);
+            mArticlesKeys.addAll(0, newKeys);
             mIsBeingSearchByWord = false;
+            for (int i = 0; i < mArticlesKeys.size(); i++) {
+                if (mArticleSaleList.get(i).getCantidad() == 0 && isReapeated(mArticlesKeys.get(i)) > 1) {
+                    mArticlesKeys.remove(i);
+                    mArticleSaleList.remove(i);
+                    mArticleList.remove(i);
+                }
+                notifyDataSetChanged();
+            }
         } else if (mIsBeingSearchByCode) {
-            mArticleList.add(0, article);
-            ArticleSale articleSale = new ArticleSale(0, 0L);
-            mArticleSaleList.add(0, articleSale);
-            mArticlesKeys.add(0, articleKey);
+            if (!mArticlesKeys.contains(articleKey.trim())) {
+                mArticleList.add(0, article);
+                ArticleSale articleSale = new ArticleSale(0, 0L);
+                mArticleSaleList.add(0, articleSale);
+                mArticlesKeys.add(0, articleKey);
+            }
+
             mIsBeingSearchByCode = false;
         } else {
             mArticleList.add(article);
@@ -258,11 +277,5 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
             mArticleSaleList.add(articleSale);
             mArticlesKeys.add(articleKey);
         }
-    }
-
-    private void logTheList() {
-        Log.i(TAG, "THE SIZE OF THE articles: " + String.valueOf(mArticleList.size()));
-        Log.i(TAG, "THE SIZE OF THE keys: " + String.valueOf(mArticlesKeys.size()));
-        Log.i(TAG, "THE SIZE OF THE articlesales: " + String.valueOf(mArticleSaleList.size()));
     }
 }
