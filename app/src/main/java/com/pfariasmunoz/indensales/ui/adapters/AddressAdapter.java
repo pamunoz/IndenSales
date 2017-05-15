@@ -83,7 +83,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressViewHolder> {
             @Override
             public void onClick(View v) {
                 String addressId = mAddressKeyList.get(position);
-                Intent intent = new Intent(holder.getRootView().getContext(), CreateSaleActivity.class);
+                Intent intent = new Intent(v.getContext(), CreateSaleActivity.class);
                 intent.putExtra(Constants.CLIENT_ID_KEY, mClientId);
                 if (addressId != null) {
                     intent.putExtra(Constants.ADDRESS_ID_KEY, addressId);

@@ -2,6 +2,9 @@ package com.pfariasmunoz.indensales.utils;
 
 import android.text.TextUtils;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+
 /**
  * Created by Pablo Farias on 21-04-17.
  */
@@ -33,6 +36,27 @@ public class TextHelper {
 
         }
         return word;
+    }
+
+
+    /**
+     * Return the formatted date string (i.e. "Mar 3, 1984") from a Date object.
+     */
+    public static String formatDate(String stringTimeInMillis) {
+        long timeInMillis = Long.valueOf(stringTimeInMillis);
+        Date dateObject = new Date(timeInMillis);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("LLL dd, yyyy");
+        return dateFormat.format(dateObject);
+    }
+
+    /**
+     * Return the formatted date string (i.e. "4:30 PM") from a Date object.
+     */
+    public static String formatTime(String stringTimeInMillis) {
+        long timeInMillis = Long.valueOf(stringTimeInMillis);
+        Date dateObject = new Date(timeInMillis);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+        return timeFormat.format(dateObject);
     }
 
 }
