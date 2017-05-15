@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,6 +34,10 @@ public class FirebaseDb {
     public static final DatabaseReference sClientAdressRef = sIndenDbRef.getReference(DbContract.CLIENT_ADRES_ND);
     public static final DatabaseReference sArticlesSalesRef = sIndenDbRef.getReference(DbContract.ARTICLES_SALE_ND);
     public static final DatabaseReference sSalesRef = sIndenDbRef.getReference(DbContract.SALES_ND);
+
+    public static String getUserId() {
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
 
 
     public static String getUid(DatabaseReference databaseReference) {
