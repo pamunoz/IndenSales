@@ -53,4 +53,7 @@
     <string name="client_zone">Not Available</string>
     <string name="total_price">Total</string>
     <string name="title_activity_create_sale">CreateSaleActivity</string>
+    <string name="message_when_signed_in_part1">You are now signed in, welcome </string>
+    <string name="message_when_signed_in_part2"> to inden Sales!</string>
+
 </resources>

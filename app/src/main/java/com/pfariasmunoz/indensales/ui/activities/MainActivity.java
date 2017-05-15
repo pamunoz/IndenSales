@@ -105,7 +105,9 @@ public class MainActivity extends AppCompatActivity
                 if (user != null) {
                     // the user is signed in
                     onSignedInInitialize(user);
-                    String message = "You are now signed in, welcome " + user.getDisplayName() + " to inden Sales!";
+                    String section1 = getResources().getString(R.string.message_when_signed_in_part1);
+                    String section2 = getResources().getString(R.string.message_when_signed_in_part2);
+                    String message = section1 + user.getDisplayName() + section2;
                     Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
 
                 } else {

@@ -5,4 +5,5 @@
     <color name="colorPrimaryLight">#5f5fc4</color>
     <color name="colorAccent">#FF4081</color>
     <color name="client_name_color_text">#575151</color>
+    <color name="white">#FFFFFF</color>
 </resources>
