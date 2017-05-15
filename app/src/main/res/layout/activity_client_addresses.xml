@@ -8,9 +8,10 @@
         android:id="@+id/pb_loading_indicator"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:visibility="gone"/>
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_content"
+        android:id="@+id/rv_addresses_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

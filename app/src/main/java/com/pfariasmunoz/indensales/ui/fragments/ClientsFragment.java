@@ -28,7 +28,6 @@ import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.data.models.Client;
 import com.pfariasmunoz.indensales.ui.activities.MainActivity;
 import com.pfariasmunoz.indensales.ui.viewholders.ClientViewHolder;
-import com.pfariasmunoz.indensales.utils.Constants;
 import com.pfariasmunoz.indensales.utils.MathHelper;
 
 import java.util.Locale;
@@ -59,8 +58,7 @@ public class ClientsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mActivity = ((MainActivity)getActivity());
-        mActivity.setTitle(mActivity.getResources().getString(R.string.clients_fragment_title));
-        return inflater.inflate(R.layout.fragment_clients, container, false);
+        return inflater.inflate(R.layout.recycler_view, container, false);
     }
 
     // This event is triggered soon after onCreateView().
@@ -70,7 +68,7 @@ public class ClientsFragment extends Fragment {
     public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(rootView, savedInstanceState);
         mDefaultQuery = "";
-        mClientRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_clients);
+        mClientRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_content);
         mLoadingIndicatorProgressBar = (ProgressBar) rootView.findViewById(R.id.pb_loading_indicator);
         mClientRecyclerView.setHasFixedSize(false);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());

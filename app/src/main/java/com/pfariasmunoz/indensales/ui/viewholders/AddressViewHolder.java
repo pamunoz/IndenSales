@@ -7,30 +7,34 @@ import android.widget.TextView;
 import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.models.Address;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Pablo Farias on 28-04-17.
  */
 
 public class AddressViewHolder extends RecyclerView.ViewHolder {
 
+    @BindView(R.id.tv_client_address)
     TextView mClientAddressTextView;
+    @BindView(R.id.tv_client_city)
     TextView mClinetCityTextView;
+    @BindView(R.id.tv_client_commune)
     TextView mClientCommuneTextView;
+    @BindView(R.id.tv_client_phone)
     TextView mClientPhoneTextView;
+    @BindView(R.id.tv_client_zone)
     TextView mClientZoneTextView;
     private View mRootView;
 
     public AddressViewHolder(View itemView) {
         super(itemView);
         mRootView = itemView;
-        mClientAddressTextView = (TextView) mRootView.findViewById(R.id.tv_client_address);
-        mClinetCityTextView = (TextView) mRootView.findViewById(R.id.tv_client_city);
-        mClientCommuneTextView = (TextView) mRootView.findViewById(R.id.tv_client_commune);
-        mClientPhoneTextView = (TextView) mRootView.findViewById(R.id.tv_client_phone);
-        mClientZoneTextView = (TextView) mRootView.findViewById(R.id.tv_client_zone);
+        ButterKnife.bind(this, mRootView);
     }
 
-    public void setTextsOnViews(Address address) {
+    public void bind(Address address) {
         mClientAddressTextView.setText(address.getDireccion());
         mClinetCityTextView.setText(address.getCiudad());
         mClientCommuneTextView.setText(address.getComuna());
