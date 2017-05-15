@@ -2,6 +2,7 @@ package com.pfariasmunoz.indensales.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> {
+
+    public static final String TAG = SalesAdapter.class.getSimpleName();
 
     private Context mContext;
     private Query mSaleQuery;
@@ -52,12 +55,47 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
                     Sale sale = snapshot.getValue(Sale.class);
                     String idClient = sale.getIdcliente();
-                    String idAddress = sale.getIddireccion();
+                    final String idAddress = sale.getIddireccion();
                     mClientIdList.add(idClient);
                     mAddressIdList.add(idAddress);
                     mSaleList.add(sale);
+                    mClientQuery.orderByKey().equalTo(idClient).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                Client client = snapshot.getValue(Client.class);
+                                Log.i(TAG, "CLIENT: " + client.getNombre() + " ADDED");
+                                mClientList.add(client);
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                    mAddressQuery.equalTo(idClient).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            for (DataSnapshot data : dataSnapshot.getChildren()) {
+                                Address address = data.child(idAddress).getValue(Address.class);
+                                Log.i(TAG, "ADDRESS: " + address.getDireccion() + " ADDED");
+                                mAddressList.add(address);
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
 
             }
@@ -68,50 +106,6 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> {
             }
         };
         mSaleQuery.addValueEventListener(mSalesListener);
-        if (mClientIdList.size() > 0) {
-            mClientListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Client client = snapshot.getValue(Client.class);
-                        for (int i = 0; i < mClientIdList.size(); i++) {
-                            if (mClientIdList.get(i).equals(dataSnapshot.getKey())) {
-                                mClientList.add(client);
-                            }
-                        }
-
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            };
-            mClientQuery.addValueEventListener(mClientListener);
-        }
-
-        if (mAddressIdList.size() > 0) {
-            mAddressListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        for (String clientId : mClientIdList) {
-                            for (String addressId : mAddressIdList) {
-                                Address address = snapshot.child(clientId).child(addressId).getValue(Address.class);
-                                mAddressList.add(address);
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            };
-            mAddressQuery.addValueEventListener(mAddressListener);
-        }
     }
 
     @Override
@@ -128,12 +122,13 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> {
 
     @Override
     public void onBindViewHolder(SalesViewHolder holder, int position) {
-        if (mAddressList.size() == mClientList.size() && mClientList.size() == mSaleList.size()) {
-            Address address = mAddressList.get(position);
-            Client client = mClientList.get(position);
-            Sale sale = mSaleList.get(position);
-            holder.bind(sale, address, client);
-        }
+        int addresSize = mAddressList.size();
+        int clientSize = mClientList.size();
+        int saleSize = mSaleList.size();
+        Address address = mAddressList.get(position);
+        Client client = mClientList.get(position);
+        Sale sale = mSaleList.get(position);
+        holder.bind(sale, address, client);
     }
 
     @Override

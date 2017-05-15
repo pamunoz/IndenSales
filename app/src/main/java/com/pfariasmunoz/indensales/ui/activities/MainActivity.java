@@ -35,6 +35,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.ui.fragments.ClientsFragment;
+import com.pfariasmunoz.indensales.ui.fragments.SalesFragment;
 import com.pfariasmunoz.indensales.utils.Constants;
 
 import java.util.ArrayList;
@@ -140,6 +141,7 @@ public class MainActivity extends AppCompatActivity
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         adapter.addFragment(new ClientsFragment(), "Clients");
+        adapter.addFragment(new SalesFragment(), "My Sales");
         viewPager.setAdapter(adapter);
     }
 
