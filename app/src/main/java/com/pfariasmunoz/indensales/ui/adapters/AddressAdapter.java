@@ -98,7 +98,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressViewHolder> {
         return mAddressList.size();
     }
 
-    private void cleanup() {
+    public void cleanup() {
         if (mListener != null) {
             mQuery.removeEventListener(mListener);
         }

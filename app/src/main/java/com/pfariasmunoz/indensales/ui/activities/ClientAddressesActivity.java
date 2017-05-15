@@ -2,6 +2,7 @@ package com.pfariasmunoz.indensales.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -31,6 +32,14 @@ public class ClientAddressesActivity extends AppCompatActivity {
         layoutManager.setReverseLayout(false);
         mRecyclerView.setHasFixedSize(false);
         mRecyclerView.setLayoutManager(layoutManager);
+        DividerItemDecoration divider = new DividerItemDecoration(this, layoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(divider);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mAdapter.cleanup();
     }
 }
