@@ -27,6 +27,7 @@ import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.data.models.Client;
 import com.pfariasmunoz.indensales.ui.activities.MainActivity;
+import com.pfariasmunoz.indensales.ui.adapters.ClientsAdapter;
 import com.pfariasmunoz.indensales.ui.viewholders.ClientViewHolder;
 import com.pfariasmunoz.indensales.utils.MathHelper;
 
@@ -38,7 +39,7 @@ import java.util.Locale;
 public class ClientsFragment extends Fragment {
 
     private RecyclerView mClientRecyclerView;
-    private FirebaseRecyclerAdapter<Client, ClientViewHolder> mClientAdapter;
+    private ClientsAdapter mClientAdapter;
     private ProgressBar mLoadingIndicatorProgressBar;
     private MainActivity mActivity;
     private Query mQuery;
@@ -67,7 +68,7 @@ public class ClientsFragment extends Fragment {
     @Override
     public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(rootView, savedInstanceState);
-        mDefaultQuery = "";
+        mQuery = FirebaseDb.sClientsRef;
         mClientRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_content);
         mLoadingIndicatorProgressBar = (ProgressBar) rootView.findViewById(R.id.pb_loading_indicator);
         mClientRecyclerView.setHasFixedSize(false);
@@ -77,7 +78,7 @@ public class ClientsFragment extends Fragment {
                 new DividerItemDecoration(mClientRecyclerView.getContext(), layoutManager.getOrientation());
         mClientRecyclerView.addItemDecoration(dividerItemDecoration);
         mClientRecyclerView.setVisibility(View.INVISIBLE);
-
+        mClientAdapter = new ClientsAdapter(getActivity(), mQuery);
         mClientRecyclerView.setAdapter(mClientAdapter);
 
     }
@@ -90,74 +91,13 @@ public class ClientsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        setupAdapter();
+        //setupAdapter();
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         mClientAdapter.cleanup();
-    }
-
-    private void setupAdapter() {
-        Query nameQuery = FirebaseDb.getClientsNameQuery(mDefaultQuery);
-        mClientAdapter = getFirebaseAdapter(nameQuery);
-        mClientAdapter.notifyDataSetChanged();
-    }
-
-    private FirebaseRecyclerAdapter<Client, ClientViewHolder> getFirebaseAdapter(Query query) {
-        return new FirebaseRecyclerAdapter<Client, ClientViewHolder>(
-                Client.class,
-                R.layout.item_client,
-                ClientViewHolder.class,
-                query) {
-
-            @Override
-            protected void populateViewHolder(
-                    final ClientViewHolder viewHolder,
-                    final Client model, final int position) {
-
-                viewHolder.getAddSaleButton().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final String clientId = getRef(position).getKey();
-                        FirebaseDb.sClientAdressRef
-                                .child(clientId).addValueEventListener(
-                                new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        String addressId = "";
-                                        long clientAdressNum = dataSnapshot.getChildrenCount();
-                                        Iterable<DataSnapshot> iterable = dataSnapshot.getChildren();
-                                        if (clientAdressNum < 2) {
-                                            for (DataSnapshot data : iterable) {
-                                                addressId = data.getKey();
-
-                                            }
-                                            mActivity.startSalesActivity(
-                                                    clientAdressNum, clientId, addressId);
-                                        } else {
-                                            mActivity.startSalesActivity(
-                                                    clientAdressNum, clientId, null);
-                                        }
-
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
-                    }
-                });
-
-                viewHolder.setTextOnViews(model);
-                mLoadingIndicatorProgressBar.setVisibility(View.GONE);
-                mClientRecyclerView.setVisibility(View.VISIBLE);
-            }
-        };
-
     }
 
 
@@ -190,12 +130,12 @@ public class ClientsFragment extends Fragment {
                 @Override
                 public boolean onQueryTextChange(String newText) {
                     if (MathHelper.isNumeric(newText)) {
-                        Query nameQuery = FirebaseDb.getClientsRutQuery(newText);
-                        mClientAdapter = getFirebaseAdapter(nameQuery);
+                        Query numberQuery = FirebaseDb.getClientsRutQuery(newText);
+                        mClientAdapter = new ClientsAdapter(getActivity(), numberQuery);
                     } else {
                         String text = newText.toUpperCase();
                         Query nameQuery = FirebaseDb.getClientsNameQuery(text);
-                        mClientAdapter = getFirebaseAdapter(nameQuery);
+                        mClientAdapter = new ClientsAdapter(getActivity(), nameQuery);
                     }
                     mClientAdapter.notifyDataSetChanged();
                     mClientRecyclerView.swapAdapter(mClientAdapter, false);

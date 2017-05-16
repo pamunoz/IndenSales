@@ -2,12 +2,15 @@ package com.pfariasmunoz.indensales.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
+import com.pfariasmunoz.indensales.R;
 import com.pfariasmunoz.indensales.data.models.Client;
 import com.pfariasmunoz.indensales.ui.viewholders.ClientViewHolder;
 
@@ -60,13 +63,21 @@ public class ClientsAdapter extends RecyclerView.Adapter<ClientViewHolder>{
     }
 
     @Override
-    public ClientViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+    public ClientViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        Context context = viewGroup.getContext();
+        int layoutIdForListItem = R.layout.item_article_sale;
+        LayoutInflater inflater = LayoutInflater.from(context);
+        boolean shouldAttachToParentImmediately = false;
+
+        View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
+        ClientViewHolder viewHolder = new ClientViewHolder(view);
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ClientViewHolder holder, int position) {
-
+        Client client = mClientList.get(position);
+        holder.bind(client);
     }
 
     @Override
