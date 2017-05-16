@@ -43,12 +43,9 @@ public class SalesFragment extends Fragment {
         DividerItemDecoration divider = new DividerItemDecoration(getContext(), mLayoutManager.getOrientation());
         mRecyclerView.addItemDecoration(divider);
         String userId = FirebaseDb.getUserId();
-        Log.i(TAG, "MY ID: " + userId);
-        mSalesQuery = FirebaseDb.sSalesRef.orderByChild("idvendedor").equalTo(userId);
-        Log.i(TAG, "QUERY TEXT: " + mSalesQuery.getRef().toString());
+        mSalesQuery = FirebaseDb.sSaleReportRef.child(userId);
         mAdapter = new SalesAdapter(getActivity(), mSalesQuery);
         mRecyclerView.setAdapter(mAdapter);
-        Log.i(TAG, "ON CREATE VIEW");
         return rootView;
     }
 

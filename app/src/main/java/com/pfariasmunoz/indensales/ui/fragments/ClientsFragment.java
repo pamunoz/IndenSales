@@ -9,6 +9,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,6 +39,8 @@ import java.util.Locale;
  */
 public class ClientsFragment extends Fragment {
 
+    public static final String TAG = ClientsFragment.class.getSimpleName();
+
     private RecyclerView mClientRecyclerView;
     private ClientsAdapter mClientAdapter;
     private ProgressBar mLoadingIndicatorProgressBar;
@@ -58,7 +61,6 @@ public class ClientsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mActivity = ((MainActivity)getActivity());
         return inflater.inflate(R.layout.recycler_view, container, false);
     }
 
@@ -68,7 +70,7 @@ public class ClientsFragment extends Fragment {
     @Override
     public void onViewCreated(View rootView, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(rootView, savedInstanceState);
-        mQuery = FirebaseDb.sClientsRef;
+        mQuery = FirebaseDb.sClientsRef.limitToFirst(30);
         mClientRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_content);
         mLoadingIndicatorProgressBar = (ProgressBar) rootView.findViewById(R.id.pb_loading_indicator);
         mClientRecyclerView.setHasFixedSize(false);
@@ -77,7 +79,6 @@ public class ClientsFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration =
                 new DividerItemDecoration(mClientRecyclerView.getContext(), layoutManager.getOrientation());
         mClientRecyclerView.addItemDecoration(dividerItemDecoration);
-        mClientRecyclerView.setVisibility(View.INVISIBLE);
         mClientAdapter = new ClientsAdapter(getActivity(), mQuery);
         mClientRecyclerView.setAdapter(mClientAdapter);
 
@@ -120,7 +121,7 @@ public class ClientsFragment extends Fragment {
             return true;
         } else if (id == R.id.action_search) {
             SearchView searchView = (SearchView) item.getActionView();
-            searchView.setQueryHint(mActivity.getResources().getString(R.string.search_clients_hint));
+            searchView.setQueryHint(getActivity().getResources().getString(R.string.search_clients_hint));
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
@@ -129,16 +130,19 @@ public class ClientsFragment extends Fragment {
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                    if (MathHelper.isNumeric(newText)) {
-                        Query numberQuery = FirebaseDb.getClientsRutQuery(newText);
-                        mClientAdapter = new ClientsAdapter(getActivity(), numberQuery);
-                    } else {
-                        String text = newText.toUpperCase();
-                        Query nameQuery = FirebaseDb.getClientsNameQuery(text);
-                        mClientAdapter = new ClientsAdapter(getActivity(), nameQuery);
+                    if (!TextUtils.isEmpty(newText)) {
+                        if (MathHelper.isNumeric(newText)) {
+                            Query numberQuery = FirebaseDb.getClientsRutQuery(newText);
+                            mClientAdapter = new ClientsAdapter(getActivity(), numberQuery);
+                        } else {
+                            String text = newText.toUpperCase();
+                            Query nameQuery = FirebaseDb.getClientsNameQuery(text);
+                            mClientAdapter = new ClientsAdapter(getActivity(), nameQuery);
+                        }
+                        mClientAdapter.notifyDataSetChanged();
+                        mClientRecyclerView.swapAdapter(mClientAdapter, false);
+
                     }
-                    mClientAdapter.notifyDataSetChanged();
-                    mClientRecyclerView.swapAdapter(mClientAdapter, false);
                     return false;
                 }
             });

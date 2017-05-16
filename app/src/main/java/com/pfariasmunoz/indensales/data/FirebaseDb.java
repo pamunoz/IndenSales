@@ -53,11 +53,13 @@ public class FirebaseDb {
     }
 
     public static Query getClientsNameQuery(String newName) {
-        return sClientsRef.orderByChild(DbContract.CLIENT_NAME_KEY).startAt(newName);
+        String endtext = newName + "\uf8ff";
+        return sClientsRef.orderByChild(DbContract.CLIENT_NAME_KEY).startAt(newName).endAt(endtext);
     }
 
     public static Query getClientsRutQuery(String newRut) {
-        return sClientsRef.orderByChild(DbContract.CLIENT_RUT_KEY).startAt(newRut);
+        String endtext = newRut + "\uf8ff";
+        return sClientsRef.orderByChild(DbContract.CLIENT_RUT_KEY).startAt(newRut).endAt(endtext);
     }
 
     public static Query getArticlesCodeQuery(String newCode) {
