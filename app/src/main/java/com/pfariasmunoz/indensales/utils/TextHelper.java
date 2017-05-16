@@ -42,8 +42,7 @@ public class TextHelper {
     /**
      * Return the formatted date string (i.e. "Mar 3, 1984") from a Date object.
      */
-    public static String formatDate(String stringTimeInMillis) {
-        long timeInMillis = Long.valueOf(stringTimeInMillis);
+    public static String formatDate(long timeInMillis) {
         Date dateObject = new Date(timeInMillis);
         SimpleDateFormat dateFormat = new SimpleDateFormat("LLL dd, yyyy");
         return dateFormat.format(dateObject);
@@ -52,8 +51,7 @@ public class TextHelper {
     /**
      * Return the formatted date string (i.e. "4:30 PM") from a Date object.
      */
-    public static String formatTime(String stringTimeInMillis) {
-        long timeInMillis = Long.valueOf(stringTimeInMillis);
+    public static String formatTime(long timeInMillis) {
         Date dateObject = new Date(timeInMillis);
         SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
         return timeFormat.format(dateObject);
