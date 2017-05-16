@@ -3,6 +3,7 @@ package com.pfariasmunoz.indensales.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -39,6 +40,8 @@ public class SalesFragment extends Fragment {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_content);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+        DividerItemDecoration divider = new DividerItemDecoration(getContext(), mLayoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(divider);
         String userId = FirebaseDb.getUserId();
         Log.i(TAG, "MY ID: " + userId);
         mSalesQuery = FirebaseDb.sSalesRef.orderByChild("idvendedor").equalTo(userId);

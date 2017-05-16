@@ -5,30 +5,19 @@ package com.pfariasmunoz.indensales.data.models;
  */
 
 public class ArticleSale {
-    private int cantidad;
-    private Long total;
+    public int cantidad;
+    public String idarticulo;
+    public String idventa;
+    public Long total;
+
 
     public ArticleSale() {
     }
 
-    public ArticleSale(int cantidad, Long total) {
+    public ArticleSale(int cantidad, String idarticulo, String idventa, Long total) {
         this.cantidad = cantidad;
-        this.total = total;
-    }
-
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public Long getTotal() {
-        return total;
-    }
-
-    public void setTotal(Long total) {
+        this.idarticulo = idarticulo;
+        this.idventa = idventa;
         this.total = total;
     }
 }

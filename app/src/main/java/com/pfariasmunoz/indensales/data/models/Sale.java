@@ -12,64 +12,22 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class Sale {
 
-    private boolean aprob;
-    private String fecha;
-    private String idcliente;
-    private String iddireccion;
-    private String idvendedor;
-    private long total;
+    public boolean aprob;
+    public long timestamp;
+    public String idcliente;
+    public String iddireccion;
+    public String idvendedor;
+    public long total;
 
     public Sale() {
     }
 
-    public Sale(boolean aprob,
-                String fecha,
-                String idcliente,
-                String iddireccion,
-                String idvendedor,
-                long total) {
+    public Sale(boolean aprob, long timestamp, String idcliente, String iddireccion, String idvendedor, long total) {
         this.aprob = aprob;
-        this.fecha = fecha;
+        this.timestamp = timestamp;
         this.idcliente = idcliente;
         this.iddireccion = iddireccion;
         this.idvendedor = idvendedor;
         this.total = total;
-    }
-
-    public boolean isAprob() {
-        return aprob;
-    }
-
-    public String getFecha() {
-        return fecha;
-    }
-
-    public String getIdcliente() {
-        return idcliente;
-    }
-
-    public String getIddireccion() {
-        return iddireccion;
-    }
-
-    public String getIdvendedor() {
-        return idvendedor;
-    }
-
-    public long getTotal() {
-        return total;
-    }
-
-    @Exclude
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("aprob", aprob);
-        result.put("fecha", fecha);
-        result.put("idcliente", idcliente);
-        result.put("iddireccion", iddireccion);
-        result.put("idvendedor", idvendedor);
-        result.put("total", total);
-
-        return result;
     }
 }

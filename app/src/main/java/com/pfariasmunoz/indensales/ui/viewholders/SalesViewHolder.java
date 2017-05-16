@@ -42,7 +42,8 @@ public class SalesViewHolder extends RecyclerView.ViewHolder {
         mTotalSalePriceTextView.setText(stringTotal);
         mClientNameSaleTextView.setText(client.getNombre());
         mClientRutSaleTextView.setText(client.getRut());
-        mClientAddressSaleTextView.setText(address.getDireccion());
+        String direction = address != null ? address.getDireccion() : "unknown";
+        mClientAddressSaleTextView.setText(direction);
         String date = TextHelper.formatDate(sale.getFecha());
         String time = TextHelper.formatTime(sale.getFecha());
         mDateSaleTextView.setText(date);

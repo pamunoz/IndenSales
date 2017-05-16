@@ -48,6 +48,7 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> {
         mClientQuery = FirebaseDb.sClientsRef;
         mAddressQuery = FirebaseDb.sClientAdressRef;
         setupData();
+        mSaleQuery.addValueEventListener(mSalesListener);
     }
 
     private void setupData() {
@@ -60,8 +61,12 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> {
                     String idClient = sale.getIdcliente();
                     final String idAddress = sale.getIddireccion();
                     mClientIdList.add(idClient);
+
                     mAddressIdList.add(idAddress);
                     mSaleList.add(sale);
+                    int saleSize = mSaleList.size();
+
+                    Log.i(TAG, "SIZE OF SALES: " + String.valueOf(saleSize));
                     mClientQuery.orderByKey().equalTo(idClient).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -69,6 +74,8 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> {
                                 Client client = snapshot.getValue(Client.class);
                                 Log.i(TAG, "CLIENT: " + client.getNombre() + " ADDED");
                                 mClientList.add(client);
+                                int clientSize = mClientList.size();
+                                Log.i(TAG, "SIZE OF CLIENTS: " + String.valueOf(clientSize));
                             }
 
                         }
@@ -78,24 +85,25 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> {
 
                         }
                     });
-                    mAddressQuery.equalTo(idClient).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            for (DataSnapshot data : dataSnapshot.getChildren()) {
-                                Address address = data.child(idAddress).getValue(Address.class);
-                                Log.i(TAG, "ADDRESS: " + address.getDireccion() + " ADDED");
-                                mAddressList.add(address);
-                            }
-
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+//                    mAddressQuery.equalTo(idClient).addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                            for (DataSnapshot data : dataSnapshot.getChildren()) {
+//                                Address address = data.child(idAddress).getValue(Address.class);
+//                                Log.i(TAG, "ADDRESS: " + address.getDireccion() + " ADDED");
+//                                mAddressList.add(address);
+//                            }
+//
+//
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
                 }
 
             }
@@ -105,7 +113,15 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> {
 
             }
         };
-        mSaleQuery.addValueEventListener(mSalesListener);
+        notifyDataSetChanged();
+
+        int addresSize = mAddressList.size();
+        Log.i(TAG, "SIZE OF ADDRESSES: " + String.valueOf(addresSize));
+        int clientSize = mClientList.size();
+        Log.i(TAG, "SIZE OF CLIENTS: " + String.valueOf(clientSize));
+        int saleSize = mSaleList.size();
+        Log.i(TAG, "SIZE OF SALES: " + String.valueOf(saleSize));
+
     }
 
     @Override
@@ -122,13 +138,11 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> {
 
     @Override
     public void onBindViewHolder(SalesViewHolder holder, int position) {
-        int addresSize = mAddressList.size();
-        int clientSize = mClientList.size();
-        int saleSize = mSaleList.size();
-        Address address = mAddressList.get(position);
+
+        //Address address = mAddressList.get(position);
         Client client = mClientList.get(position);
         Sale sale = mSaleList.get(position);
-        holder.bind(sale, address, client);
+        holder.bind(sale, null, client);
     }
 
     @Override
