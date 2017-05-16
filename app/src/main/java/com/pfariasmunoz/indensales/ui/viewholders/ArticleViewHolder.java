@@ -43,13 +43,13 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder{
     }
 
     public void bind(Article article, ArticleSale articleSale, String code) {
-        String stringDescription = TextHelper.capitalizeFirestLetter(article.getDescripcion());
+        String stringDescription = TextHelper.capitalizeFirestLetter(article.descripcion);
         mArticleDescriptionTextView.setText(stringDescription);
-        String stringArticlePrice = MathHelper.getLocalCurrency(article.getPrecio());
+        String stringArticlePrice = MathHelper.getLocalCurrency(article.precio);
         mArticlePriceTextView.setText(stringArticlePrice);
         mArticleCodeTextView.setText(code);
-        String stringArticleTotalPrice = MathHelper.getLocalCurrency(String.valueOf(articleSale.getTotal()));
+        String stringArticleTotalPrice = MathHelper.getLocalCurrency(String.valueOf(articleSale.total));
         mArticlesTotalPriceTextView.setText(stringArticleTotalPrice);
-        mArticlesAmountTextView.setText(String.valueOf(articleSale.getCantidad()));
+        mArticlesAmountTextView.setText(String.valueOf(articleSale.cantidad));
     }
 }
