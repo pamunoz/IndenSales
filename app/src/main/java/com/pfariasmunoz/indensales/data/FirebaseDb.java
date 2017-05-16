@@ -22,6 +22,8 @@ import com.pfariasmunoz.indensales.ui.viewholders.ClientViewHolder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import retrofit2.http.PUT;
+
 /**
  * Created by Pablo Farias on 16-04-17.
  */
@@ -29,9 +31,10 @@ import java.util.HashMap;
 public class FirebaseDb {
 
     public static final FirebaseDatabase sIndenDbRef = FirebaseDatabase.getInstance();
-    public static final DatabaseReference sClientsRef = sIndenDbRef.getReference(DbContract.CLIENTS_ND);
     public static final DatabaseReference sArticlesRef = sIndenDbRef.getReference(DbContract.ARTICLES_ND);
-    public static final DatabaseReference sClientAdressRef = sIndenDbRef.getReference(DbContract.CLIENT_ADRES_ND);
+    public static final DatabaseReference sClientAdressRef = sIndenDbRef.getReference(DbContract.CLIENT_ADDRESS_ND);
+    public static final DatabaseReference sClientsRef = sIndenDbRef.getReference(DbContract.CLIENTS_ND);
+    public static final DatabaseReference sSaleReportRef = sIndenDbRef.getReference(DbContract.SALE_REPORTS);
     public static final DatabaseReference sArticlesSalesRef = sIndenDbRef.getReference(DbContract.ARTICLES_SALE_ND);
     public static final DatabaseReference sSalesRef = sIndenDbRef.getReference(DbContract.SALES_ND);
 
