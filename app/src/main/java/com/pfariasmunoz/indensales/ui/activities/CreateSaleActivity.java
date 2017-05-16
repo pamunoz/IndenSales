@@ -35,6 +35,7 @@ import com.pfariasmunoz.indensales.data.models.Article;
 import com.pfariasmunoz.indensales.data.models.ArticleSale;
 import com.pfariasmunoz.indensales.data.models.Client;
 import com.pfariasmunoz.indensales.data.models.Sale;
+import com.pfariasmunoz.indensales.data.models.SaleReport;
 import com.pfariasmunoz.indensales.ui.adapters.ArticleSaleAdapter;
 import com.pfariasmunoz.indensales.utils.Constants;
 import com.pfariasmunoz.indensales.utils.MathHelper;
@@ -67,6 +68,9 @@ public class CreateSaleActivity extends AppCompatActivity {
     private String mClientId;
     private String mUserId;
     private String mClientAddressId;
+    private String mClientName;
+    private String mClientRut;
+    private String mClientAddress;
     private FirebaseUser mUser;
 
     private ValueEventListener mClientListener;
@@ -90,6 +94,10 @@ public class CreateSaleActivity extends AppCompatActivity {
         // Initialize Firebase components
         mClientId = getIntent().getStringExtra(Constants.CLIENT_ID_KEY);
         mClientAddressId = getIntent().getStringExtra(Constants.ADDRESS_ID_KEY);
+        mClientName = "";
+        mClientRut = "";
+        mClientAddress = "";
+
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         mUserId = mUser != null ? mUser.getUid() : "Unknown User";
 
@@ -118,12 +126,12 @@ public class CreateSaleActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
                     Client client = dataSnapshot.getValue(Client.class);
-                    String name = client.getNombre();
-                    String rut = client.getRut();
-                    String discount = client.getDescuento();
-                    String stringName = TextHelper.capitalizeFirestLetter(name);
+                    mClientName = client.nombre;
+                    mClientRut = client.rut;
+                    String discount = client.descuento;
+                    String stringName = TextHelper.capitalizeFirestLetter(mClientName);
                     mClientNameTextView.setText(stringName);
-                    mClientRutTextView.setText(rut);
+                    mClientRutTextView.setText(mClientRut);
                 }
             }
 
@@ -137,8 +145,9 @@ public class CreateSaleActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists() && dataSnapshot.getValue() != null) {
                     Address address = dataSnapshot.getValue(Address.class);
-                    String longAddress = address.getDireccion() + "\n" + address.getComuna() + " " + address.getCiudad();
+                    String longAddress = address.direccion + "\n" + address.comuna + ", " + address.ciudad;
                     String stringLongAddress = TextHelper.capitalizeFirestLetter(longAddress);
+                    mClientAddress = longAddress;
                     mClientAddressTextView.setText(stringLongAddress);
                 }
             }
@@ -156,8 +165,10 @@ public class CreateSaleActivity extends AppCompatActivity {
     public void createSale() {
         Map<String, ArticleSale> articlesForSale = mAdapter.getArticlesForSale();
         if (articlesForSale != null) {
+            long currentTimeInMillis = System.currentTimeMillis();
             Sale sale = new Sale(
-                    false, String.valueOf(System.currentTimeMillis()),
+                    false,
+                    currentTimeInMillis,
                     mClientId,
                     mClientAddressId,
                     mUserId,
@@ -168,12 +179,26 @@ public class CreateSaleActivity extends AppCompatActivity {
 
             String saleUid = ref.getKey();
 
+            SaleReport saleReport = new SaleReport(
+                    mClientId,
+                    mUserId,
+                    saleUid,
+                    mClientName,
+                    mClientRut,
+                    mAdapter.getTotalPrice(),
+                    currentTimeInMillis,
+                    mClientAddress
+            );
+
+            FirebaseDb.sSaleReportRef.push().setValue(saleReport);
+
             Iterator it = articlesForSale.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry)it.next();
                 ArticleSale articleSale = (ArticleSale) pair.getValue();
+                articleSale.idventa = saleUid;
                 String key = (String) pair.getKey();
-                FirebaseDb.sArticlesSalesRef.child(saleUid).child(key).setValue(articleSale);
+                FirebaseDb.sArticlesSalesRef.push().setValue(articleSale);
                 it.remove(); // avoids a ConcurrentModificationException
             }
             finish();
@@ -198,7 +223,7 @@ public class CreateSaleActivity extends AppCompatActivity {
         List<ArticleSale> currentArticlesSales = new ArrayList<>();
         List<Article> currentArticles = new ArrayList<>();
         for (int i = 0; i < mAdapter.getArticlesKeys().size(); i++) {
-            if (mAdapter.getArticleSaleList().get(i).getCantidad() > 0) {
+            if (mAdapter.getArticleSaleList().get(i).cantidad > 0) {
                 currentKeys.add(mAdapter.getArticlesKeys().get(i));
                 currentArticlesSales.add(mAdapter.getArticleSaleList().get(i));
                 currentArticles.add(mAdapter.getArticleList().get(i));

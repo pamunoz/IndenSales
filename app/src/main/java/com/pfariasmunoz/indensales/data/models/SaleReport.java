@@ -10,7 +10,7 @@ public class SaleReport {
     public String idventa;
     public String nombre_cliente;
     public String rut_cliente;
-    public String total;
+    public long total;
     public long timestamp;
     public String direccion;
 
@@ -23,7 +23,7 @@ public class SaleReport {
             String idventa,
             String nombre_cliente,
             String rut_cliente,
-            String total,
+            long total,
             long timestamp,
             String direccion) {
         this.idcliente = idcliente;

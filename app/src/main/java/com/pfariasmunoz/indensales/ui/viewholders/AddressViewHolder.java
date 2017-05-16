@@ -35,11 +35,11 @@ public class AddressViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Address address) {
-        mClientAddressTextView.setText(address.getDireccion());
-        mClinetCityTextView.setText(address.getCiudad());
-        mClientCommuneTextView.setText(address.getComuna());
-        mClientPhoneTextView.setText(address.getTelefono());
-        mClientZoneTextView.setText(address.getZona());
+        mClientAddressTextView.setText(address.direccion);
+        mClinetCityTextView.setText(address.ciudad);
+        mClientCommuneTextView.setText(address.comuna);
+        mClientPhoneTextView.setText(address.telefono);
+        mClientZoneTextView.setText(address.zona);
     }
 
     public View getRootView() {

@@ -2,11 +2,11 @@ package com.pfariasmunoz.indensales.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -16,95 +16,53 @@ import com.pfariasmunoz.indensales.data.FirebaseDb;
 import com.pfariasmunoz.indensales.data.models.Address;
 import com.pfariasmunoz.indensales.data.models.Client;
 import com.pfariasmunoz.indensales.data.models.Sale;
-import com.pfariasmunoz.indensales.ui.viewholders.ArticleViewHolder;
-import com.pfariasmunoz.indensales.ui.viewholders.SalesViewHolder;
+import com.pfariasmunoz.indensales.data.models.SaleReport;
+import com.pfariasmunoz.indensales.ui.viewholders.SalesReportViewHolder;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> {
+public class SalesAdapter extends RecyclerView.Adapter<SalesReportViewHolder> {
 
     public static final String TAG = SalesAdapter.class.getSimpleName();
 
     private Context mContext;
-    private Query mSaleQuery;
-    private Query mClientQuery;
-    private Query mAddressQuery;
+    private Query mSaleReportsQuery;
 
 
-    private List<String> mAddressIdList = new ArrayList<>();
-    private List<String> mClientIdList = new ArrayList<>();
-    private List<Address> mAddressList = new ArrayList<>();
-    private List<Sale> mSaleList = new ArrayList<>();
+
+    private List<SaleReport> mSaleReportList = new ArrayList<>();
     private List<Client> mClientList = new ArrayList<>();
 
-    private ValueEventListener mSalesListener;
-    private ValueEventListener mClientListener;
-    private ValueEventListener mAddressListener;
+    private ChildEventListener mChildEventListener;
 
     public SalesAdapter(Context context, Query query) {
         mContext = context;
-        mSaleQuery = query;
-        mClientQuery = FirebaseDb.sClientsRef;
-        mAddressQuery = FirebaseDb.sClientAdressRef;
-        setupData();
-        mSaleQuery.addValueEventListener(mSalesListener);
+        mSaleReportsQuery = query;
+        initData();
     }
 
-    private void setupData() {
-        mSalesListener = new ValueEventListener() {
+    private void initData() {
+        mChildEventListener = new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                SaleReport saleReport = dataSnapshot.getValue(SaleReport.class);
+                mSaleReportList.add(saleReport);
+            }
 
-                    Sale sale = snapshot.getValue(Sale.class);
-                    String idClient = sale.getIdcliente();
-                    final String idAddress = sale.getIddireccion();
-                    mClientIdList.add(idClient);
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                    mAddressIdList.add(idAddress);
-                    mSaleList.add(sale);
-                    int saleSize = mSaleList.size();
+            }
 
-                    Log.i(TAG, "SIZE OF SALES: " + String.valueOf(saleSize));
-                    mClientQuery.orderByKey().equalTo(idClient).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                Client client = snapshot.getValue(Client.class);
-                                Log.i(TAG, "CLIENT: " + client.getNombre() + " ADDED");
-                                mClientList.add(client);
-                                int clientSize = mClientList.size();
-                                Log.i(TAG, "SIZE OF CLIENTS: " + String.valueOf(clientSize));
-                            }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                        }
+            }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-//                    mAddressQuery.equalTo(idClient).addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//                            for (DataSnapshot data : dataSnapshot.getChildren()) {
-//                                Address address = data.child(idAddress).getValue(Address.class);
-//                                Log.i(TAG, "ADDRESS: " + address.getDireccion() + " ADDED");
-//                                mAddressList.add(address);
-//                            }
-//
-//
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError databaseError) {
-//
-//                        }
-//                    });
-                }
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
             }
 
@@ -113,52 +71,37 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesViewHolder> {
 
             }
         };
-        notifyDataSetChanged();
-
-        int addresSize = mAddressList.size();
-        Log.i(TAG, "SIZE OF ADDRESSES: " + String.valueOf(addresSize));
-        int clientSize = mClientList.size();
-        Log.i(TAG, "SIZE OF CLIENTS: " + String.valueOf(clientSize));
-        int saleSize = mSaleList.size();
-        Log.i(TAG, "SIZE OF SALES: " + String.valueOf(saleSize));
-
+        mSaleReportsQuery.addChildEventListener(mChildEventListener);
     }
 
+
     @Override
-    public SalesViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public SalesReportViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
         int layoutIdForListItem = R.layout.item_article_sale;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
-        SalesViewHolder viewHolder = new SalesViewHolder(view);
+        SalesReportViewHolder viewHolder = new SalesReportViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(SalesViewHolder holder, int position) {
+    public void onBindViewHolder(SalesReportViewHolder holder, int position) {
+        SaleReport saleReport = mSaleReportList.get(position);
+        holder.bind(saleReport);
 
-        //Address address = mAddressList.get(position);
-        Client client = mClientList.get(position);
-        Sale sale = mSaleList.get(position);
-        holder.bind(sale, null, client);
     }
 
     @Override
     public int getItemCount() {
-        return (mSaleList != null ? mSaleList.size() : 0);
+        return (mSaleReportList != null ? mSaleReportList.size() : 0);
     }
 
     public void cleanup() {
-        if (mSalesListener != null) {
-            mSaleQuery.removeEventListener(mSalesListener);
-        }
-        if (mAddressListener != null) {
-            mAddressQuery.removeEventListener(mAddressListener);
-        }
-        if (mClientListener != null) {
-            mClientQuery.removeEventListener(mClientListener);
+        if (mChildEventListener != null) {
+            mSaleReportsQuery.removeEventListener(mChildEventListener);
         }
     }
 }

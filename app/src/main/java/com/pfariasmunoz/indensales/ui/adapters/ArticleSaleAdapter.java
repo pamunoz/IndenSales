@@ -115,6 +115,7 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
 
         final ArticleSale articleSale = mArticleSaleList.get(position);
         final Article article = mArticleList.get(position);
+        final String articleKey = mArticlesKeys.get(position);
         String code = mArticlesKeys.get(position);
 
         holder.bind(article, articleSale, code);
@@ -122,9 +123,9 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
             @Override
             public void onClick(View v) {
 
-                int amount = articleSale.getCantidad() + 1;
-                long total = Long.valueOf(article.getPrecio().trim()) * amount;
-                mArticleSaleList.set(position, new ArticleSale(amount, total));
+                int amount = articleSale.cantidad + 1;
+                long total = Long.valueOf(article.precio.trim()) * amount;
+                mArticleSaleList.set(position, new ArticleSale(amount, articleKey, total, article.descripcion));
                 notifyDataSetChanged();
                 setToalPriceAndAmount();
             }
@@ -132,12 +133,12 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
         holder.mSubtractArticleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (articleSale.getCantidad() <= 1) {
-                    mArticleSaleList.set(position, new ArticleSale(0, 0L));
+                if (articleSale.cantidad <= 1) {
+                    mArticleSaleList.set(position, new ArticleSale(0, articleKey, 0L, article.descripcion));
                 } else {
-                    int amount = articleSale.getCantidad() - 1;
-                    long total = Long.valueOf(article.getPrecio()) * amount;
-                    mArticleSaleList.set(position, new ArticleSale(amount, total));
+                    int amount = articleSale.cantidad - 1;
+                    long total = Long.valueOf(article.precio) * amount;
+                    mArticleSaleList.set(position, new ArticleSale(amount, articleKey, total, article.descripcion));
                 }
                 notifyDataSetChanged();
                 setToalPriceAndAmount();
@@ -161,7 +162,7 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
                 for (int j = 0; j < mArticleSaleList.size(); j++) {
                     ArticleSale sale = mArticleSaleList.get(i);
                     String key = mArticlesKeys.get(i);
-                    if (sale.getCantidad() > 0) {
+                    if (sale.cantidad > 0) {
                         mArticlesForSale.put(key, sale);
                     }
                 }
@@ -178,8 +179,8 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry)it.next();
                 ArticleSale sale = (ArticleSale) pair.getValue();
-                mTotalPrice += sale.getTotal();
-                mTotalAmount += sale.getCantidad();
+                mTotalPrice += sale.total;
+                mTotalAmount += sale.cantidad;
                 it.remove(); // avoids a ConcurrentModificationException
             }
         }
@@ -225,14 +226,14 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
                     if (!newKeys.contains(articleKey.trim())) {
                         Log.i(TAG, "new keys contains the key");
                         newArticles.add(article);
-                        ArticleSale articleSale = new ArticleSale(0, 0L);
+                        ArticleSale articleSale = new ArticleSale(0, articleKey,  0L, article.descripcion);
                         newArticleSales.add(articleSale);
                         newKeys.add(articleKey);
                     }
 
                 } else {
                     newArticles.add(article);
-                    ArticleSale articleSale = new ArticleSale(0, 0L);
+                    ArticleSale articleSale = new ArticleSale(0, articleKey, 0L, article.descripcion);
                     newArticleSales.add(articleSale);
                     newKeys.add(articleKey);
                 }
@@ -243,7 +244,7 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
             mArticlesKeys.addAll(0, newKeys);
             mIsBeingSearchByWord = false;
             for (int i = 0; i < mArticlesKeys.size(); i++) {
-                if (mArticleSaleList.get(i).getCantidad() == 0 && isReapeated(mArticlesKeys.get(i)) > 1) {
+                if (mArticleSaleList.get(i).cantidad == 0 && isReapeated(mArticlesKeys.get(i)) > 1) {
                     mArticlesKeys.remove(i);
                     mArticleSaleList.remove(i);
                     mArticleList.remove(i);
@@ -253,7 +254,7 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
         } else if (mIsBeingSearchByCode) {
             if (!mArticlesKeys.contains(articleKey.trim())) {
                 mArticleList.add(0, article);
-                ArticleSale articleSale = new ArticleSale(0, 0L);
+                ArticleSale articleSale = new ArticleSale(0, articleKey, 0L, article.descripcion);
                 mArticleSaleList.add(0, articleSale);
                 mArticlesKeys.add(0, articleKey);
             }
@@ -261,7 +262,7 @@ public class ArticleSaleAdapter extends RecyclerView.Adapter<ArticleViewHolder> 
             mIsBeingSearchByCode = false;
         } else {
             mArticleList.add(article);
-            ArticleSale articleSale = new ArticleSale(0, 0L);
+            ArticleSale articleSale = new ArticleSale(0, articleKey, 0L, article.descripcion);
             mArticleSaleList.add(articleSale);
             mArticlesKeys.add(articleKey);
         }

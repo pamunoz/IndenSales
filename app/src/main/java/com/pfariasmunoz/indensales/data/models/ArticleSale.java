@@ -9,6 +9,7 @@ public class ArticleSale {
     public String idarticulo;
     public String idventa;
     public Long total;
+    public String descripcion;
 
 
     public ArticleSale() {
@@ -19,5 +20,12 @@ public class ArticleSale {
         this.idarticulo = idarticulo;
         this.idventa = idventa;
         this.total = total;
+    }
+
+    public ArticleSale(int cantidad, String idarticulo, Long total, String descripcion) {
+        this.cantidad = cantidad;
+        this.idarticulo = idarticulo;
+        this.total = total;
+        this.descripcion = descripcion;
     }
 }
