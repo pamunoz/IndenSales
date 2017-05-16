@@ -32,21 +32,34 @@ public class SalesFragment extends Fragment {
     SalesAdapter mAdapter;
     Query mSalesQuery;
 
+    public SalesFragment() {
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recycler_view, container, false);
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_content);
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        String userId = FirebaseDb.getUserId();
+        mSalesQuery = FirebaseDb.sSaleReportRef.orderByChild("idvendedor").equalTo(userId);
+        Log.i(TAG, "REF: " + mSalesQuery.getRef().toString());
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_content);
+        mRecyclerView.setHasFixedSize(false);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        DividerItemDecoration divider = new DividerItemDecoration(getContext(), mLayoutManager.getOrientation());
+
+        DividerItemDecoration divider = new DividerItemDecoration(mRecyclerView.getContext(), mLayoutManager.getOrientation());
         mRecyclerView.addItemDecoration(divider);
-        String userId = FirebaseDb.getUserId();
-        mSalesQuery = FirebaseDb.sSaleReportRef.child(userId);
+
         mAdapter = new SalesAdapter(getActivity(), mSalesQuery);
         mRecyclerView.setAdapter(mAdapter);
-        return rootView;
     }
 
     @Override

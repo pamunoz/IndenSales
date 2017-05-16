@@ -51,7 +51,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressViewHolder> {
                     String addressKey = snapshot.getKey();
                     mAddressList.add(address);
                     mAddressKeyList.add(addressKey);
-                    notifyDataSetChanged();
+                    notifyItemInserted(mAddressList.size() -1);
                 }
             }
 

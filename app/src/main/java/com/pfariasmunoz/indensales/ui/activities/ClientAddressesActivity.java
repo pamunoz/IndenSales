@@ -26,7 +26,7 @@ public class ClientAddressesActivity extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_addresses_content);
         mClientId = getIntent().getStringExtra(Constants.CLIENT_ID_KEY);
-        mAddressQuery = FirebaseDb.sClientAdressRef.child(mClientId);
+        mAddressQuery = FirebaseDb.sClientAdressRef.orderByChild("idcliente").equalTo(mClientId);
         mAdapter = new AddressAdapter(this, mAddressQuery, mClientId);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setReverseLayout(false);

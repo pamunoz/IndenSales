@@ -26,12 +26,10 @@ public class ClientViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.bt_add_sale)
     Button mAddSaleButton;
 
-    private View mItemView;
 
     public ClientViewHolder(View itemView) {
         super(itemView);
-        mItemView = itemView;
-        ButterKnife.bind(this, mItemView);
+        ButterKnife.bind(this, itemView);
     }
 
 
@@ -44,11 +42,15 @@ public class ClientViewHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.imbt_client_location)
     public void showMap() {
-        Toast.makeText(mItemView.getContext(), "funcion no disponible", Toast.LENGTH_SHORT).show();
+        Toast.makeText(itemView.getContext(), "funcion no disponible", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.imbt_edit_client)
     public void goToEditClientActivity() {
-        Toast.makeText(mItemView.getContext(), "funcion no disponible", Toast.LENGTH_SHORT).show();
+        Toast.makeText(itemView.getContext(), "funcion no disponible", Toast.LENGTH_SHORT).show();
+    }
+
+    public Button getAddSaleButton() {
+        return mAddSaleButton;
     }
 }

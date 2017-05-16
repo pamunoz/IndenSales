@@ -33,9 +33,8 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesReportViewHolder> {
 
 
     private List<SaleReport> mSaleReportList = new ArrayList<>();
-    private List<Client> mClientList = new ArrayList<>();
 
-    private ChildEventListener mChildEventListener;
+    private ValueEventListener mValueEventListener;
 
     public SalesAdapter(Context context, Query query) {
         mContext = context;
@@ -44,25 +43,15 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesReportViewHolder> {
     }
 
     private void initData() {
-        mChildEventListener = new ChildEventListener() {
+        mSaleReportList.clear();
+        mValueEventListener = new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                SaleReport saleReport = dataSnapshot.getValue(SaleReport.class);
-                mSaleReportList.add(saleReport);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    SaleReport saleReport = snapshot.getValue(SaleReport.class);
+                    mSaleReportList.add(saleReport);
+                    notifyItemInserted(mSaleReportList.size() -1);
+                }
 
             }
 
@@ -71,14 +60,15 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesReportViewHolder> {
 
             }
         };
-        mSaleReportsQuery.addChildEventListener(mChildEventListener);
+        mSaleReportsQuery.addValueEventListener(mValueEventListener);
+
     }
 
 
     @Override
     public SalesReportViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.item_article_sale;
+        int layoutIdForListItem = R.layout.item_sale;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 
@@ -100,8 +90,8 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesReportViewHolder> {
     }
 
     public void cleanup() {
-        if (mChildEventListener != null) {
-            mSaleReportsQuery.removeEventListener(mChildEventListener);
+        if (mValueEventListener != null) {
+            mSaleReportsQuery.removeEventListener(mValueEventListener);
         }
     }
 }
