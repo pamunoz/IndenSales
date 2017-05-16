@@ -35,16 +35,12 @@ public class ClientViewHolder extends RecyclerView.ViewHolder {
     }
 
 
-    public void setTextOnViews(Client client) {
-        String clientName = TextHelper.capitalizeFirestLetter(client.getNombre());
+    public void bind(Client client) {
+        String clientName = TextHelper.capitalizeFirestLetter(client.nombre);
         mNameTextView.setText(clientName);
-        mRutTextView.setText(client.getRut());
-        //mDiscountTextView.setText(client.getDescuento());
+        mRutTextView.setText(client.rut);
     }
 
-    public Button getAddSaleButton() {
-        return mAddSaleButton;
-    }
 
     @OnClick(R.id.imbt_client_location)
     public void showMap() {
