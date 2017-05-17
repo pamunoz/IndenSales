@@ -103,7 +103,7 @@ public class CreateSaleActivity extends AppCompatActivity {
 
         // Initialize the queries
         mClientQuery = FirebaseDb.sClientsRef.child(mClientId);
-        mClientAddressQuery = FirebaseDb.sClientAdressRef.child(mClientId).child(mClientAddressId);
+        mClientAddressQuery = FirebaseDb.sClientAdressRef.child(mClientAddressId);
         mArticlesQuery = FirebaseDb.sArticlesRef.limitToFirst(30);
 
         mAdapter = new ArticleSaleAdapter(this, mArticlesQuery);
@@ -147,7 +147,7 @@ public class CreateSaleActivity extends AppCompatActivity {
                     Address address = dataSnapshot.getValue(Address.class);
                     String longAddress = address.direccion + "\n" + address.comuna + ", " + address.ciudad;
                     String stringLongAddress = TextHelper.capitalizeFirestLetter(longAddress);
-                    mClientAddress = longAddress;
+                    mClientAddress = stringLongAddress;
                     mClientAddressTextView.setText(stringLongAddress);
                 }
             }
@@ -190,7 +190,7 @@ public class CreateSaleActivity extends AppCompatActivity {
                     mClientAddress
             );
 
-            FirebaseDb.sSaleReportRef.push().setValue(saleReport);
+            FirebaseDb.sSaleReportRef.child(mUserId).push().setValue(saleReport);
 
             Iterator it = articlesForSale.entrySet().iterator();
             while (it.hasNext()) {
@@ -313,7 +313,9 @@ public class CreateSaleActivity extends AppCompatActivity {
                     .setNegativeButton("No", null)
                     .show();
         } else {
-            super.onBackPressed();
+            Intent intent = new Intent(CreateSaleActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
     }
 

@@ -239,6 +239,7 @@ public class MainActivity extends AppCompatActivity
         if (mAuthStateListener != null) {
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
         }
+
     }
 
     @Override

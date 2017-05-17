@@ -6,16 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.database.ChildEventListener;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.pfariasmunoz.indensales.R;
-import com.pfariasmunoz.indensales.data.FirebaseDb;
-import com.pfariasmunoz.indensales.data.models.Address;
-import com.pfariasmunoz.indensales.data.models.Client;
-import com.pfariasmunoz.indensales.data.models.Sale;
 import com.pfariasmunoz.indensales.data.models.SaleReport;
 import com.pfariasmunoz.indensales.ui.viewholders.SalesReportViewHolder;
 
@@ -49,7 +45,7 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesReportViewHolder> {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     SaleReport saleReport = snapshot.getValue(SaleReport.class);
-                    mSaleReportList.add(saleReport);
+                    mSaleReportList.add(0, saleReport);
                     notifyItemInserted(mSaleReportList.size() -1);
                 }
 

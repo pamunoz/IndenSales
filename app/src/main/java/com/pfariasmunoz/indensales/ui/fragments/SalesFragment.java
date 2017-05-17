@@ -48,7 +48,7 @@ public class SalesFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         String userId = FirebaseDb.getUserId();
-        mSalesQuery = FirebaseDb.sSaleReportRef.orderByChild("idvendedor").equalTo(userId);
+        mSalesQuery = FirebaseDb.sSaleReportRef.child(FirebaseDb.getUserId()).orderByChild("nombre_cliente").startAt("R");
         Log.i(TAG, "REF: " + mSalesQuery.getRef().toString());
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_content);
         mRecyclerView.setHasFixedSize(false);

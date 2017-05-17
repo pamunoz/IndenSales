@@ -22,10 +22,6 @@ import com.pfariasmunoz.indensales.utils.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Pablo Farias on 15-05-17.
- */
-
 public class AddressAdapter extends RecyclerView.Adapter<AddressViewHolder> {
 
     private Query mQuery;
@@ -52,6 +48,14 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressViewHolder> {
                     mAddressList.add(address);
                     mAddressKeyList.add(addressKey);
                     notifyItemInserted(mAddressList.size() -1);
+                    if (dataSnapshot.getChildrenCount() < 2) {
+                        Intent intent = new Intent(mContext, CreateSaleActivity.class);
+                        intent.putExtra(Constants.CLIENT_ID_KEY, mClientId);
+                        if (addressKey != null) {
+                            intent.putExtra(Constants.ADDRESS_ID_KEY, addressKey);
+                        }
+                        mContext.startActivity(intent);
+                    }
                 }
             }
 

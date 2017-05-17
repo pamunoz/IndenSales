@@ -45,7 +45,7 @@ public class SalesReportViewHolder extends RecyclerView.ViewHolder {
         mTotalSalePriceTextView.setText(stringTotal);
         mClientNameSaleTextView.setText(stringClientName);
         mClientRutSaleTextView.setText(report.rut_cliente);
-        mClientAddressSaleTextView.setText(stringAddress);
+        mClientAddressSaleTextView.setText(report.direccion);
         String date = TextHelper.formatDate(report.timestamp);
         String time = TextHelper.formatTime(report.timestamp);
         mDateSaleTextView.setText(date);
