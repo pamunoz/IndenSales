@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         // Allow persistence of the data
         if (!FirebaseApp.getApps(this).isEmpty()) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
@@ -123,11 +125,6 @@ public class MainActivity extends AppCompatActivity
                 if (user != null) {
                     // the user is signed in
                     onSignedInInitialize(user);
-                    String section1 = getResources().getString(R.string.message_when_signed_in_part1);
-                    String section2 = getResources().getString(R.string.message_when_signed_in_part2);
-                    String message = section1 + user.getDisplayName() + section2;
-                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-
                 } else {
                     onSignedOutCleanup();
                     // the user is signed out, so, launch the sign in flow
@@ -205,6 +202,7 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
+                        .setLogo(R.drawable.indenlogo3)
                         .setIsSmartLockEnabled(false)
                         .setProviders(Arrays.asList(
                                 new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
@@ -239,7 +237,6 @@ public class MainActivity extends AppCompatActivity
         if (mAuthStateListener != null) {
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
         }
-
     }
 
     @Override
@@ -277,29 +274,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    /**
-     * This method start the sales activity if the number of adresses is less than 2.
-     * That's because if it is more than 2, it starts a nother fragment with the list
-     * of adresses to choose of the client with the id provided.
-     * @param numberOfAdresses
-     * @param clientId
-     */
-    public void startSalesActivity(long numberOfAdresses, String clientId, String addressId) {
-        if (numberOfAdresses < 2) {
-            Intent intent = new Intent(this, CreateSaleActivity.class);
-            intent.putExtra(Constants.CLIENT_ID_KEY, clientId);
-            if (addressId != null) {
-                intent.putExtra(Constants.ADDRESS_ID_KEY, addressId);
-            }
-            startActivity(intent);
-        } else {
-            Intent intent = new Intent(this, ClientAddressesActivity.class);
-            intent.putExtra(Constants.CLIENT_ID_KEY, clientId);
-            startActivity(intent);
-        }
-    }
-
-
 
 }

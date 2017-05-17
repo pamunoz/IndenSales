@@ -39,18 +39,14 @@ public class FirebaseDb {
     public static final DatabaseReference sSalesRef = sIndenDbRef.getReference(DbContract.SALES_ND);
 
     public static String getUserId() {
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
-    }
-
-
-    public static String getUid(DatabaseReference databaseReference) {
-        String url = databaseReference.toString();
-        if (url.contains("/")) {
-            return url.substring(url.lastIndexOf("/") + 1, url.length());
-        } else {
-            return "Nothing found";
+        String userId = "unknown";
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            userId = user.getUid();
         }
+        return userId;
     }
+
 
     public static Query getClientsNameQuery(String newName) {
         String endtext = newName + "\uf8ff";
@@ -63,11 +59,13 @@ public class FirebaseDb {
     }
 
     public static Query getArticlesCodeQuery(String newCode) {
-        return sArticlesRef.orderByKey().equalTo(newCode);
+        String endtext = newCode + "\uf8ff";
+        return sArticlesRef.orderByKey().startAt(newCode).endAt(endtext);
     }
 
     public static Query getArticlesDescriptionQuery(String newDescription) {
-        return sArticlesRef.orderByChild(DbContract.ARTICLES_DESCRIPTION_KEY).startAt(newDescription);
+        String endtext = newDescription + "\uf8ff";
+        return sArticlesRef.orderByChild(DbContract.ARTICLES_DESCRIPTION_KEY).startAt(newDescription).endAt(endtext);
     }
 
 }
