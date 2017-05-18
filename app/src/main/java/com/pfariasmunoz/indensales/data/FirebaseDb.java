@@ -68,4 +68,14 @@ public class FirebaseDb {
         return sArticlesRef.orderByChild(DbContract.ARTICLES_DESCRIPTION_KEY).startAt(newDescription).endAt(endtext);
     }
 
+    public static Query getSaleReportByClientName(String clientName) {
+        String endtext = clientName + "\uf8ff";
+        return sSaleReportRef.orderByChild(DbContract.SALE_REPORT_CLIENT_NAME_FD).startAt(clientName).endAt(endtext);
+    }
+
+    public static Query getSaleReportByClientRut(String clientRut) {
+        String endtext = clientRut + "\uf8ff";
+        return sSaleReportRef.orderByChild(DbContract.SALE_REPORT_CLIENT_NAME_FD).startAt(clientRut).endAt(endtext);
+    }
+
 }
