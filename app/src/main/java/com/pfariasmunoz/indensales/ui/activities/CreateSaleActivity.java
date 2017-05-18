@@ -201,6 +201,9 @@ public class CreateSaleActivity extends AppCompatActivity {
                 FirebaseDb.sArticlesSalesRef.push().setValue(articleSale);
                 it.remove(); // avoids a ConcurrentModificationException
             }
+            Intent intent = new Intent(CreateSaleActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
             finish();
         } else {
             Toast.makeText(this, "Add an article to sale", Toast.LENGTH_SHORT).show();
@@ -240,6 +243,12 @@ public class CreateSaleActivity extends AppCompatActivity {
         super.onPause();
         mAdapter.cleanup();
         detachReadListeners();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAdapter.cleanup();
     }
 
     @Override

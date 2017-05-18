@@ -42,4 +42,10 @@ public class ClientAddressesActivity extends AppCompatActivity {
         super.onPause();
         mAdapter.cleanup();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAdapter.cleanup();
+    }
 }

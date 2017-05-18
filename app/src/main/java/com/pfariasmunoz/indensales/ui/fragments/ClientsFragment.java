@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -79,6 +80,7 @@ public class ClientsFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration =
                 new DividerItemDecoration(mClientRecyclerView.getContext(), layoutManager.getOrientation());
         mClientRecyclerView.addItemDecoration(dividerItemDecoration);
+
         mClientAdapter = new ClientsAdapter(getActivity(), mQuery);
         mClientRecyclerView.setAdapter(mClientAdapter);
 
@@ -101,6 +103,11 @@ public class ClientsFragment extends Fragment {
         mClientAdapter.cleanup();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mClientAdapter.cleanup();
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

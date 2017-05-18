@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -30,6 +31,7 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesReportViewHolder> {
 
     private List<SaleReport> mSaleReportList = new ArrayList<>();
 
+    private ChildEventListener mChildEventListener;
     private ValueEventListener mValueEventListener;
 
     public SalesAdapter(Context context, Query query) {
@@ -40,23 +42,55 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesReportViewHolder> {
 
     private void initData() {
         mSaleReportList.clear();
-        mValueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    SaleReport saleReport = snapshot.getValue(SaleReport.class);
+        if (mChildEventListener == null) {
+            mChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    SaleReport saleReport = dataSnapshot.getValue(SaleReport.class);
                     mSaleReportList.add(0, saleReport);
                     notifyItemInserted(mSaleReportList.size() -1);
                 }
 
-            }
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                }
 
-            }
-        };
-        mSaleReportsQuery.addValueEventListener(mValueEventListener);
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+            mSaleReportsQuery.addChildEventListener(mChildEventListener);
+        }
+        notifyDataSetChanged();
+//        mValueEventListener = new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                    SaleReport saleReport = snapshot.getValue(SaleReport.class);
+//                    mSaleReportList.add(0, saleReport);
+//                    notifyItemInserted(mSaleReportList.size() -1);
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        };
+//        mSaleReportsQuery.addValueEventListener(mValueEventListener);
 
     }
 
@@ -88,6 +122,10 @@ public class SalesAdapter extends RecyclerView.Adapter<SalesReportViewHolder> {
     public void cleanup() {
         if (mValueEventListener != null) {
             mSaleReportsQuery.removeEventListener(mValueEventListener);
+        }
+
+        if (mChildEventListener != null) {
+            mSaleReportsQuery.removeEventListener(mChildEventListener);
         }
     }
 }

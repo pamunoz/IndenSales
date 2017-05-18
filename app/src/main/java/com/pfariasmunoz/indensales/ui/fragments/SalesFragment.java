@@ -39,18 +39,9 @@ public class SalesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recycler_view, container, false);
-
-
-        return rootView;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         String userId = FirebaseDb.getUserId();
-        mSalesQuery = FirebaseDb.sSaleReportRef.child(FirebaseDb.getUserId()).orderByChild("nombre_cliente").startAt("R");
-        Log.i(TAG, "REF: " + mSalesQuery.getRef().toString());
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_content);
+        mSalesQuery = FirebaseDb.sSaleReportRef.child(FirebaseDb.getUserId()).orderByChild("timestamp");
+        mRecyclerView = (RecyclerView)rootView.findViewById(R.id.rv_content);
         mRecyclerView.setHasFixedSize(false);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -60,11 +51,30 @@ public class SalesFragment extends Fragment {
 
         mAdapter = new SalesAdapter(getActivity(), mSalesQuery);
         mRecyclerView.setAdapter(mAdapter);
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mAdapter.cleanup();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mAdapter.cleanup();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }

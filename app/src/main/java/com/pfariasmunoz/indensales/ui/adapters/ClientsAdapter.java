@@ -31,8 +31,8 @@ public class ClientsAdapter extends RecyclerView.Adapter<ClientViewHolder>{
 
     private Query mQuery;
     private Query mAddressQuery;
-    private ValueEventListener mValueEventListener;
-    private ValueEventListener mAddressListener;
+
+    private ChildEventListener mClientEventListener;
     private List<String> mClientKeys = new ArrayList<>();
     private List<Client> mClientList = new ArrayList<>();
     private List<Long> mAddressNumList = new ArrayList<>();
@@ -45,29 +45,45 @@ public class ClientsAdapter extends RecyclerView.Adapter<ClientViewHolder>{
         initData();
     }
 
-    private void initData() {
+    public void initData() {
         mClientKeys.clear();
         mClientList.clear();
-        mValueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Client client = snapshot.getValue(Client.class);
-                    final String key = snapshot.getKey();
+        if (mClientEventListener == null) {
+            mClientEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Client client = dataSnapshot.getValue(Client.class);
+                    String key = dataSnapshot.getKey();
                     Log.i(TAG, "CLIENT: " + client.nombre + " ADDED");
                     mClientKeys.add(key);
                     mClientList.add(client);
 
                     notifyItemInserted(mClientList.size() - 1);
                 }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        };
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+            mQuery.addChildEventListener(mClientEventListener);
+        }
         notifyDataSetChanged();
-        mQuery.addValueEventListener(mValueEventListener);
     }
 
     @Override
@@ -95,11 +111,6 @@ public class ClientsAdapter extends RecyclerView.Adapter<ClientViewHolder>{
         });
     }
 
-    public void startCreateSalesActivity(View view, String clientKey) {
-        Intent intent = new Intent(view.getContext(), CreateSaleActivity.class);
-        intent.putExtra(Constants.CLIENT_ID_KEY, clientKey);
-        mContext.startActivity(intent);
-    }
 
     public void startAddressesActivity(View view, String clientKey) {
         Intent intent = new Intent(view.getContext(), ClientAddressesActivity.class);
@@ -113,11 +124,9 @@ public class ClientsAdapter extends RecyclerView.Adapter<ClientViewHolder>{
     }
 
     public void cleanup() {
-        if (mValueEventListener != null) {
-            mQuery.removeEventListener(mValueEventListener);
-        }
-        if (mAddressListener != null) {
-            mAddressQuery.removeEventListener(mAddressListener);
+
+        if (mClientEventListener != null) {
+            mAddressQuery.removeEventListener(mClientEventListener);
         }
     }
 }
