@@ -90,6 +90,10 @@ public class CreateSaleActivity extends AppCompatActivity {
         setTitle(getResources().getString(R.string.sales_activity_title));
         ButterKnife.bind(this);
 
+        // Adding Toolbar to Main screen
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
 
         // Initialize Firebase components
         mClientId = getIntent().getStringExtra(Constants.CLIENT_ID_KEY);

@@ -1,10 +1,14 @@
 package com.pfariasmunoz.indensales.ui.activities;
 
+import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
 import com.google.firebase.database.Query;
 import com.pfariasmunoz.indensales.R;
@@ -23,6 +27,11 @@ public class ClientAddressesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_addresses);
+
+        // Adding Toolbar to Main screen
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_addresses_content);
         mClientId = getIntent().getStringExtra(Constants.CLIENT_ID_KEY);
