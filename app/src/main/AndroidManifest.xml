@@ -29,9 +29,12 @@
         </activity>
         <activity
             android:name=".ui.activities.CreateSaleActivity"
-            android:label="@string/title_activity_create_sale">
+            android:label="@string/title_activity_create_sale"
+            android:theme="@style/SalesTheme">
         </activity>
-        <activity android:name=".ui.activities.ClientAddressesActivity">
+        <activity
+            android:name=".ui.activities.ClientAddressesActivity"
+            android:theme="@style/AddressTheme">
         </activity>
     </application>
 
