@@ -60,10 +60,13 @@ public class SalesFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         String userId = FirebaseDb.getUserId();
-        mSalesQuery = FirebaseDb.sSaleReportRef.child(userId).orderByChild("timestamp");
+
+        mSalesQuery = FirebaseDb.sSaleReportRef.child(userId).limitToLast(30);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_content);
         mRecyclerView.setHasFixedSize(false);
         mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         DividerItemDecoration divider = new DividerItemDecoration(mRecyclerView.getContext(), mLayoutManager.getOrientation());

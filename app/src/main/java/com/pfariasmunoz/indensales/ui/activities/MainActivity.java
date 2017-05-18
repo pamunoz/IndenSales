@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity
         adapter.addFragment(new ClientsFragment(), "Clients");
         adapter.addFragment(new SalesFragment(), "My Sales");
         viewPager.setAdapter(adapter);
+
     }
 
     static class Adapter extends FragmentPagerAdapter {
@@ -169,6 +170,12 @@ public class MainActivity extends AppCompatActivity
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
 
     }
 
